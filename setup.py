@@ -6,7 +6,7 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
-    name='bank_feed_parsers',
+    name='card_data_parsers',
     version='0.1.0',
     author='Siva Narayanan',
     author_email='siva@fyle.in',

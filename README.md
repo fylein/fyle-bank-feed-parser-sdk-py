@@ -8,7 +8,7 @@ Bank feeds parsers collection.
 To use the VCF parser, use the VCFParser class:
 
 ```
-from bank_feed_parsers import VCFParser, ParserError
+from card_data_parsers import VCFParser, ParserError
 
 try:
   with open(dir + '/input.vcf') as input_file:
@@ -17,6 +17,7 @@ try:
       account_number_mask_begin=4,
       account_number_mask_end=4
     )
+  print(result)
 except ParserError as e:
   print(f'Omg! error {e}')
 ```

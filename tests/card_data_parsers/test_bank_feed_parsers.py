@@ -4,12 +4,12 @@ from glob import glob
 import json
 from jsondiff import diff
 import logging
-from bank_feed_parsers import AmexParser, CDFParser, VCFParser, HappayParser, S3DFParser, ParserError
+from card_data_parsers import AmexParser, CDFParser, VCFParser, HappayParser, S3DFParser, ParserError
 
 
 logging.basicConfig(level=logging.DEBUG)
 
-logger = logging.getLogger('test_parsers')
+logger = logging.getLogger('test_card_data_parsers')
 logger.setLevel(logging.DEBUG)
 
 
@@ -26,7 +26,7 @@ def get_test_sets():
     test_sets = []
 
     for parser_dir in PARSERS_TESTS_DIR_MAPPINGS:
-        test_case_paths = glob(f'./tests/bank_feed_parsers/{parser_dir}/*')
+        test_case_paths = glob(f'./tests/card_data_parsers/{parser_dir}/*')
         for test_case_path in test_case_paths:
             test_sets.append(
                 (PARSERS_TESTS_DIR_MAPPINGS[parser_dir], test_case_path))
