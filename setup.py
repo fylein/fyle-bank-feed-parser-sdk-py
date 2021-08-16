@@ -17,7 +17,8 @@ setup(
     long_description_content_type='text/markdown',
     packages=find_packages(exclude=('tests',)),
     install_requires=[
-        "pycountry >= 18.5.26"
+        "pycountry >= 18.5.26",
+        "typing-extensions>=3.10.0.0"
     ],
     keywords=['fyle', 'api', 'python', 'sdk'],
     classifiers=[
