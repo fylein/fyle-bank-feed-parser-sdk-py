@@ -15,12 +15,12 @@ setup(
     description='Parsing bank feed data files',
     long_description=long_description,
     long_description_content_type='text/markdown',
-    packages=find_packages(exclude=('tests',)),
+    packages=find_packages(exclude=['*.tests', '*.tests.*', 'tests.*', 'tests']),
     install_requires=[
-        "pycountry >= 18.5.26",
-        "typing-extensions>=3.10.0.0"
+        'pycountry >= 18.5.26',
+        'typing-extensions>=3.10.0.0'
     ],
-    keywords=['fyle', 'api', 'python', 'sdk'],
+    keywords=['fyle', 'api', 'python', 'sdk', 'cards', 'parsers'],
     classifiers=[
         'Intended Audience :: Developers',
         'Programming Language :: Python :: 3',
