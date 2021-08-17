@@ -18,7 +18,8 @@ setup(
     packages=find_packages(exclude=['*.tests', '*.tests.*', 'tests.*', 'tests']),
     install_requires=[
         'pycountry >= 18.5.26',
-        'typing-extensions>=3.10.0.0'
+        'typing-extensions>=3.10.0.0',
+        'jsondiff >= 1.2.0'
     ],
     keywords=['fyle', 'api', 'python', 'sdk', 'cards', 'parsers'],
     classifiers=[
