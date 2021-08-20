@@ -15,7 +15,7 @@ class AmexParser(Parser):
     def __remove_leading_zeros(value, min_len=None):
         """
         Removes leading zeros.
-        but maintaining min length - https://docs.python.org/2/library/string.html#string.zfill
+        but maintaining min length - https://docs.python.org/3/library/stdtypes.html?highlight=zfill#str.zfill
         If min_len given, removes so that the expected minimum length is maintained.
         Examples:
             If 00000440 -> 440
