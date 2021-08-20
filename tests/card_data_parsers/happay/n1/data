@@ -1,0 +1,2 @@
+account_number,transaction_date,amount,transaction_type,currency,description,vendor,external_id,nickname,foreign_amount,foreign_currency
+000123,2021-08-13,624.00,Debit,INR,,,HPUCT2021813747572006595847HP,Boi1,624.00,INR

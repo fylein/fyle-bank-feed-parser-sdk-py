@@ -1,0 +1,46 @@
+[
+  {
+    "account_number": "Abcd",
+    "sync_type": "BANK FEED - CDF",
+    "transaction_dt": "2018-12-18T10:00:00Z",
+    "transaction_date": "2018-12-18T10:00:00Z",
+    "transaction_type": "debit",
+    "amount": "13.99",
+    "currency": "EUR",
+    "vendor": "ZOOM.EUR",
+    "external_id": "bcc54fff373cf5b4eb1b3b8c53c111bf"
+  },
+  {
+    "account_number": "Abcd",
+    "sync_type": "BANK FEED - CDF",
+    "transaction_dt": "2018-12-19T10:00:00Z",
+    "transaction_date": "2018-12-19T10:00:00Z",
+    "transaction_type": "debit",
+    "amount": "130",
+    "currency": "EUR",
+    "vendor": "BUILDTEC ACOUSTICS",
+    "external_id": "c36c9ba0602a898336e1c08360495d5d"
+  },
+  {
+    "account_number": "Abcd",
+    "sync_type": "BANK FEED - CDF",
+    "transaction_dt": "2018-12-19T10:00:00Z",
+    "transaction_date": "2018-12-19T10:00:00Z",
+    "transaction_type": "debit",
+    "amount": "38.63",
+    "currency": "EUR",
+    "vendor": "EFLOW BARRIER FREE TOL",
+    "external_id": "379e9c62e0804eeb9ff0864fb03b96f0"
+  },
+  {
+    "account_number": "Abcd",
+    "sync_type": "BANK FEED - CDF",
+    "transaction_dt": "2018-12-19T10:00:00Z",
+    "transaction_date": "2018-12-19T10:00:00Z",
+    "transaction_type": "debit",
+    "amount": "129",
+    "currency": "EUR",
+    "vendor": "MUSIC MAKER",
+    "external_id": "14a181d358d82b3dd3532e5ec47653d8"
+  }
+]
