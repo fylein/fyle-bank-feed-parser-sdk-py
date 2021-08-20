@@ -47,7 +47,6 @@ class CDFParser(Parser):
         trxn = {}
 
         trxn['account_number'] = account_number
-        trxn['sync_type'] = 'BANK FEED - CDF'
 
         ftrxn = CDFParser.__get_element_by_tag(
             root, 'FinancialTransaction_5000')

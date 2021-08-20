@@ -88,7 +88,6 @@ class VCFParser(Parser):
         # Masking the card number
         trxn['account_number'] = mask_card_number(
             trxn['account_number'], account_number_mask_begin, account_number_mask_end)
-        trxn['sync_type'] = 'BANK FEED - VCF'
         external_id = str(trxn['external_id']) + trxn['account_number'] + \
             trxn['transaction_dt'] + trxn['vendor'] + \
             trxn['currency'] + trxn['amount']

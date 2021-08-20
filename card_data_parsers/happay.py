@@ -47,9 +47,6 @@ class HappayParser(Parser):
 
         expand_with_default_values(trxn_line, default_values)
 
-        if 'sync_type' not in trxn_line:
-            trxn_line['sync_type'] = 'BANK FEED - HAPPAY'
-
         trxn_line = HappayParser.__strip_spaces(trxn_line)
 
         # account number
