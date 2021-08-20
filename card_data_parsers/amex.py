@@ -101,8 +101,6 @@ class AmexParser(Parser):
         txn['account_number'] = mask_card_number(txn['account_number'], account_number_mask_begin,
                                                  account_number_mask_end)
 
-        txn['sync_type'] = 'BANK FEED - AMEX'
-
         external_id = str(txn['external_id'] + txn['account_number'] + txn['transaction_dt'] + txn['description'] + txn[
             'currency'] + txn['amount'])
         if 'orig_currency' in txn and 'orig_amount' in txn:

@@ -48,7 +48,6 @@ class S3DFParser(Parser):
         trxn = {}
 
         trxn['account_number'] = account_number
-        trxn['sync_type'] = 'BANK FEED - S3DF'
 
         ftrxn = S3DFParser.__get_element_by_tag(
             root, 'FinancialTransaction_5000')
