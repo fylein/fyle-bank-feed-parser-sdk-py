@@ -12,8 +12,7 @@
     "external_id": "b739fc16b4385637ea46f97e24d389a1",
     "merchant_category_code": "399",
     "vendor": "NEWYORKCITYTAXI'S(YELLOW)",
-    "transaction_date": "2009-03-05T10:00:00Z",
-    "sync_type": "BANK FEED - AMEX"
+    "transaction_date": "2009-03-05T10:00:00Z"
   },
   {
     "account_number": "0123*******0111",
@@ -25,8 +24,7 @@
     "description": "MVD NVNYVIHSRK UVV - C",
     "external_id": "528df26cf5ff4d685f5af917f28d8e69",
     "merchant_category_code": "000",
-    "transaction_date": "2009-08-04T10:00:00Z",
-    "sync_type": "BANK FEED - AMEX"
+    "transaction_date": "2009-08-04T10:00:00Z"
   },
   {
     "account_number": "0123*******0111",
@@ -41,8 +39,7 @@
     "external_id": "280de44a8fedc28851bfbb78af883cce",
     "merchant_category_code": "311",
     "vendor": "GOOGLE, INC",
-    "transaction_date": "2009-03-04T10:00:00Z",
-    "sync_type": "BANK FEED - AMEX"
+    "transaction_date": "2009-03-04T10:00:00Z"
   },
   {
     "account_number": "0123*******0112",
@@ -54,8 +51,7 @@
     "description": "MVD NVNYVIHSRK UVV - C",
     "external_id": "b853c363374a0beb8216e7e45096db21",
     "merchant_category_code": "000",
-    "transaction_date": "2009-08-04T10:00:00Z",
-    "sync_type": "BANK FEED - AMEX"
+    "transaction_date": "2009-08-04T10:00:00Z"
   },
   {
     "account_number": "0123*******0113",
@@ -70,8 +66,7 @@
     "external_id": "dc256c4570e7cd61c1dd0e9709c67106",
     "merchant_category_code": "812",
     "vendor": "MARGARITAVILLE CAYMAN",
-    "transaction_date": "2009-03-31T10:00:00Z",
-    "sync_type": "BANK FEED - AMEX"
+    "transaction_date": "2009-03-31T10:00:00Z"
   },
   {
     "account_number": "0123*******0113",
@@ -83,8 +78,7 @@
     "description": "MVD NVNYVIHSRK UVV - C",
     "external_id": "f320f8283dcf7e0336ad6c027205d662",
     "merchant_category_code": "000",
-    "transaction_date": "2009-08-04T10:00:00Z",
-    "sync_type": "BANK FEED - AMEX"
+    "transaction_date": "2009-08-04T10:00:00Z"
   },
   {
     "account_number": "0123*******0113",
@@ -99,7 +93,6 @@
     "external_id": "9f59f3e4f07496291a7da3e7b74c05cf",
     "merchant_category_code": "310",
     "vendor": "WAL-MART U.S. STORES",
-    "transaction_date": "2009-03-13T10:00:00Z",
-    "sync_type": "BANK FEED - AMEX"
+    "transaction_date": "2009-03-13T10:00:00Z"
   }
 ]
