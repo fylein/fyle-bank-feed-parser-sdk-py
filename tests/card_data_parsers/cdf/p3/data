@@ -79,7 +79,7 @@
             <TransactionDate >2018-12-18</TransactionDate>
             <ProcessingDate >2018-12-19</ProcessingDate>
             <ApprovalCode >034289</ApprovalCode>
-            <BanknetReferenceNum >MCOX4MMSP</BanknetReferenceNum>
+            <BanknetReferenceNum >abcd</BanknetReferenceNum>
             <CardAcceptorTerminalId >R505</CardAcceptorTerminalId>
             <DebitOrCreditIndicator >D</DebitOrCreditIndicator>
             <AmountInOriginalCurrency CurrencyCode = "978" CurrencyExponent = "4" CurrencySign = "D" >0000000000050000</AmountInOriginalCurrency>
@@ -98,7 +98,7 @@
             <IssuerTransactionCode >3001</IssuerTransactionCode>
             <TransactionCategory >0001</TransactionCategory>
             <TransactionCodeQualifier >0</TransactionCodeQualifier>
-            <VATEligibleInd >IRL003</VATEligibleInd>
+            <VATEligibleInd >IRL999</VATEligibleInd>
             <DataSource >00</DataSource>
             <MatchSwitch >N</MatchSwitch>
           </FinancialTransaction_5000 >
@@ -147,7 +147,7 @@
             <TransactionDate >2018-12-18</TransactionDate>
             <ProcessingDate >2018-12-19</ProcessingDate>
             <ApprovalCode >046693</ApprovalCode>
-            <BanknetReferenceNum >MCOX58JJP</BanknetReferenceNum>
+            <BanknetReferenceNum >abcd</BanknetReferenceNum>
             <CardAcceptorTerminalId >R303</CardAcceptorTerminalId>
             <DebitOrCreditIndicator >D</DebitOrCreditIndicator>
             <AmountInOriginalCurrency CurrencyCode = "978" CurrencyExponent = "4" CurrencySign = "D" >0000000000038900</AmountInOriginalCurrency>
@@ -166,7 +166,7 @@
             <IssuerTransactionCode >3001</IssuerTransactionCode>
             <TransactionCategory >0001</TransactionCategory>
             <TransactionCodeQualifier >0</TransactionCodeQualifier>
-            <VATEligibleInd >IRL003</VATEligibleInd>
+            <VATEligibleInd >IRL999</VATEligibleInd>
             <DataSource >00</DataSource>
             <MatchSwitch >N</MatchSwitch>
           </FinancialTransaction_5000 >
@@ -215,7 +215,7 @@
             <TransactionDate >2018-12-18</TransactionDate>
             <ProcessingDate >2018-12-19</ProcessingDate>
             <ApprovalCode >081475</ApprovalCode>
-            <BanknetReferenceNum >MCO24XBHE</BanknetReferenceNum>
+            <BanknetReferenceNum >abcd</BanknetReferenceNum>
             <CardAcceptorTerminalId >71001920</CardAcceptorTerminalId>
             <DebitOrCreditIndicator >D</DebitOrCreditIndicator>
             <AmountInOriginalCurrency CurrencyCode = "978" CurrencyExponent = "4" CurrencySign = "D" >0000000000890000</AmountInOriginalCurrency>
@@ -234,7 +234,7 @@
             <IssuerTransactionCode >3001</IssuerTransactionCode>
             <TransactionCategory >0001</TransactionCategory>
             <TransactionCodeQualifier >0</TransactionCodeQualifier>
-            <VATEligibleInd >IRL003</VATEligibleInd>
+            <VATEligibleInd >IRL999</VATEligibleInd>
             <DataSource >00</DataSource>
             <MatchSwitch >N</MatchSwitch>
           </FinancialTransaction_5000 >

@@ -79,7 +79,7 @@
             <TransactionDate >2018-12-18</TransactionDate>
             <ProcessingDate >2018-12-20</ProcessingDate>
             <ApprovalCode >015333</ApprovalCode>
-            <BanknetReferenceNum >MCOM6KAT5</BanknetReferenceNum>
+            <BanknetReferenceNum >abcd</BanknetReferenceNum>
             <CardAcceptorTerminalId >0001</CardAcceptorTerminalId>
             <DebitOrCreditIndicator >D</DebitOrCreditIndicator>
             <AmountInOriginalCurrency CurrencyCode = "978" CurrencyExponent = "4" CurrencySign = "D" >0000000000139900</AmountInOriginalCurrency>
@@ -114,7 +114,7 @@
             </FinancialRecordHeader >
             <AcquiringICA >00000006204</AcquiringICA>
             <CardAcceptorId >483168500997</CardAcceptorId>
-            <CardAcceptorName >ZOOM.EUR</CardAcceptorName>
+            <CardAcceptorName >ABCDEF</CardAcceptorName>
             <CardAcceptorStreetAddress >Abcd</CardAcceptorStreetAddress>
             <CardAcceptorCity >Abcd</CardAcceptorCity>
             <CardAcceptorStateProvince >CA</CardAcceptorStateProvince>
@@ -165,7 +165,7 @@
             <TransactionDate >2018-12-19</TransactionDate>
             <ProcessingDate >2018-12-20</ProcessingDate>
             <ApprovalCode >036554</ApprovalCode>
-            <BanknetReferenceNum >MCOP1E51B</BanknetReferenceNum>
+            <BanknetReferenceNum >abcd</BanknetReferenceNum>
             <CardAcceptorTerminalId >U6I8LEDX</CardAcceptorTerminalId>
             <DebitOrCreditIndicator >D</DebitOrCreditIndicator>
             <AmountInOriginalCurrency CurrencyCode = "978" CurrencyExponent = "4" CurrencySign = "D" >0000000001300000</AmountInOriginalCurrency>
@@ -184,7 +184,7 @@
             <IssuerTransactionCode >3001</IssuerTransactionCode>
             <TransactionCategory >0001</TransactionCategory>
             <TransactionCodeQualifier >0</TransactionCodeQualifier>
-            <VATEligibleInd >IRL003</VATEligibleInd>
+            <VATEligibleInd >IRL999</VATEligibleInd>
             <DataSource >00</DataSource>
             <MatchSwitch >N</MatchSwitch>
           </FinancialTransaction_5000 >
@@ -198,7 +198,7 @@
             </FinancialRecordHeader >
             <AcquiringICA >00000018505</AcquiringICA>
             <CardAcceptorId >VUO8X7RTKGQE8NO</CardAcceptorId>
-            <CardAcceptorName >BUILDTEC ACOUSTICS</CardAcceptorName>
+            <CardAcceptorName >ABCDEF</CardAcceptorName>
             <CardAcceptorStreetAddress >33 Manor Wood, The Glen</CardAcceptorStreetAddress>
             <CardAcceptorCity >MONAGHAN</CardAcceptorCity>
             <CardAcceptorStateProvince >MN</CardAcceptorStateProvince>
@@ -233,7 +233,7 @@
             <TransactionDate >2018-12-19</TransactionDate>
             <ProcessingDate >2018-12-20</ProcessingDate>
             <ApprovalCode >043328</ApprovalCode>
-            <BanknetReferenceNum >MCOBQTH0D</BanknetReferenceNum>
+            <BanknetReferenceNum >abcd</BanknetReferenceNum>
             <CardAcceptorTerminalId >80005144</CardAcceptorTerminalId>
             <DebitOrCreditIndicator >D</DebitOrCreditIndicator>
             <AmountInOriginalCurrency CurrencyCode = "978" CurrencyExponent = "4" CurrencySign = "D" >0000000000386300</AmountInOriginalCurrency>
@@ -252,7 +252,7 @@
             <IssuerTransactionCode >3001</IssuerTransactionCode>
             <TransactionCategory >0001</TransactionCategory>
             <TransactionCodeQualifier >0</TransactionCodeQualifier>
-            <VATEligibleInd >IRL003</VATEligibleInd>
+            <VATEligibleInd >IRL999</VATEligibleInd>
             <DataSource >00</DataSource>
             <MatchSwitch >N</MatchSwitch>
           </FinancialTransaction_5000 >
@@ -266,9 +266,9 @@
             </FinancialRecordHeader >
             <AcquiringICA >00000011319</AcquiringICA>
             <CardAcceptorId >009668228</CardAcceptorId>
-            <CardAcceptorName >EFLOW BARRIER FREE TOL</CardAcceptorName>
-            <CardAcceptorStreetAddress >Parkgate Street</CardAcceptorStreetAddress>
-            <CardAcceptorCity >DUBLIN 8</CardAcceptorCity>
+            <CardAcceptorName >ABCDEF</CardAcceptorName>
+            <CardAcceptorStreetAddress >ABcd</CardAcceptorStreetAddress>
+            <CardAcceptorCity >ABcd</CardAcceptorCity>
             <CardAcceptorStateProvince >IRL</CardAcceptorStateProvince>
             <CardAcceptorLocationPostalCode >WA15 9EN</CardAcceptorLocationPostalCode>
             <CardAcceptorCountryCode >IRL</CardAcceptorCountryCode>
@@ -301,7 +301,7 @@
             <TransactionDate >2018-12-19</TransactionDate>
             <ProcessingDate >2018-12-20</ProcessingDate>
             <ApprovalCode >092997</ApprovalCode>
-            <BanknetReferenceNum >MCODE2E0E</BanknetReferenceNum>
+            <BanknetReferenceNum >abcd</BanknetReferenceNum>
             <CardAcceptorTerminalId >33824246</CardAcceptorTerminalId>
             <DebitOrCreditIndicator >D</DebitOrCreditIndicator>
             <AmountInOriginalCurrency CurrencyCode = "978" CurrencyExponent = "4" CurrencySign = "D" >0000000001290000</AmountInOriginalCurrency>
@@ -320,7 +320,7 @@
             <IssuerTransactionCode >3001</IssuerTransactionCode>
             <TransactionCategory >0001</TransactionCategory>
             <TransactionCodeQualifier >0</TransactionCodeQualifier>
-            <VATEligibleInd >IRL003</VATEligibleInd>
+            <VATEligibleInd >IRL999</VATEligibleInd>
             <DataSource >00</DataSource>
             <MatchSwitch >N</MatchSwitch>
           </FinancialTransaction_5000 >
@@ -334,7 +334,7 @@
             </FinancialRecordHeader >
             <AcquiringICA >00000011319</AcquiringICA>
             <CardAcceptorId >013325332</CardAcceptorId>
-            <CardAcceptorName >MUSIC MAKER</CardAcceptorName>
+            <CardAcceptorName >ABCDEF</CardAcceptorName>
             <CardAcceptorStreetAddress >29</CardAcceptorStreetAddress>
             <CardAcceptorCity >EXCHEQUER STR</CardAcceptorCity>
             <CardAcceptorStateProvince >IRL</CardAcceptorStateProvince>

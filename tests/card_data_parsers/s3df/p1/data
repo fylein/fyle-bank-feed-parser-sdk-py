@@ -219,7 +219,7 @@
             <AcquirerReferenceData>--</AcquirerReferenceData>
             <CardHolderTransactionType>00</CardHolderTransactionType>
             <PostingDate>2019-10-02</PostingDate>
-            <TransactionDate>2019-09-30</TransactionDate>
+            <TransactionDate>2019-01-01</TransactionDate>
             <ProcessingDate>2019-10-05</ProcessingDate>
             <DebitOrCreditIndicator>D</DebitOrCreditIndicator>
             <AmountInOriginalCurrency CurrencyCode="826" CurrencyExponent="3" CurrencySign="D">294970</AmountInOriginalCurrency>
@@ -255,7 +255,7 @@
             <AcquirerReferenceData>--</AcquirerReferenceData>
             <CardHolderTransactionType>00</CardHolderTransactionType>
             <PostingDate>2019-10-02</PostingDate>
-            <TransactionDate>2019-09-30</TransactionDate>
+            <TransactionDate>2019-01-01</TransactionDate>
             <ProcessingDate>2019-10-05</ProcessingDate>
             <DebitOrCreditIndicator>D</DebitOrCreditIndicator>
             <AmountInOriginalCurrency CurrencyCode="826" CurrencyExponent="3" CurrencySign="D">109000</AmountInOriginalCurrency>
@@ -325,7 +325,7 @@
             <AcquirerReferenceData>--</AcquirerReferenceData>
             <CardHolderTransactionType>00</CardHolderTransactionType>
             <PostingDate>2019-10-02</PostingDate>
-            <TransactionDate>2019-09-30</TransactionDate>
+            <TransactionDate>2019-01-01</TransactionDate>
             <ProcessingDate>2019-10-05</ProcessingDate>
             <DebitOrCreditIndicator>D</DebitOrCreditIndicator>
             <AmountInOriginalCurrency CurrencyCode="826" CurrencyExponent="3" CurrencySign="D">2098800</AmountInOriginalCurrency>
@@ -361,7 +361,7 @@
             <AcquirerReferenceData>--</AcquirerReferenceData>
             <CardHolderTransactionType>00</CardHolderTransactionType>
             <PostingDate>2019-10-02</PostingDate>
-            <TransactionDate>2019-09-30</TransactionDate>
+            <TransactionDate>2019-01-01</TransactionDate>
             <ProcessingDate>2019-10-05</ProcessingDate>
             <DebitOrCreditIndicator>D</DebitOrCreditIndicator>
             <AmountInOriginalCurrency CurrencyCode="826" CurrencyExponent="3" CurrencySign="D">5640</AmountInOriginalCurrency>
@@ -396,7 +396,7 @@
             <AcquirerReferenceData>--</AcquirerReferenceData>
             <CardHolderTransactionType>00</CardHolderTransactionType>
             <PostingDate>2019-10-02</PostingDate>
-            <TransactionDate>2019-09-30</TransactionDate>
+            <TransactionDate>2019-01-01</TransactionDate>
             <ProcessingDate>2019-10-05</ProcessingDate>
             <DebitOrCreditIndicator>D</DebitOrCreditIndicator>
             <AmountInOriginalCurrency CurrencyCode="978" CurrencyExponent="3" CurrencySign="D">230400</AmountInOriginalCurrency>
@@ -432,7 +432,7 @@
             <AcquirerReferenceData>--</AcquirerReferenceData>
             <CardHolderTransactionType>18</CardHolderTransactionType>
             <PostingDate>2019-10-02</PostingDate>
-            <TransactionDate>2019-09-30</TransactionDate>
+            <TransactionDate>2019-01-01</TransactionDate>
             <ProcessingDate>2019-10-05</ProcessingDate>
             <DebitOrCreditIndicator>D</DebitOrCreditIndicator>
             <AmountInOriginalCurrency CurrencyCode="826" CurrencyExponent="3" CurrencySign="D">74000</AmountInOriginalCurrency>
@@ -468,7 +468,7 @@
             <AcquirerReferenceData>--</AcquirerReferenceData>
             <CardHolderTransactionType>18</CardHolderTransactionType>
             <PostingDate>2019-10-02</PostingDate>
-            <TransactionDate>2019-09-30</TransactionDate>
+            <TransactionDate>2019-01-01</TransactionDate>
             <ProcessingDate>2019-10-05</ProcessingDate>
             <DebitOrCreditIndicator>D</DebitOrCreditIndicator>
             <AmountInOriginalCurrency CurrencyCode="826" CurrencyExponent="3" CurrencySign="D">74000</AmountInOriginalCurrency>
