@@ -78,16 +78,16 @@ class AmexParser(Parser):
         if txn['transaction_type'] is None:
             raise ParserError(f'Transaction type is missing')
 
-        if txn['orig_currency'] == txn['currency'] and txn['orig_amount'] == txn['amount']:
-            del txn['orig_amount']
-            del txn['orig_currency']
+        if txn['foreign_currency'] == txn['currency'] and txn['foreign_amount'] == txn['amount']:
+            del txn['foreign_amount']
+            del txn['foreign_currency']
         else:
-            txn['orig_currency'] = AmexParser.__process_currency(
-                txn['orig_currency'])
-            if txn['orig_currency'] is None:
-                raise ParserError(f'orig_currency is missing')
-            txn['orig_amount'] = AmexParser.__process_amount(
-                txn['orig_amount'], txn['decimal_place_indicator'])
+            txn['foreign_currency'] = AmexParser.__process_currency(
+                txn['foreign_currency'])
+            if txn['foreign_currency'] is None:
+                raise ParserError(f'foreign_currency is missing')
+            txn['foreign_amount'] = AmexParser.__process_amount(
+                txn['foreign_amount'], txn['decimal_place_indicator'])
 
         txn['amount'] = AmexParser.__process_amount(
             txn['amount'], txn['decimal_place_indicator'])
@@ -104,9 +104,9 @@ class AmexParser(Parser):
 
         external_id = str(txn['external_id'] + txn['account_number'] + txn['transaction_dt'] + txn['description'] + txn[
             'currency'] + txn['amount'])
-        if 'orig_currency' in txn and 'orig_amount' in txn:
+        if 'foreign_currency' in txn and 'foreign_amount' in txn:
             external_id = str(
-                external_id + txn['orig_currency'] + txn['orig_amount'])
+                external_id + txn['foreign_currency'] + txn['foreign_amount'])
         txn['external_id'] = generate_external_id(external_id)
 
         del txn['decimal_place_indicator']
@@ -138,8 +138,8 @@ class AmexParser(Parser):
         ) + ' ' + transaction[277:297].strip() + ' ' + transaction[227:257].strip()
         txn['amount'] = transaction[737:752].strip()
         txn['currency'] = transaction[769:772].strip()
-        txn['orig_amount'] = transaction[811:826].strip()
-        txn['orig_currency'] = transaction[858:861].strip()
+        txn['foreign_amount'] = transaction[811:826].strip()
+        txn['foreign_currency'] = transaction[858:861].strip()
         txn['transaction_dt'] = transaction[588:598].strip()
         txn['transaction_type'] = transaction[736:737].strip()
         txn['description'] = transaction[946:991].strip()

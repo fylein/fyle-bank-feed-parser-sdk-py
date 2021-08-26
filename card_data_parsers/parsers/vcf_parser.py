@@ -61,18 +61,18 @@ class VCFParser(Parser):
         if trxn['transaction_type'] == None:
             raise ParserError('Transaction type missing.')
 
-        if trxn.get('orig_currency') is None or trxn.get('orig_amount') is None or trxn['orig_currency'] == trxn['currency'] or trxn['orig_amount'] == trxn['amount']:
-            del trxn['orig_currency']
-            del trxn['orig_amount']
+        if trxn.get('foreign_currency') is None or trxn.get('foreign_amount') is None or trxn['foreign_currency'] == trxn['currency'] or trxn['foreign_amount'] == trxn['amount']:
+            del trxn['foreign_currency']
+            del trxn['foreign_amount']
         else:
-            trxn['orig_currency'] = VCFParser.__remove_leading_zeros(
-                trxn['orig_currency'], 3)
-            trxn['orig_currency'] = get_currency_from_country_code(
-                trxn['orig_currency'])
-            if trxn['orig_currency'] == None:
-                raise ParserError('orig_currency missing.')
-            trxn['orig_amount'] = VCFParser.__process_amount(
-                trxn['orig_amount'])
+            trxn['foreign_currency'] = VCFParser.__remove_leading_zeros(
+                trxn['foreign_currency'], 3)
+            trxn['foreign_currency'] = get_currency_from_country_code(
+                trxn['foreign_currency'])
+            if trxn['foreign_currency'] == None:
+                raise ParserError('foreign_currency missing.')
+            trxn['foreign_amount'] = VCFParser.__process_amount(
+                trxn['foreign_amount'])
 
         trxn['amount'] = VCFParser.__process_amount(trxn['amount'])
         trxn['currency'] = VCFParser.__remove_leading_zeros(
@@ -92,9 +92,9 @@ class VCFParser(Parser):
         external_id = str(trxn['external_id']) + trxn['account_number'] + \
             trxn['transaction_dt'] + trxn['vendor'] + \
             trxn['currency'] + trxn['amount']
-        if 'orig_currency' in trxn and 'orig_amount' in trxn:
+        if 'foreign_currency' in trxn and 'foreign_amount' in trxn:
             external_id = external_id + \
-                trxn['orig_currency'] + trxn['orig_amount']
+                trxn['foreign_currency'] + trxn['foreign_amount']
         trxn['external_id'] = generate_external_id(external_id)
         return trxn
 
@@ -122,8 +122,8 @@ class VCFParser(Parser):
         trxn['vendor'] = transaction[8].strip()
         trxn['amount'] = transaction[14].strip()
         trxn['currency'] = transaction[19].strip()
-        trxn['orig_amount'] = transaction[13].strip()
-        trxn['orig_currency'] = transaction[15].strip()
+        trxn['foreign_amount'] = transaction[13].strip()
+        trxn['foreign_currency'] = transaction[15].strip()
         trxn['transaction_type'] = transaction[17].strip()
         trxn['transaction_dt'] = transaction[18].strip()
         trxn['external_id'] = transaction[3].strip()

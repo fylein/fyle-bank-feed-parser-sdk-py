@@ -85,27 +85,27 @@ class S3DFParser(Parser):
         else:
             return None
 
-        # orig_amount
-        orig_amount = S3DFParser.__get_element_by_tag(
+        # foreign_amount
+        foreign_amount = S3DFParser.__get_element_by_tag(
             ftrxn, 'AmountInOriginalCurrency')
-        orig_currency_exponent = trxn['orig_amount'] = orig_amount.attrib['CurrencyExponent']
-        trxn['orig_amount'] = S3DFParser.__get_amount(
-            orig_amount.text, orig_currency_exponent)
-        if trxn['orig_amount'] == None:
+        orig_currency_exponent = trxn['foreign_amount'] = foreign_amount.attrib['CurrencyExponent']
+        trxn['foreign_amount'] = S3DFParser.__get_amount(
+            foreign_amount.text, orig_currency_exponent)
+        if trxn['foreign_amount'] == None:
             return None
 
-        # orig_currency
-        trxn['orig_currency'] = S3DFParser.__get_element_by_tag(
+        # foreign_currency
+        trxn['foreign_currency'] = S3DFParser.__get_element_by_tag(
             ftrxn, 'OriginalCurrencyCode').text
-        if trxn['orig_currency'] != None:
-            trxn['orig_currency'] = get_currency_from_country_code(
-                trxn['orig_currency'])
+        if trxn['foreign_currency'] != None:
+            trxn['foreign_currency'] = get_currency_from_country_code(
+                trxn['foreign_currency'])
         else:
             return None
 
-        if trxn['orig_currency'] == trxn['currency']:
-            del trxn['orig_currency']
-            del trxn['orig_amount']
+        if trxn['foreign_currency'] == trxn['currency']:
+            del trxn['foreign_currency']
+            del trxn['foreign_amount']
 
         # Vendor
         trxn['vendor'] = S3DFParser.__get_element_by_tag(

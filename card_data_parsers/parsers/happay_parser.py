@@ -21,8 +21,6 @@ HAPPAY_FIELDS_MAPPINGS = {
     'external_id': 'external_id',
     'nickname': 'nickname',
     'currency': 'currency',
-    'foreign_amount': 'orig_amount',
-    'foreign_currency': 'orig_currency'
 }
 
 
@@ -73,11 +71,11 @@ class HappayParser(Parser):
             "%Y-%m-%dT%H:%M:%SZ")
 
         # orig amount and orig currency
-        if trxn_line['orig_amount'] and trxn_line['orig_currency']:
-            trxn_line['orig_amount'] = abs(float(trxn_line['orig_amount']))
+        if trxn_line['foreign_amount'] and trxn_line['foreign_currency']:
+            trxn_line['foreign_amount'] = abs(float(trxn_line['foreign_amount']))
         else:
-            del trxn_line['orig_amount']
-            del trxn_line['orig_currency']
+            del trxn_line['foreign_amount']
+            del trxn_line['foreign_currency']
 
         # external id
         unique_for_transaction = str(trxn_line['account_number']) + str(trxn_line['transaction_dt']) + str(
