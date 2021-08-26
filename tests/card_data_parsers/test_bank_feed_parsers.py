@@ -4,7 +4,7 @@ from glob import glob
 import json
 from jsondiff import diff
 import logging
-from card_data_parsers import AmexParser, CDFParser, VCFParser, HappayParser, S3DFParser, ParserError
+from card_data_parsers import AmexParser, CDFParser, VCFParser, HappayParser, S3DFParser, ParserError, filter_none_values
 
 
 logging.basicConfig(level=logging.DEBUG)
@@ -55,9 +55,8 @@ def test_parser(parser, test_case_path):
             args = json.loads(args_file.read())
             try:
                 result = parser.parse(file_obj=data_file, **args)
-                print(json.dumps(result))
                 if not is_negative:
-                    actual = result
+                    actual = [filter_none_values(item) for item in result]
             except ParserError as e:
                 if is_negative:
                     actual = str(e)
