@@ -1,7 +1,9 @@
 import logging
 import csv
+from typing import List
 from .parser import Parser, ParserError
-from .utils import get_currency_from_country_code, is_amount, mask_card_number, generate_external_id, get_iso_date_string, expand_with_default_values, has_null_value_for_keys
+from ..models import VCFTransaction
+from ..utils import get_currency_from_country_code, is_amount, mask_card_number, generate_external_id, get_iso_date_string, expand_with_default_values, has_null_value_for_keys
 
 
 logger = logging.getLogger('vcf')
@@ -82,7 +84,6 @@ class VCFParser(Parser):
 
         trxn['transaction_dt'] = get_iso_date_string(
             trxn['transaction_dt'].strip(), '%m%d%Y')
-        trxn['transaction_date'] = trxn['transaction_dt']
 
         card_num = trxn['account_number']
         # Masking the card number
@@ -288,7 +289,7 @@ class VCFParser(Parser):
         return line
 
     @staticmethod
-    def parse(file_obj, account_number_mask_begin, account_number_mask_end, default_values={}, mandatory_fields=[]):
+    def parse(file_obj, account_number_mask_begin, account_number_mask_end, default_values={}, mandatory_fields=[]) -> List[VCFTransaction]:
         reader = csv.reader(file_obj, delimiter='\t', quoting=csv.QUOTE_NONE)
 
         trxn_lines = []
