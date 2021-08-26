@@ -3,7 +3,7 @@ import csv
 from typing import List
 from .parser import Parser, ParserError
 from ..models import VCFTransaction
-from ..utils import get_currency_from_country_code, is_amount, mask_card_number, generate_external_id, get_iso_date_string, expand_with_default_values, has_null_value_for_keys
+from ..utils import get_currency_from_country_code, is_amount, mask_card_number, generate_external_id, get_iso_date_string, expand_with_default_values, has_null_value_for_keys, remove_leading_zeros
 
 
 logger = logging.getLogger('vcf')
@@ -15,25 +15,8 @@ class VCFParser(Parser):
         pass
 
     @staticmethod
-    def __remove_leading_zeros(value, min_len=None):
-        '''
-        Removes leading zeros. 
-        but maintaining min length - https://docs.python.org/2/library/string.html#string.zfill
-        If min_len given, removes so that the expected minimum length is maintained.
-        Examples:
-            If 00000440 -> 440
-            If 44 -> 44
-            If 0000044 -> 044
-            If 000044444000 -> 44444000
-        '''
-        value = value.lstrip('0')
-        if min_len:
-            value = value.zfill(min_len)
-        return value
-
-    @staticmethod
     def __process_amount(amount):
-        amount = VCFParser.__remove_leading_zeros(amount)
+        amount = remove_leading_zeros(amount)
         # making the string '1234' into '12.34'
         if len(amount) <= 2:
             amount = '.' + amount
@@ -65,7 +48,7 @@ class VCFParser(Parser):
             del trxn['foreign_currency']
             del trxn['foreign_amount']
         else:
-            trxn['foreign_currency'] = VCFParser.__remove_leading_zeros(
+            trxn['foreign_currency'] = remove_leading_zeros(
                 trxn['foreign_currency'], 3)
             trxn['foreign_currency'] = get_currency_from_country_code(
                 trxn['foreign_currency'])
@@ -75,8 +58,7 @@ class VCFParser(Parser):
                 trxn['foreign_amount'])
 
         trxn['amount'] = VCFParser.__process_amount(trxn['amount'])
-        trxn['currency'] = VCFParser.__remove_leading_zeros(
-            trxn['currency'], 3)
+        trxn['currency'] = remove_leading_zeros(trxn['currency'], 3)
         # currency utils to convert to currency ISO string
         trxn['currency'] = get_currency_from_country_code(trxn['currency'])
         if trxn['currency'] == None:
@@ -175,7 +157,7 @@ class VCFParser(Parser):
         return trxn
 
     @staticmethod
-    def __group_by_transaction_type(lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields):
+    def __process_transaction_lines(lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields):
         card_transactions_block_start = -1
         card_transactions_block_end = -1
 
@@ -298,7 +280,7 @@ class VCFParser(Parser):
             cleaned_line = VCFParser.__cleanup_fields(line)
             trxn_lines.append(cleaned_line)
 
-        trxns = VCFParser.__group_by_transaction_type(
+        trxns = VCFParser.__process_transaction_lines(
             trxn_lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields)
 
         return trxns

@@ -58,6 +58,23 @@ def mask_card_number(card_number, unmask_begin, unmask_end):
     return card_number
 
 
+def remove_leading_zeros(value, min_len=None):
+    """
+    Removes leading zeros.
+    but maintaining min length - https://docs.python.org/3/library/stdtypes.html?highlight=zfill#str.zfill
+    If min_len given, removes so that the expected minimum length is maintained.
+    Examples:
+        If 00000440 -> 440
+        If 44 -> 44
+        If 0000044 -> 044
+        If 000044444000 -> 44444000
+    """
+    value = value.lstrip('0')
+    if min_len:
+        value = value.zfill(min_len)
+    return value
+
+
 def get_iso_date_string(date_string, date_format):
     if date_string is not '':
         iso_date_string = datetime.strptime(date_string.strip(), date_format)

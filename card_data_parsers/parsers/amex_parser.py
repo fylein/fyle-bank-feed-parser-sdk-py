@@ -2,7 +2,7 @@ import logging
 from typing import List
 from .parser import Parser, ParserError
 from ..models import AmexTransaction
-from ..utils import generate_external_id, get_currency_from_country_code, get_iso_date_string, is_amount, mask_card_number, expand_with_default_values, has_null_value_for_keys
+from ..utils import generate_external_id, get_currency_from_country_code, get_iso_date_string, is_amount, mask_card_number, expand_with_default_values, has_null_value_for_keys, remove_leading_zeros
 
 
 logger = logging.getLogger('amex')
@@ -14,25 +14,8 @@ class AmexParser(Parser):
         pass
 
     @staticmethod
-    def __remove_leading_zeros(value, min_len=None):
-        """
-        Removes leading zeros.
-        but maintaining min length - https://docs.python.org/3/library/stdtypes.html?highlight=zfill#str.zfill
-        If min_len given, removes so that the expected minimum length is maintained.
-        Examples:
-            If 00000440 -> 440
-            If 44 -> 44
-            If 0000044 -> 044
-            If 000044444000 -> 44444000
-        """
-        value = value.lstrip('0')
-        if min_len:
-            value = value.zfill(min_len)
-        return value
-
-    @staticmethod
     def __process_amount(amount, decimal_place_indicator):
-        amount = AmexParser.__remove_leading_zeros(amount)
+        amount = remove_leading_zeros(amount)
 
         # making the string '1234' into '12.34' and so on according to decimal_place_indicator
         amount = float(amount) / (10 ** int(decimal_place_indicator))
@@ -40,7 +23,7 @@ class AmexParser(Parser):
 
     @staticmethod
     def __process_currency(currency):
-        currency = AmexParser.__remove_leading_zeros(currency, 3)
+        currency = remove_leading_zeros(currency, 3)
 
         # getting the currency from ISO code
         currency = get_currency_from_country_code(currency)
@@ -188,20 +171,20 @@ class AmexParser(Parser):
         return txn
 
     @staticmethod
-    def __group_by_transaction_type(txn_lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields):
+    def __process_transaction_lines(txn_lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields):
         txns = []
-        for transaction in txn_lines:
-            txn = AmexParser.__extract_transaction_fields(transaction)
-            if transaction[904:907].strip() == '01':
+        for txn_line in txn_lines:
+            txn = AmexParser.__extract_transaction_fields(txn_line)
+            if txn_line[904:907].strip() == '01':
                 txn = AmexParser.__extract_airline_transaction_fields(
-                    txn, transaction)
-            if transaction[904:907].strip() == '03':
+                    txn, txn_line)
+            if txn_line[904:907].strip() == '03':
                 txn = AmexParser.__extract_lodging_transaction_fields(
-                    txn, transaction)
+                    txn, txn_line)
                 txn = AmexParser.__process_lodging_transaction(txn)
-            if transaction[904:907].strip() == '04':
+            if txn_line[904:907].strip() == '04':
                 txn = AmexParser.__extract_car_rental_transaction_fields(
-                    txn, transaction)
+                    txn, txn_line)
                 txn = AmexParser.__process_car_rental_transaction(txn)
 
             expand_with_default_values(txn, default_values)
@@ -237,7 +220,7 @@ class AmexParser(Parser):
             if is_transaction:
                 txn_lines.append(line)
 
-        trxns = AmexParser.__group_by_transaction_type(
+        trxns = AmexParser.__process_transaction_lines(
             txn_lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields)
 
         return trxns

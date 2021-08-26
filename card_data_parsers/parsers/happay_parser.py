@@ -87,7 +87,7 @@ class HappayParser(Parser):
         return trxn_line
 
     @staticmethod
-    def __group_by_transaction_type(trxn_lines, account_number_mask_begin, account_number_mask_end, default_values):
+    def __process_transaction_lines(trxn_lines, account_number_mask_begin, account_number_mask_end, default_values):
         txns = []
         for trxn_line in trxn_lines:
             txn = HappayParser.__get_transaction_from_line(
@@ -110,7 +110,7 @@ class HappayParser(Parser):
                 raise ParserError(
                     f'One or many mandatory fields missing.')
 
-        trxns = HappayParser.__group_by_transaction_type(
+        trxns = HappayParser.__process_transaction_lines(
             trxn_lines, account_number_mask_begin, account_number_mask_end, default_values)
 
         return trxns
