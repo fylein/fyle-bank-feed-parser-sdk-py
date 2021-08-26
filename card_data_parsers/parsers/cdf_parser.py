@@ -82,24 +82,24 @@ class CDFParser(Parser):
             return None
         trxn['currency'] = get_currency_from_country_code(trxn['currency'])
 
-        # orig_amount
-        orig_amount = CDFParser.__get_element_by_tag(
+        # foreign_amount
+        foreign_amount = CDFParser.__get_element_by_tag(
             ftrxn, 'AmountInOriginalCurrency')
-        orig_currency_exponent = orig_amount.attrib['CurrencyExponent']
-        trxn['orig_amount'] = CDFParser.__get_amount(
-            orig_amount.text, orig_currency_exponent)
+        orig_currency_exponent = foreign_amount.attrib['CurrencyExponent']
+        trxn['foreign_amount'] = CDFParser.__get_amount(
+            foreign_amount.text, orig_currency_exponent)
 
-        # orig_currency
-        trxn['orig_currency'] = CDFParser.__get_element_by_tag(
+        # foreign_currency
+        trxn['foreign_currency'] = CDFParser.__get_element_by_tag(
             ftrxn, 'OriginalCurrencyCode').text
-        if trxn['orig_currency'] is None:
+        if trxn['foreign_currency'] is None:
             return None
-        trxn['orig_currency'] = get_currency_from_country_code(
-            trxn['orig_currency'])
+        trxn['foreign_currency'] = get_currency_from_country_code(
+            trxn['foreign_currency'])
 
-        if trxn['orig_currency'] is not None and trxn['orig_currency'] == trxn['currency']:
-            del trxn['orig_currency']
-            del trxn['orig_amount']
+        if trxn['foreign_currency'] is not None and trxn['foreign_currency'] == trxn['currency']:
+            del trxn['foreign_currency']
+            del trxn['foreign_amount']
 
         # Vendor
         trxn['vendor'] = CDFParser.__get_element_by_tag(

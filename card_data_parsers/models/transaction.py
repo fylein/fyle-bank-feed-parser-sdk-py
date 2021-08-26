@@ -23,9 +23,9 @@ class Transaction(TypedDict):
 
     external_id: Unique string based on some of fields present
 
-    orig_amount: Refers to amount in foreign currency
+    foreign_amount: Refers to amount in foreign currency
 
-    orig_currency: Refers to foreign currency
+    foreign_currency: Refers to foreign currency
     '''
     bank_name: str
     vendor: str
@@ -35,5 +35,5 @@ class Transaction(TypedDict):
     account_number: str
     transaction_dt: str
     external_id: str
-    orig_amount: str
-    orig_currency: str
+    foreign_amount: str
+    foreign_currency: str
