@@ -299,7 +299,7 @@ class CDFParser(Parser):
                         raise ParserError(
                             'One or many mandatory fields missing.')
 
-                    trxns.append(trxn)
+                    trxns.append(CDFTransaction(**trxn))
                 else:
                     return None
 

@@ -277,7 +277,7 @@ class VCFParser(Parser):
                 raise ParserError(
                     'One or many mandatory fields missing.')
 
-            trxns.append(trxn)
+            trxns.append(VCFTransaction(**trxn))
 
         return trxns
 

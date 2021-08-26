@@ -253,7 +253,7 @@ class S3DFParser(Parser):
                         raise ParserError(
                             'One or many mandatory fields missing.')
 
-                    trxns.append(trxn)
+                    trxns.append(S3DFTransaction(**trxn))
                 else:
                     return None
 
