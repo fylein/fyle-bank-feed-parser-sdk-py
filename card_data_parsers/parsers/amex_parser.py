@@ -1,6 +1,8 @@
 import logging
+from typing import List
 from .parser import Parser, ParserError
-from .utils import generate_external_id, get_currency_from_country_code, get_iso_date_string, is_amount, mask_card_number, expand_with_default_values, has_null_value_for_keys
+from ..models import AmexTransaction
+from ..utils import generate_external_id, get_currency_from_country_code, get_iso_date_string, is_amount, mask_card_number, expand_with_default_values, has_null_value_for_keys
 
 
 logger = logging.getLogger('amex')
@@ -95,7 +97,6 @@ class AmexParser(Parser):
 
         txn['transaction_dt'] = get_iso_date_string(
             txn['transaction_dt'].strip(), "%Y-%m-%d")
-        txn['transaction_date'] = txn['transaction_dt']
 
         # Masking the card number
         txn['account_number'] = mask_card_number(txn['account_number'], account_number_mask_begin,
@@ -228,7 +229,7 @@ class AmexParser(Parser):
         return is_transaction
 
     @staticmethod
-    def parse(file_obj, account_number_mask_begin, account_number_mask_end, default_values={}, mandatory_fields=[]):
+    def parse(file_obj, account_number_mask_begin, account_number_mask_end, default_values={}, mandatory_fields=[]) -> List[AmexTransaction]:
         txn_lines = []
         file_content = file_obj.readlines()
         for line in file_content:

@@ -1,13 +1,14 @@
 from abc import ABCMeta, abstractmethod
-from typing import List
-from .transaction import Transaction
+from typing import List, Iterable
+from ..models import Transaction
+
 
 class Parser:
 
     @staticmethod
     @abstractmethod
     def parse(
-        file_obj,
+        file_obj: Iterable[str],
         account_number_mask_begin: int,
         account_number_mask_end: int,
         default_values={},

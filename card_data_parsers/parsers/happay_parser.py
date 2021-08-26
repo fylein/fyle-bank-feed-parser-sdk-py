@@ -1,8 +1,10 @@
 import logging
 import csv
 import datetime
+from typing import List
 from .parser import Parser, ParserError
-from .utils import get_currency_from_country_code, is_amount, mask_card_number, generate_external_id, has_null_value_for_keys, expand_with_default_values
+from ..models import HappayTransaction
+from ..utils import get_currency_from_country_code, is_amount, mask_card_number, generate_external_id, has_null_value_for_keys, expand_with_default_values
 
 
 logger = logging.getLogger('happay')
@@ -94,7 +96,7 @@ class HappayParser(Parser):
         return txns
 
     @staticmethod
-    def parse(file_obj, account_number_mask_begin, account_number_mask_end, default_values={}, mandatory_fields=[]):
+    def parse(file_obj, account_number_mask_begin, account_number_mask_end, default_values={}, mandatory_fields=[]) -> List[HappayTransaction]:
         reader = csv.DictReader(file_obj, delimiter=',')
 
         # Transaction Lines

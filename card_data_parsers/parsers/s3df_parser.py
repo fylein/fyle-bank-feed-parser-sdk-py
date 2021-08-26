@@ -1,8 +1,10 @@
 import logging
 import xml.etree.ElementTree as ET
 from xml.etree.ElementTree import ElementTree
+from typing import List
 from .parser import Parser, ParserError
-from .utils import get_currency_from_country_code, is_amount, mask_card_number, generate_external_id, get_iso_date_string, expand_with_default_values, has_null_value_for_keys
+from ..models import S3DFTransaction
+from ..utils import get_currency_from_country_code, is_amount, mask_card_number, generate_external_id, get_iso_date_string, expand_with_default_values, has_null_value_for_keys
 
 
 logger = logging.getLogger('s3df')
@@ -59,7 +61,6 @@ class S3DFParser(Parser):
             ftrxn, 'TransactionDate').text
         trxn['transaction_dt'] = get_iso_date_string(
             trxn['transaction_dt'].strip(), '%Y-%m-%d')
-        trxn['transaction_date'] = trxn['transaction_dt']
 
         # Transaction Type
         trxn['transaction_type'] = S3DFParser.__get_element_by_tag(
@@ -259,7 +260,7 @@ class S3DFParser(Parser):
         return trxns
 
     @staticmethod
-    def parse(file_obj, account_number_mask_begin, account_number_mask_end, default_values={}, mandatory_fields=[]):
+    def parse(file_obj, account_number_mask_begin, account_number_mask_end, default_values={}, mandatory_fields=[]) -> List[S3DFTransaction]:
         root: ElementTree = ET.parse(file_obj).getroot()
         if root is None:
             return None
