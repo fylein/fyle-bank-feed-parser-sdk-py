@@ -9,8 +9,8 @@
     "external_id": "22ad6bf6230053b0fdd4a17717615004",
     "nickname": "Boi1",
     "currency": "INR",
-    "orig_amount": 624.0,
-    "orig_currency": "INR",
+    "foreign_amount": 624.0,
+    "foreign_currency": "INR",
     "bank_name": "Test Bank"
   },
   {
@@ -23,8 +23,8 @@
     "external_id": "3bb23c91900be9c326f7b80575250831",
     "nickname": "Boi2",
     "currency": "INR",
-    "orig_amount": 1005.0,
-    "orig_currency": "INR",
+    "foreign_amount": 1005.0,
+    "foreign_currency": "INR",
     "bank_name": "Test Bank"
   },
   {
@@ -37,8 +37,8 @@
     "external_id": "910efbef3c4ab927fd4d8a2cd87ab664",
     "nickname": "Boi3",
     "currency": "INR",
-    "orig_amount": 1516.08,
-    "orig_currency": "USD",
+    "foreign_amount": 1516.08,
+    "foreign_currency": "USD",
     "bank_name": "Test Bank"
   }
 ]

@@ -41,8 +41,8 @@
     "transaction_type": "debit",
     "amount": "205.16",
     "currency": "GBP",
-    "orig_amount": "230.4",
-    "orig_currency": "EUR",
+    "foreign_amount": "230.4",
+    "foreign_currency": "EUR",
     "vendor": "Abcd, --",
     "external_id": "0205ba3ba7e22335177c2bb52e1bf68f"
   },
