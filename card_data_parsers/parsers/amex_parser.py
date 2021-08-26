@@ -212,7 +212,7 @@ class AmexParser(Parser):
             if has_null_value_for_keys(txn, mandatory_fields):
                 raise ParserError('One or many mandatory fields missing.')
 
-            txns.append(txn)
+            txns.append(AmexTransaction(**txn))
         return txns
 
     @staticmethod

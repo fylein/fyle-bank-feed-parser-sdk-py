@@ -92,7 +92,7 @@ class HappayParser(Parser):
         for trxn_line in trxn_lines:
             txn = HappayParser.__get_transaction_from_line(
                 trxn_line, account_number_mask_begin, account_number_mask_end, default_values)
-            txns.append(txn)
+            txns.append(HappayTransaction(**txn))
         return txns
 
     @staticmethod
