@@ -21,6 +21,8 @@ HAPPAY_FIELDS_MAPPINGS = {
     'external_id': 'external_id',
     'nickname': 'nickname',
     'currency': 'currency',
+    'foreign_amount': 'foreign_amount',
+    'foreign_currency': 'foreign_currency',
 }
 
 
