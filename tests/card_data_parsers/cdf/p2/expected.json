@@ -1,6 +1,6 @@
 [
   {
-    "account_number": "Abcd",
+    "account_number": "1234*********1213",
     "transaction_dt": "2018-12-18T10:00:00Z",
     "transaction_type": "debit",
     "amount": "13.99",
@@ -9,7 +9,7 @@
     "external_id": "bcc54fff373cf5b4eb1b3b8c53c111bf"
   },
   {
-    "account_number": "Abcd",
+    "account_number": "1234*********1213",
     "transaction_dt": "2018-12-19T10:00:00Z",
     "transaction_type": "debit",
     "amount": "130",
@@ -18,7 +18,7 @@
     "external_id": "c36c9ba0602a898336e1c08360495d5d"
   },
   {
-    "account_number": "Abcd",
+    "account_number": "1234*********1213",
     "transaction_dt": "2018-12-19T10:00:00Z",
     "transaction_type": "debit",
     "amount": "38.63",
@@ -27,7 +27,7 @@
     "external_id": "379e9c62e0804eeb9ff0864fb03b96f0"
   },
   {
-    "account_number": "Abcd",
+    "account_number": "1234*********1213",
     "transaction_dt": "2018-12-19T10:00:00Z",
     "transaction_type": "debit",
     "amount": "129",

@@ -1,6 +1,6 @@
 [
   {
-    "account_number": "Abcd",
+    "account_number": "1234*********1213",
     "transaction_dt": "2018-12-18T10:00:00Z",
     "transaction_type": "debit",
     "amount": "5",
@@ -9,7 +9,7 @@
     "external_id": "516f72d0902bafeec0448b23a9735b94"
   },
   {
-    "account_number": "Abcd",
+    "account_number": "1234*********1213",
     "transaction_dt": "2018-12-18T10:00:00Z",
     "transaction_type": "debit",
     "amount": "3.89",
@@ -18,12 +18,12 @@
     "external_id": "7479ca62690d075b08a39e072df79c2a"
   },
   {
-    "account_number": "Abcd",
+    "account_number": "1234*********1213",
     "transaction_dt": "2018-12-18T10:00:00Z",
     "transaction_type": "debit",
     "amount": "89",
     "currency": "EUR",
-    "vendor": "DRURY COURT HOTEL",
+    "vendor": "Abcdedfgh",
     "external_id": "79c952ed6c2e4fb3038a405dc494cade"
   }
 ]
