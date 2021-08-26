@@ -38,7 +38,7 @@
           <AvailableCredit CurrencyCode = "840" CurrencyExponent = "4" CurrencySign = "C" >0000000351430000</AvailableCredit>
         </DailyPortfolio_4450 >
         </AccountEntity >
-        <AccountEntity AccountNumber = "Abcd" >
+        <AccountEntity AccountNumber = "12345678910111213" >
         <DailyPortfolio_4450 >
           <HierarchyRecordHeader >
             <SequenceNum >00000003</SequenceNum>
@@ -248,7 +248,7 @@
             </FinancialRecordHeader >
             <AcquiringICA >00000011319</AcquiringICA>
             <CardAcceptorId >008812181</CardAcceptorId>
-            <CardAcceptorName >DRURY COURT HOTEL</CardAcceptorName>
+            <CardAcceptorName >Abcdedfgh</CardAcceptorName>
             <CardAcceptorStreetAddress >28 LOWER STEPHENS STREET</CardAcceptorStreetAddress>
             <CardAcceptorCity >DUBLIN 2</CardAcceptorCity>
             <CardAcceptorStateProvince >IRL</CardAcceptorStateProvince>

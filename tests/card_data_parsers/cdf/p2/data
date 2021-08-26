@@ -38,7 +38,7 @@
           <AvailableCredit CurrencyCode = "840" CurrencyExponent = "4" CurrencySign = "C" >0000000335960000</AvailableCredit>
         </DailyPortfolio_4450 >
         </AccountEntity >
-        <AccountEntity AccountNumber = "Abcd" >
+        <AccountEntity AccountNumber = "12345678910111213" >
         <DailyPortfolio_4450 >
           <HierarchyRecordHeader >
             <SequenceNum >00000003</SequenceNum>
