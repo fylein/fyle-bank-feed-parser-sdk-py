@@ -55,7 +55,6 @@ def test_parser(parser, test_case_path):
             args = json.loads(args_file.read())
             try:
                 result = parser.parse(file_obj=data_file, **args)
-                print(json.dumps(result))
                 if not is_negative:
                     actual = [filter_none_values(item) for item in result]
             except ParserError as e:
