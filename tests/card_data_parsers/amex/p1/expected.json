@@ -1,1 +1,17 @@
-[]
+[
+  {
+    "account_number": "0123*******0113",
+    "nickname": "I  ABCDEFG",
+    "amount": "63.81",
+    "currency": "CAD",
+    "foreign_amount": "48.33",
+    "foreign_currency": "USD",
+    "transaction_dt": "2009-03-13T10:00:00Z",
+    "transaction_type": "debit",
+    "description": "ABC-DEF  9511      HXLGGHWZOV M      ZA",
+    "external_id": "dd11f01234dde3c25b1a4d87a764201e",
+    "merchant_category_code": "10",
+    "vendor": "5",
+    "bank_name": "Test Bank"
+  }
+]
