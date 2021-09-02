@@ -278,7 +278,5 @@ class VCFParser(Parser):
             cleaned_line = VCFParser.__cleanup_fields(line)
             trxn_lines.append(cleaned_line)
 
-        trxns = VCFParser.__extract_transactions(
+        return VCFParser.__extract_transactions(
             trxn_lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields)
-
-        return trxns

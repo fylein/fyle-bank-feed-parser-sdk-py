@@ -217,7 +217,5 @@ class AmexParser(Parser):
             if is_transaction:
                 txn_lines.append(line)
 
-        trxns = AmexParser.__extract_transactions(
+        return AmexParser.__extract_transactions(
             txn_lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields)
-
-        return trxns
