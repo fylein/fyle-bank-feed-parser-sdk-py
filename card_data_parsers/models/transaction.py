@@ -34,8 +34,8 @@ class Transaction:
     amount: str = None
     foreign_amount: str = None
     foreign_currency: str = None
-    transaction_type: str  = None
-    vendor: str  = None
-    description: str  = None
-    external_id: str  = None
-    bank_name: str  = None
+    transaction_type: str = None
+    vendor: str = None
+    description: str = None
+    external_id: str = None
+    bank_name: str = None

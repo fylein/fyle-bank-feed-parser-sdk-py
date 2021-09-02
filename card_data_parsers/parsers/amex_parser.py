@@ -75,9 +75,6 @@ class AmexParser(Parser):
         if txn['currency'] is None:
             raise ParserError(f'Currency is missing')
 
-        txn['transaction_dt'] = get_iso_date_string(
-            txn['transaction_dt'].strip(), "%Y-%m-%d")
-
         # Masking the card number
         txn['account_number'] = mask_card_number(txn['account_number'], account_number_mask_begin,
                                                  account_number_mask_end)
@@ -120,7 +117,7 @@ class AmexParser(Parser):
         txn['currency'] = transaction[769:772].strip()
         txn['foreign_amount'] = transaction[811:826].strip()
         txn['foreign_currency'] = transaction[858:861].strip()
-        txn['transaction_dt'] = transaction[588:598].strip()
+        txn['transaction_dt'] = get_iso_date_string(transaction[588:598].strip(), "%Y-%m-%d")
         txn['transaction_type'] = transaction[736:737].strip()
         txn['description'] = transaction[946:991].strip()
         txn['external_id'] = transaction[631:681].strip()
