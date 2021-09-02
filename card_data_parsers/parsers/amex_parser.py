@@ -1,20 +1,17 @@
-import logging
 from typing import List
+from ..log import getLogger
 from .parser import Parser, ParserError
 from ..models import AmexTransaction
 from ..utils import generate_external_id, get_currency_from_country_code, get_iso_date_string, is_amount, mask_card_number, expand_with_default_values, has_null_value_for_keys, remove_leading_zeros
 
 
-logger = logging.getLogger('amex')
-logger.setLevel(logging.INFO)
+logger = getLogger(__name__)
 
 
 class AmexParser(Parser):
-    def __init__(self):
-        pass
 
     @staticmethod
-    def __process_amount(amount, decimal_place_indicator):
+    def __extract_amount(amount, decimal_place_indicator):
         amount = remove_leading_zeros(amount)
 
         # making the string '1234' into '12.34' and so on according to decimal_place_indicator
@@ -22,7 +19,7 @@ class AmexParser(Parser):
         return str(amount)
 
     @staticmethod
-    def __process_currency(currency):
+    def __extract_currency(currency):
         currency = remove_leading_zeros(currency, 3)
 
         # getting the currency from ISO code
@@ -30,7 +27,7 @@ class AmexParser(Parser):
         return currency
 
     @staticmethod
-    def __process_transaction_type(sign_indicator):
+    def __extract_transaction_type(sign_indicator):
         transaction_type = None
         if sign_indicator == '+':
             transaction_type = 'debit'
@@ -56,7 +53,7 @@ class AmexParser(Parser):
 
     @staticmethod
     def __process_transaction(txn, account_number_mask_begin, account_number_mask_end):
-        txn['transaction_type'] = AmexParser.__process_transaction_type(
+        txn['transaction_type'] = AmexParser.__extract_transaction_type(
             txn['transaction_type'])
         if txn['transaction_type'] is None:
             raise ParserError(f'Transaction type is missing')
@@ -65,16 +62,16 @@ class AmexParser(Parser):
             del txn['foreign_amount']
             del txn['foreign_currency']
         else:
-            txn['foreign_currency'] = AmexParser.__process_currency(
+            txn['foreign_currency'] = AmexParser.__extract_currency(
                 txn['foreign_currency'])
             if txn['foreign_currency'] is None:
                 raise ParserError(f'foreign_currency is missing')
-            txn['foreign_amount'] = AmexParser.__process_amount(
+            txn['foreign_amount'] = AmexParser.__extract_amount(
                 txn['foreign_amount'], txn['decimal_place_indicator'])
 
-        txn['amount'] = AmexParser.__process_amount(
+        txn['amount'] = AmexParser.__extract_amount(
             txn['amount'], txn['decimal_place_indicator'])
-        txn['currency'] = AmexParser.__process_currency(txn['currency'])
+        txn['currency'] = AmexParser.__extract_currency(txn['currency'])
         if txn['currency'] is None:
             raise ParserError(f'Currency is missing')
 
@@ -171,7 +168,7 @@ class AmexParser(Parser):
         return txn
 
     @staticmethod
-    def __process_transaction_lines(txn_lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields):
+    def __extract_transactions(txn_lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields):
         txns = []
         for txn_line in txn_lines:
             txn = AmexParser.__extract_transaction_fields(txn_line)
@@ -220,7 +217,7 @@ class AmexParser(Parser):
             if is_transaction:
                 txn_lines.append(line)
 
-        trxns = AmexParser.__process_transaction_lines(
+        trxns = AmexParser.__extract_transactions(
             txn_lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields)
 
         return trxns

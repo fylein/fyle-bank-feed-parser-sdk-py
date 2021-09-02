@@ -2,13 +2,13 @@ import logging
 import csv
 import datetime
 from typing import List
+from ..log import getLogger
 from .parser import Parser, ParserError
 from ..models import HappayTransaction
 from ..utils import get_currency_from_country_code, is_amount, mask_card_number, generate_external_id, has_null_value_for_keys, expand_with_default_values
 
 
-logger = logging.getLogger('happay')
-logger.setLevel(logging.INFO)
+logger = getLogger(__name__)
 
 
 HAPPAY_FIELDS_MAPPINGS = {
@@ -27,8 +27,6 @@ HAPPAY_FIELDS_MAPPINGS = {
 
 
 class HappayParser(Parser):
-    def __init__(self):
-        pass
 
     @staticmethod
     def __strip_spaces(trxn_line):
@@ -87,7 +85,7 @@ class HappayParser(Parser):
         return trxn_line
 
     @staticmethod
-    def __process_transaction_lines(trxn_lines, account_number_mask_begin, account_number_mask_end, default_values):
+    def __extract_transactions(trxn_lines, account_number_mask_begin, account_number_mask_end, default_values):
         txns = []
         for trxn_line in trxn_lines:
             txn = HappayParser.__get_transaction_from_line(
@@ -110,7 +108,7 @@ class HappayParser(Parser):
                 raise ParserError(
                     f'One or many mandatory fields missing.')
 
-        trxns = HappayParser.__process_transaction_lines(
+        trxns = HappayParser.__extract_transactions(
             trxn_lines, account_number_mask_begin, account_number_mask_end, default_values)
 
         return trxns

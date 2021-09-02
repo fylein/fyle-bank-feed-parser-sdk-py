@@ -2,18 +2,16 @@ import logging
 import xml.etree.ElementTree as ET
 from xml.etree.ElementTree import ElementTree
 from typing import List
+from ..log import getLogger
 from .parser import Parser, ParserError
 from ..models import CDFTransaction
 from ..utils import get_currency_from_country_code, is_amount, mask_card_number, generate_external_id, get_iso_date_string, expand_with_default_values, has_null_value_for_keys
 
 
-logger = logging.getLogger('cdf')
-logger.setLevel(logging.INFO)
+logger = getLogger(__name__)
 
 
 class CDFParser(Parser):
-    def __init__(self):
-        pass
 
     @staticmethod
     def __get_element_by_tag(root, name):
@@ -250,13 +248,13 @@ class CDFParser(Parser):
         return nickname
 
     @staticmethod
-    def __get_transactions(root, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields):
+    def __extract_transactions(root, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields):
         if not CDFParser.__check_transmission_headers(root):
             return None
 
         trxns = []
         issuer_entity = CDFParser.__get_element_by_tag(root, 'IssuerEntity')
-        if issuer_entity == None:
+        if issuer_entity is None:
             return []
         corporate_entity = CDFParser.__get_element_by_tag(
             issuer_entity, 'CorporateEntity')
@@ -311,7 +309,7 @@ class CDFParser(Parser):
         if root is None:
             return None
 
-        trxns = CDFParser.__get_transactions(
+        trxns = CDFParser.__extract_transactions(
             root, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields)
 
         return trxns

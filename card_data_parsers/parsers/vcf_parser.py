@@ -1,21 +1,19 @@
 import logging
 import csv
 from typing import List
+from ..log import getLogger
 from .parser import Parser, ParserError
 from ..models import VCFTransaction
 from ..utils import get_currency_from_country_code, is_amount, mask_card_number, generate_external_id, get_iso_date_string, expand_with_default_values, has_null_value_for_keys, remove_leading_zeros
 
 
-logger = logging.getLogger('vcf')
-logger.setLevel(logging.INFO)
+logger = getLogger(__name__)
 
 
 class VCFParser(Parser):
-    def __init__(self):
-        pass
 
     @staticmethod
-    def __process_amount(amount):
+    def __extract_amount(amount):
         amount = remove_leading_zeros(amount)
         # making the string '1234' into '12.34'
         if len(amount) <= 2:
@@ -27,7 +25,7 @@ class VCFParser(Parser):
         return amount
 
     @staticmethod
-    def __process_transaction_type(trxn_type):
+    def __extract_transaction_type(trxn_type):
         credits = ['11', '30', '31', '61', '63', '65', '71', '73']
         debits = ['10', '20', '22', '40', '50', '52', '54',
                   '56', '62', '64', '66', '80', '82', '84', '86', '88']
@@ -39,7 +37,7 @@ class VCFParser(Parser):
 
     @staticmethod
     def __process_transaction(trxn, account_number_mask_begin, account_number_mask_end):
-        trxn['transaction_type'] = VCFParser.__process_transaction_type(
+        trxn['transaction_type'] = VCFParser.__extract_transaction_type(
             trxn['transaction_type'])
         if trxn['transaction_type'] == None:
             raise ParserError('Transaction type missing.')
@@ -54,10 +52,10 @@ class VCFParser(Parser):
                 trxn['foreign_currency'])
             if trxn['foreign_currency'] == None:
                 raise ParserError('foreign_currency missing.')
-            trxn['foreign_amount'] = VCFParser.__process_amount(
+            trxn['foreign_amount'] = VCFParser.__extract_amount(
                 trxn['foreign_amount'])
 
-        trxn['amount'] = VCFParser.__process_amount(trxn['amount'])
+        trxn['amount'] = VCFParser.__extract_amount(trxn['amount'])
         trxn['currency'] = remove_leading_zeros(trxn['currency'], 3)
         # currency utils to convert to currency ISO string
         trxn['currency'] = get_currency_from_country_code(trxn['currency'])
@@ -86,7 +84,7 @@ class VCFParser(Parser):
             airline_trxn['airline_travel_date'].strip(), '%m%d%Y')
 
         if airline_trxn['airline_total_fare'] is not None:
-            airline_trxn['airline_total_fare'] = VCFParser.__process_amount(
+            airline_trxn['airline_total_fare'] = VCFParser.__extract_amount(
                 airline_trxn['airline_total_fare'])
         return airline_trxn
 
@@ -157,7 +155,7 @@ class VCFParser(Parser):
         return trxn
 
     @staticmethod
-    def __process_transaction_lines(lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields):
+    def __extract_transactions(lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields):
         card_transactions_block_start = -1
         card_transactions_block_end = -1
 
@@ -280,7 +278,7 @@ class VCFParser(Parser):
             cleaned_line = VCFParser.__cleanup_fields(line)
             trxn_lines.append(cleaned_line)
 
-        trxns = VCFParser.__process_transaction_lines(
+        trxns = VCFParser.__extract_transactions(
             trxn_lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields)
 
         return trxns
