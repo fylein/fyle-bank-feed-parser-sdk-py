@@ -250,9 +250,6 @@ class CDFParser(Parser):
 
     @staticmethod
     def __extract_transactions(root, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields):
-        if not CDFParser.__check_transmission_headers(root):
-            return None
-
         txns = []
         issuer_entity = CDFParser.__get_element_by_tag(root, 'IssuerEntity')
         if issuer_entity is None:
@@ -306,6 +303,9 @@ class CDFParser(Parser):
     def parse(file_obj, account_number_mask_begin, account_number_mask_end, default_values={}, mandatory_fields=[]) -> List[CDFTransaction]:
         root: ElementTree = ET.parse(file_obj).getroot()
         if root is None:
+            return None
+
+        if not CDFParser.__check_transmission_headers(root):
             return None
 
         return CDFParser.__extract_transactions(
