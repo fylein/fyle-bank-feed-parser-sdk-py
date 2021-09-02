@@ -263,7 +263,5 @@ class S3DFParser(Parser):
         if root is None:
             return None
 
-        trxns = S3DFParser.__extract_transactions(
+        return S3DFParser.__extract_transactions(
             root, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields)
-
-        return trxns

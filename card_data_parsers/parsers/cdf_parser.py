@@ -309,7 +309,5 @@ class CDFParser(Parser):
         if root is None:
             return None
 
-        trxns = CDFParser.__extract_transactions(
+        return CDFParser.__extract_transactions(
             root, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields)
-
-        return trxns

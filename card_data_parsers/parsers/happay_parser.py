@@ -108,7 +108,5 @@ class HappayParser(Parser):
                 raise ParserError(
                     f'One or many mandatory fields missing.')
 
-        trxns = HappayParser.__extract_transactions(
+        return HappayParser.__extract_transactions(
             trxn_lines, account_number_mask_begin, account_number_mask_end, default_values)
-
-        return trxns

@@ -28,14 +28,14 @@ class Transaction:
 
     foreign_currency: Refers to foreign currency
     '''
-    account_number: str
-    transaction_dt: str
-    currency: str
-    amount: str
+    account_number: str = None
+    transaction_dt: str = None
+    currency: str = None
+    amount: str = None
     foreign_amount: str = None
     foreign_currency: str = None
-    transaction_type: str  = None
-    vendor: str  = None
-    description: str  = None
-    external_id: str  = None
-    bank_name: str  = None
+    transaction_type: str = None
+    vendor: str = None
+    description: str = None
+    external_id: str = None
+    bank_name: str = None
