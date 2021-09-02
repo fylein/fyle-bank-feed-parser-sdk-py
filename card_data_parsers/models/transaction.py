@@ -1,7 +1,8 @@
-from typing_extensions import TypedDict
+from dataclasses import dataclass, asdict
 
 
-class Transaction(TypedDict):
+@dataclass
+class Transaction:
     '''
     General fields to expect in a transaction i.e. parsers response.
 
@@ -27,13 +28,14 @@ class Transaction(TypedDict):
 
     foreign_currency: Refers to foreign currency
     '''
-    bank_name: str
-    vendor: str
-    transaction_type: str
-    currency: str
-    amount: str
     account_number: str
     transaction_dt: str
-    external_id: str
-    foreign_amount: str
-    foreign_currency: str
+    currency: str
+    amount: str
+    foreign_amount: str = None
+    foreign_currency: str = None
+    transaction_type: str  = None
+    vendor: str  = None
+    description: str  = None
+    external_id: str  = None
+    bank_name: str  = None
