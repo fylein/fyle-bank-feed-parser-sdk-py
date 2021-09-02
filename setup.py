@@ -19,7 +19,8 @@ setup(
     install_requires=[
         'pycountry >= 18.5.26',
         'typing-extensions>=3.10.0.0',
-        'jsondiff >= 1.2.0'
+        'jsondiff >= 1.2.0',
+        'dataclasses>=0.6'
     ],
     keywords=['fyle', 'api', 'python', 'sdk', 'cards', 'parsers'],
     classifiers=[
