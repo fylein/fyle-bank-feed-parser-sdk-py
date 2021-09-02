@@ -1,28 +1,30 @@
+from dataclasses import dataclass, asdict
 from .transaction import Transaction
 
 
+@dataclass
 class VCFTransaction(Transaction):
-    merchant_category_code: str
+    merchant_category_code: str = None
 
-    sequence_number: str
+    sequence_number: str = None
 
-    car_rental_merchant_category_code: str
-    car_rental_supplier_name: str
+    car_rental_merchant_category_code: str = None
+    car_rental_supplier_name: str = None
 
-    airline_merchant_category_code: str
-    airline_supplier_name: str
-    airline_travel_agency_name: str
-    airline_total_fare: str
-    airline_travel_date: str
-    airline_ticket_number: str
+    airline_merchant_category_code: str = None
+    airline_supplier_name: str = None
+    airline_travel_agency_name: str = None
+    airline_total_fare: str = None
+    airline_travel_date: str = None
+    airline_ticket_number: str = None
 
-    lodging_merchant_category_code: str
-    lodging_supplier_name: str
-    lodging_check_in_date: str
-    lodging_nights: int
+    lodging_merchant_category_code: str = None
+    lodging_supplier_name: str = None
+    lodging_check_in_date: str = None
+    lodging_nights: int = None
 
-    fleet_product_merchant_category_code: str
-    fleet_product_supplier_name: str
+    fleet_product_merchant_category_code: str = None
+    fleet_product_supplier_name: str = None
 
-    fleet_service_merchant_category_code: str
-    fleet_service_supplier_name: str
+    fleet_service_merchant_category_code: str = None
+    fleet_service_supplier_name: str = None

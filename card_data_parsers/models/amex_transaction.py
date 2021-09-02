@@ -1,18 +1,20 @@
+from dataclasses import dataclass
 from .transaction import Transaction
 
 
+@dataclass
 class AmexTransaction(Transaction):
-    nickname: str
-    merchant_category_code: str
-    lodging_check_in_date: str
-    lodging_checkout_date: str
-    lodging_nights: int
-    hotel_country: str
-    hotel_city: str
-    car_rental_date: str
-    car_return_date: str
-    airline_service_class: str
-    airline_carrier_code: str
-    airline_travel_agency_name: str
-    airline_ticket_number: str
-    airline_type: str
+    nickname: str = None
+    merchant_category_code: str = None
+    lodging_check_in_date: str = None
+    lodging_checkout_date: str = None
+    lodging_nights: int = None
+    hotel_country: str = None
+    hotel_city: str = None
+    car_rental_date: str = None
+    car_return_date: str = None
+    airline_service_class: str = None
+    airline_carrier_code: str = None
+    airline_travel_agency_name: str = None
+    airline_ticket_number: str = None
+    airline_type: str = None
