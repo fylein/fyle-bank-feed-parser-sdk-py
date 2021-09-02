@@ -5,7 +5,7 @@ from typing import List
 from ..log import getLogger
 from .parser import Parser, ParserError
 from ..models import CDFTransaction
-from ..utils import get_currency_from_country_code, is_amount, mask_card_number, generate_external_id, get_iso_date_string, expand_with_default_values, has_null_value_for_keys
+from ..utils import get_currency_from_country_code, is_amount, mask_card_number, generate_external_id, get_iso_date_string, has_null_value_for_attrs
 
 
 logger = getLogger(__name__)
@@ -43,10 +43,10 @@ class CDFParser(Parser):
         return amount
 
     @staticmethod
-    def __get_transaction_field(root: ElementTree, account_number, nickname):
-        trxn = {}
+    def __extract_transaction_fields(root: ElementTree, account_number, nickname, default_values):
+        txn = CDFTransaction(**default_values)
 
-        trxn['account_number'] = account_number
+        txn.account_number = account_number
 
         ftrxn = CDFParser.__get_element_by_tag(
             root, 'FinancialTransaction_5000')
@@ -54,58 +54,58 @@ class CDFParser(Parser):
             root, 'CardAcceptor_5001')
 
         # Date
-        trxn['transaction_dt'] = CDFParser.__get_element_by_tag(
+        txn.transaction_dt = CDFParser.__get_element_by_tag(
             ftrxn, 'TransactionDate').text
-        trxn['transaction_dt'] = get_iso_date_string(
-            trxn['transaction_dt'].strip(), '%Y-%m-%d')
+        txn.transaction_dt = get_iso_date_string(
+            txn.transaction_dt.strip(), '%Y-%m-%d')
 
         # Transaction Type
-        trxn['transaction_type'] = CDFParser.__get_element_by_tag(
+        txn.transaction_type = CDFParser.__get_element_by_tag(
             ftrxn, 'DebitOrCreditIndicator').text
-        if trxn['transaction_type'] == 'D':
-            trxn['transaction_type'] = 'debit'
-        elif trxn['transaction_type'] == 'C':
-            trxn['transaction_type'] = 'credit'
+        if txn.transaction_type == 'D':
+            txn.transaction_type = 'debit'
+        elif txn.transaction_type == 'C':
+            txn.transaction_type = 'credit'
 
         # amount
         amount = CDFParser.__get_element_by_tag(
             ftrxn, 'AmountInPostedCurrency')
         currency_exponent = amount.attrib['CurrencyExponent']
-        trxn['amount'] = CDFParser.__get_amount(amount.text, currency_exponent)
+        txn.amount = CDFParser.__get_amount(amount.text, currency_exponent)
 
         # currency
-        trxn['currency'] = CDFParser.__get_element_by_tag(
+        txn.currency = CDFParser.__get_element_by_tag(
             ftrxn, 'PostedCurrencyCode').text
-        if trxn['currency'] is None:
+        if txn.currency is None:
             return None
-        trxn['currency'] = get_currency_from_country_code(trxn['currency'])
+        txn.currency = get_currency_from_country_code(txn.currency)
 
         # foreign_amount
         foreign_amount = CDFParser.__get_element_by_tag(
             ftrxn, 'AmountInOriginalCurrency')
         orig_currency_exponent = foreign_amount.attrib['CurrencyExponent']
-        trxn['foreign_amount'] = CDFParser.__get_amount(
+        txn.foreign_amount = CDFParser.__get_amount(
             foreign_amount.text, orig_currency_exponent)
 
         # foreign_currency
-        trxn['foreign_currency'] = CDFParser.__get_element_by_tag(
+        txn.foreign_currency = CDFParser.__get_element_by_tag(
             ftrxn, 'OriginalCurrencyCode').text
-        if trxn['foreign_currency'] is None:
+        if txn.foreign_currency is None:
             return None
-        trxn['foreign_currency'] = get_currency_from_country_code(
-            trxn['foreign_currency'])
+        txn.foreign_currency = get_currency_from_country_code(
+            txn.foreign_currency)
 
-        if trxn['foreign_currency'] is not None and trxn['foreign_currency'] == trxn['currency']:
-            del trxn['foreign_currency']
-            del trxn['foreign_amount']
+        if txn.foreign_currency is not None and txn.foreign_currency == txn.currency:
+            txn.foreign_currency = None
+            txn.foreign_amount = None
 
         # Vendor
-        trxn['vendor'] = CDFParser.__get_element_by_tag(
+        txn.vendor = CDFParser.__get_element_by_tag(
             card_acceptor, 'CardAcceptorName').text
 
         # Nickname
         if nickname is not None:
-            trxn['nickname'] = nickname
+            txn.nickname = nickname
 
         # external Id
         external_id = '' + \
@@ -114,8 +114,9 @@ class CDFParser(Parser):
         external_id = external_id + \
             CDFParser.__get_element_by_tag(
                 ftrxn, 'MasterCardFinancialTransactionId').text
-        trxn['external_id'] = generate_external_id(external_id)
-        return trxn
+        txn.external_id = generate_external_id(external_id)
+
+        return txn
 
     @staticmethod
     def __process_date(txn_date):
@@ -128,101 +129,101 @@ class CDFParser(Parser):
         return txn_date
 
     @staticmethod
-    def __extract_lodging_transaction_fields(trxn, line_item):
+    def __extract_lodging_transaction_fields(txn, line_item):
         lodging_trxn = CDFParser.__get_element_by_tag(
             line_item, 'LodgingSummaryAddendum_5030')
 
         lodging_nights = CDFParser.__get_element_by_tag(
             lodging_trxn, 'TotalRoomNights').text
         if lodging_nights:
-            trxn['lodging_nights'] = int(lodging_nights)
+            txn.lodging_nights = int(lodging_nights)
         check_in_date = CDFParser.__get_element_by_tag(
             lodging_trxn, 'ArrivalDate')
-        trxn['lodging_check_in_date'] = CDFParser.__process_date(check_in_date)
+        txn.lodging_check_in_date = CDFParser.__process_date(check_in_date)
         departure_date = CDFParser.__get_element_by_tag(
             lodging_trxn, 'DepartureDate')
-        trxn['lodging_checkout_date'] = CDFParser.__process_date(
+        txn.lodging_checkout_date = CDFParser.__process_date(
             departure_date)
 
         total_amount = CDFParser.__get_element_by_tag(
             lodging_trxn, 'TotalAmountChargedOnCreditCardAmount')
         if total_amount is not None:
             currency_exponent = total_amount.attrib['CurrencyExponent']
-            trxn['lodging_total_fare'] = CDFParser.__get_amount(
+            txn.lodging_total_fare = CDFParser.__get_amount(
                 total_amount.text, currency_exponent)
         else:
-            trxn['lodging_total_fare'] = None
+            txn.lodging_total_fare = None
 
-        return trxn
+        return txn
 
     @staticmethod
-    def __extract_airline_transaction_fields(trxn, line_item):
+    def __extract_airline_transaction_fields(txn, line_item):
         airline_trxn = CDFParser.__get_element_by_tag(
             line_item, 'PassengerTransportDetailTripLegData_5021')
 
         travel_date = CDFParser.__get_element_by_tag(
             airline_trxn, 'TravelDate')
-        trxn['airline_travel_date'] = CDFParser.__process_date(travel_date)
+        txn.airline_travel_date = CDFParser.__process_date(travel_date)
 
         if CDFParser.__get_element_by_tag(airline_trxn, 'FareBaseCode') is not None:
-            trxn['airline_fare_base_code'] = CDFParser.__get_element_by_tag(
+            txn.airline_fare_base_code = CDFParser.__get_element_by_tag(
                 airline_trxn, 'FareBaseCode').text
         else:
-            trxn['airline_fare_base_code'] = None
+            txn.airline_fare_base_code = None
         if CDFParser.__get_element_by_tag(airline_trxn, 'ServiceClass') is not None:
-            trxn['airline_service_class'] = CDFParser.__get_element_by_tag(
+            txn.airline_service_class = CDFParser.__get_element_by_tag(
                 airline_trxn, 'ServiceClass').text
         else:
-            trxn['airline_service_class'] = None
+            txn.airline_service_class = None
         if CDFParser.__get_element_by_tag(airline_trxn, 'CarrierCode') is not None:
-            trxn['airline_carrier_code'] = CDFParser.__get_element_by_tag(
+            txn.airline_carrier_code = CDFParser.__get_element_by_tag(
                 airline_trxn, 'CarrierCode').text
         else:
-            trxn['airline_carrier_code'] = None
+            txn.airline_carrier_code = None
 
-        return trxn
+        return txn
 
     @staticmethod
-    def __extract_general_ticket_transaction_fields(trxn, line_item):
+    def __extract_general_ticket_transaction_fields(txn, line_item):
         general_ticket_trxn = CDFParser.__get_element_by_tag(
             line_item, 'PassengerTransportDetailGeneralTicketInformation_5020')
 
         issue_date = CDFParser.__get_element_by_tag(
             general_ticket_trxn, 'IssueDate')
-        trxn['general_ticket_issue_date'] = CDFParser.__process_date(
+        txn.general_ticket_issue_date = CDFParser.__process_date(
             issue_date)
 
         if CDFParser.__get_element_by_tag(general_ticket_trxn, 'TicketNum') is not None:
-            trxn['general_ticket_number'] = CDFParser.__get_element_by_tag(
+            txn.general_ticket_number = CDFParser.__get_element_by_tag(
                 general_ticket_trxn, 'TicketNum').text
         else:
-            trxn['general_ticket_number'] = None
+            txn.general_ticket_number = None
         if CDFParser.__get_element_by_tag(general_ticket_trxn, 'IssuingCarrier') is not None:
-            trxn['general_issuing_carrier'] = CDFParser.__get_element_by_tag(
+            txn.general_issuing_carrier = CDFParser.__get_element_by_tag(
                 general_ticket_trxn, 'IssuingCarrier').text
         else:
-            trxn['general_issuing_carrier'] = None
+            txn.general_issuing_carrier = None
         if CDFParser.__get_element_by_tag(general_ticket_trxn, 'TravelAgencyName') is not None:
-            trxn['general_travel_agency_name'] = CDFParser.__get_element_by_tag(
+            txn.general_travel_agency_name = CDFParser.__get_element_by_tag(
                 general_ticket_trxn, 'TravelAgencyName').text
         else:
-            trxn['general_travel_agency_name'] = None
+            txn.general_travel_agency_name = None
         if CDFParser.__get_element_by_tag(general_ticket_trxn, 'TravelAgencyCode') is not None:
-            trxn['general_travel_agency_code'] = CDFParser.__get_element_by_tag(
+            txn.general_travel_agency_code = CDFParser.__get_element_by_tag(
                 general_ticket_trxn, 'TravelAgencyCode').text
         else:
-            trxn['general_travel_agency_code'] = None
+            txn.general_travel_agency_code = None
 
         total_amount = CDFParser.__get_element_by_tag(
             general_ticket_trxn, 'TotalFare')
         if total_amount is not None:
             currency_exponent = total_amount.attrib['CurrencyExponent']
-            trxn['general_ticket_total_fare'] = CDFParser.__get_amount(
+            txn.general_ticket_total_fare = CDFParser.__get_amount(
                 total_amount.text, currency_exponent)
         else:
-            trxn['general_ticket_total_fare'] = None
+            txn.general_ticket_total_fare = None
 
-        return trxn
+        return txn
 
     @staticmethod
     def __check_transmission_headers(root):
@@ -252,7 +253,7 @@ class CDFParser(Parser):
         if not CDFParser.__check_transmission_headers(root):
             return None
 
-        trxns = []
+        txns = []
         issuer_entity = CDFParser.__get_element_by_tag(root, 'IssuerEntity')
         if issuer_entity is None:
             return []
@@ -272,10 +273,8 @@ class CDFParser(Parser):
                 account, 'FinancialTransactionEntity')
 
             for transaction in financial_transaction_entities:
-                trxn = CDFParser.__get_transaction_field(
-                    transaction, account_number, nickname)
-
-                expand_with_default_values(trxn, default_values)
+                txn = CDFParser.__extract_transaction_fields(
+                    transaction, account_number, nickname, default_values)
 
                 lodging_transaction_entities = CDFParser.__get_elements_by_tag(
                     transaction, 'LodgingSummaryAddendumEntity')
@@ -284,24 +283,24 @@ class CDFParser(Parser):
                 general_ticket_transaction_entities = CDFParser.__get_elements_by_tag(
                     transaction, 'PassengerTransportEntity')
                 for lodging_trxn in lodging_transaction_entities:
-                    trxn = CDFParser.__extract_lodging_transaction_fields(
-                        trxn, lodging_trxn)
+                    txn = CDFParser.__extract_lodging_transaction_fields(
+                        txn, lodging_trxn)
                 for airline_trxn in airline_transaction_entities:
-                    trxn = CDFParser.__extract_airline_transaction_fields(
-                        trxn, airline_trxn)
+                    txn = CDFParser.__extract_airline_transaction_fields(
+                        txn, airline_trxn)
                 for general_ticket_trxn in general_ticket_transaction_entities:
-                    trxn = CDFParser.__extract_general_ticket_transaction_fields(
-                        trxn, general_ticket_trxn)
-                if trxn:
-                    if has_null_value_for_keys(trxn, mandatory_fields):
+                    txn = CDFParser.__extract_general_ticket_transaction_fields(
+                        txn, general_ticket_trxn)
+                if txn:
+                    if has_null_value_for_attrs(txn, mandatory_fields):
                         raise ParserError(
                             'One or many mandatory fields missing.')
 
-                    trxns.append(CDFTransaction(**trxn))
+                    txns.append(txn)
                 else:
                     return None
 
-        return trxns
+        return txns
 
     @staticmethod
     def parse(file_obj, account_number_mask_begin, account_number_mask_end, default_values={}, mandatory_fields=[]) -> List[CDFTransaction]:

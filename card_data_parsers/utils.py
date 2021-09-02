@@ -93,6 +93,14 @@ def filter_none_values(d: dict) -> dict:
             if v is not None}
 
 
+def has_null_value_for_attrs(o: object, attrs: List[str]) -> bool:
+    for attr in attrs:
+        value = getattr(o, attr, None)
+        if value is None or value == '':
+            return True
+    return False
+
+
 def has_null_value_for_keys(d: dict, keys: List[str]) -> bool:
     for key in keys:
         if (key not in d) or d[key] == '':

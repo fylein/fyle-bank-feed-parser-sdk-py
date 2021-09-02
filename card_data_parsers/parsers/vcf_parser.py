@@ -4,7 +4,7 @@ from typing import List
 from ..log import getLogger
 from .parser import Parser, ParserError
 from ..models import VCFTransaction
-from ..utils import get_currency_from_country_code, is_amount, mask_card_number, generate_external_id, get_iso_date_string, expand_with_default_values, has_null_value_for_keys, remove_leading_zeros
+from ..utils import get_currency_from_country_code, is_amount, mask_card_number, generate_external_id, get_iso_date_string, has_null_value_for_keys, remove_leading_zeros
 
 
 logger = getLogger(__name__)
@@ -36,123 +36,124 @@ class VCFParser(Parser):
         raise ParserError(f'Not a valid transaction type {trxn_type}')
 
     @staticmethod
-    def __process_transaction(trxn, account_number_mask_begin, account_number_mask_end):
-        trxn['transaction_type'] = VCFParser.__extract_transaction_type(
-            trxn['transaction_type'])
-        if trxn['transaction_type'] == None:
+    def __process_transaction(txn, account_number_mask_begin, account_number_mask_end):
+        txn.transaction_type = VCFParser.__extract_transaction_type(
+            txn.transaction_type)
+        if txn.transaction_type == None:
             raise ParserError('Transaction type missing.')
 
-        if trxn.get('foreign_currency') is None or trxn.get('foreign_amount') is None or trxn['foreign_currency'] == trxn['currency'] or trxn['foreign_amount'] == trxn['amount']:
-            del trxn['foreign_currency']
-            del trxn['foreign_amount']
+        if txn.foreign_currency is None or txn.foreign_amount is None or txn.foreign_currency == txn.currency or txn.foreign_amount == txn.amount:
+            txn.foreign_currency = None
+            txn.foreign_amount = None
         else:
-            trxn['foreign_currency'] = remove_leading_zeros(
-                trxn['foreign_currency'], 3)
-            trxn['foreign_currency'] = get_currency_from_country_code(
-                trxn['foreign_currency'])
-            if trxn['foreign_currency'] == None:
+            txn.foreign_currency = remove_leading_zeros(
+                txn.foreign_currency, 3)
+            txn.foreign_currency = get_currency_from_country_code(
+                txn.foreign_currency)
+            if txn.foreign_currency == None:
                 raise ParserError('foreign_currency missing.')
-            trxn['foreign_amount'] = VCFParser.__extract_amount(
-                trxn['foreign_amount'])
+            txn.foreign_amount = VCFParser.__extract_amount(
+                txn.foreign_amount)
 
-        trxn['amount'] = VCFParser.__extract_amount(trxn['amount'])
-        trxn['currency'] = remove_leading_zeros(trxn['currency'], 3)
+        txn.amount = VCFParser.__extract_amount(txn.amount)
+        txn.currency = remove_leading_zeros(txn.currency, 3)
         # currency utils to convert to currency ISO string
-        trxn['currency'] = get_currency_from_country_code(trxn['currency'])
-        if trxn['currency'] == None:
+        txn.currency = get_currency_from_country_code(txn.currency)
+        if txn.currency == None:
             raise ParserError('currency missing.')
 
-        trxn['transaction_dt'] = get_iso_date_string(
-            trxn['transaction_dt'].strip(), '%m%d%Y')
+        txn.transaction_dt = get_iso_date_string(
+            txn.transaction_dt.strip(), '%m%d%Y')
 
-        card_num = trxn['account_number']
+        card_num = txn.account_number
         # Masking the card number
-        trxn['account_number'] = mask_card_number(
-            trxn['account_number'], account_number_mask_begin, account_number_mask_end)
-        external_id = str(trxn['external_id']) + trxn['account_number'] + \
-            trxn['transaction_dt'] + trxn['vendor'] + \
-            trxn['currency'] + trxn['amount']
-        if 'foreign_currency' in trxn and 'foreign_amount' in trxn:
+        txn.account_number = mask_card_number(
+            txn.account_number, account_number_mask_begin, account_number_mask_end)
+        external_id = str(txn.external_id) + txn.account_number + \
+            txn.transaction_dt + txn.vendor + \
+            txn.currency + txn.amount
+        if txn.foreign_currency is not None and txn.foreign_amount is not None:
             external_id = external_id + \
-                trxn['foreign_currency'] + trxn['foreign_amount']
-        trxn['external_id'] = generate_external_id(external_id)
-        return trxn
+                txn.foreign_currency + txn.foreign_amount
+        txn.external_id = generate_external_id(external_id)
+        return txn
 
     @staticmethod
     def __process_airline_transaction(airline_trxn):
-        airline_trxn['airline_travel_date'] = get_iso_date_string(
-            airline_trxn['airline_travel_date'].strip(), '%m%d%Y')
+        airline_trxn.airline_travel_date = get_iso_date_string(
+            airline_trxn.airline_travel_date.strip(), '%m%d%Y')
 
-        if airline_trxn['airline_total_fare'] is not None:
-            airline_trxn['airline_total_fare'] = VCFParser.__extract_amount(
-                airline_trxn['airline_total_fare'])
+        if airline_trxn.airline_total_fare is not None:
+            airline_trxn.airline_total_fare = VCFParser.__extract_amount(
+                airline_trxn.airline_total_fare)
+
         return airline_trxn
 
     @staticmethod
     def __process_lodging_transaction(lodging_trxn):
-        lodging_trxn['lodging_check_in_date'] = get_iso_date_string(
-            lodging_trxn['lodging_check_in_date'].strip(), '%m%d%Y')
+        lodging_trxn.lodging_check_in_date = get_iso_date_string(
+            lodging_trxn.lodging_check_in_date.strip(), '%m%d%Y')
 
         return lodging_trxn
 
     @staticmethod
-    def __extract_transaction_fields(transaction):
-        trxn = {}
-        trxn['account_number'] = transaction[1].strip()
-        trxn['vendor'] = transaction[8].strip()
-        trxn['amount'] = transaction[14].strip()
-        trxn['currency'] = transaction[19].strip()
-        trxn['foreign_amount'] = transaction[13].strip()
-        trxn['foreign_currency'] = transaction[15].strip()
-        trxn['transaction_type'] = transaction[17].strip()
-        trxn['transaction_dt'] = transaction[18].strip()
-        trxn['external_id'] = transaction[3].strip()
-        trxn['merchant_category_code'] = transaction[16].strip()
-        trxn['sequence_number'] = transaction[4].strip()
+    def __extract_transaction_fields(transaction, default_values):
+        txn = VCFTransaction(**default_values)
+        txn.account_number = transaction[1].strip()
+        txn.vendor = transaction[8].strip()
+        txn.amount = transaction[14].strip()
+        txn.currency = transaction[19].strip()
+        txn.foreign_amount = transaction[13].strip()
+        txn.foreign_currency = transaction[15].strip()
+        txn.transaction_type = transaction[17].strip()
+        txn.transaction_dt = transaction[18].strip()
+        txn.external_id = transaction[3].strip()
+        txn.merchant_category_code = transaction[16].strip()
+        txn.sequence_number = transaction[4].strip()
 
         # other amounts to consider are
         # at positions 20, 28, 29
         # if 28 is present then do not add the other 20 , 29
         # values exists in 20 and 29
-        return trxn
+        return txn
 
     @staticmethod
-    def __extract_car_rental_transaction_fields(trxn, line_item):
-        trxn['car_rental_merchant_category_code'] = line_item[29].strip()
-        trxn['car_rental_supplier_name'] = line_item[30].strip()
-        return trxn
+    def __extract_car_rental_transaction_fields(txn, line_item):
+        txn.car_rental_merchant_category_code = line_item[29].strip()
+        txn.car_rental_supplier_name = line_item[30].strip()
+        return txn
 
     @staticmethod
-    def __extract_airline_booking_transaction_fields(trxn, line_item):
-        trxn['airline_merchant_category_code'] = line_item[22].strip()
-        trxn['airline_supplier_name'] = line_item[23].strip()
-        trxn['airline_travel_agency_name'] = line_item[7].strip()
-        trxn['airline_total_fare'] = line_item[14].strip()
-        trxn['airline_travel_date'] = line_item[5].strip()
-        trxn['airline_ticket_number'] = line_item[9].strip()
-        return trxn
+    def __extract_airline_booking_transaction_fields(txn, line_item):
+        txn.airline_merchant_category_code = line_item[22].strip()
+        txn.airline_supplier_name = line_item[23].strip()
+        txn.airline_travel_agency_name = line_item[7].strip()
+        txn.airline_total_fare = line_item[14].strip()
+        txn.airline_travel_date = line_item[5].strip()
+        txn.airline_ticket_number = line_item[9].strip()
+        return txn
 
     @staticmethod
-    def __extract_lodging_transaction_fields(trxn, line_item):
-        trxn['lodging_merchant_category_code'] = line_item[29].strip()
-        trxn['lodging_supplier_name'] = line_item[30].strip()
-        trxn['lodging_check_in_date'] = line_item[6].strip()
+    def __extract_lodging_transaction_fields(txn, line_item):
+        txn.lodging_merchant_category_code = line_item[29].strip()
+        txn.lodging_supplier_name = line_item[30].strip()
+        txn.lodging_check_in_date = line_item[6].strip()
         lodging_nights = line_item[23].strip()
         if lodging_nights:
-            trxn['lodging_nights'] = int(lodging_nights)
-        return trxn
+            txn.lodging_nights = int(lodging_nights)
+        return txn
 
     @staticmethod
-    def __extract_fleet_product_transaction_fields(trxn, line_item):
-        trxn['fleet_product_merchant_category_code'] = line_item[11].strip()
-        trxn['fleet_product_supplier_name'] = line_item[12].strip()
-        return trxn
+    def __extract_fleet_product_transaction_fields(txn, line_item):
+        txn.fleet_product_merchant_category_code = line_item[11].strip()
+        txn.fleet_product_supplier_name = line_item[12].strip()
+        return txn
 
     @staticmethod
-    def __extract_fleet_service_transaction_fields(trxn, line_item):
-        trxn['fleet_service_merchant_category_code'] = line_item[46].strip()
-        trxn['fleet_service_supplier_name'] = line_item[47].strip()
-        return trxn
+    def __extract_fleet_service_transaction_fields(txn, line_item):
+        txn.fleet_service_merchant_category_code = line_item[46].strip()
+        txn.fleet_service_supplier_name = line_item[47].strip()
+        return txn
 
     @staticmethod
     def __extract_transactions(lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields):
@@ -213,53 +214,51 @@ class VCFParser(Parser):
         fleet_product_transactions = lines[fleet_product_transactions_block_start:
                                            fleet_product_transactions_block_end + 1]
 
-        trxns = []
+        txns = []
         for transaction in card_transactions:
-            trxn = VCFParser.__extract_transaction_fields(transaction)
+            txn = VCFParser.__extract_transaction_fields(transaction, default_values)
 
-            expand_with_default_values(trxn, default_values)
+            txn_sequence_num = txn.sequence_number
 
-            txn_sequence_num = trxn['sequence_number']
-
-            trxn = VCFParser.__process_transaction(
-                trxn, account_number_mask_begin, account_number_mask_end)
-            if trxn is None:
+            txn = VCFParser.__process_transaction(
+                txn, account_number_mask_begin, account_number_mask_end)
+            if txn is None:
                 raise ParserError(f'unable to parse transaction.')
 
             for car_rental_transaction in car_rental_transactions:
                 if car_rental_transaction[4].strip() == txn_sequence_num:
-                    trxn = VCFParser.__extract_car_rental_transaction_fields(
-                        trxn, car_rental_transaction)
+                    txn = VCFParser.__extract_car_rental_transaction_fields(
+                        txn, car_rental_transaction)
 
             for airline_booking_trxn in airline_booking_transactions:
                 if airline_booking_trxn[4].strip() == txn_sequence_num:
-                    trxn = VCFParser.__extract_airline_booking_transaction_fields(
-                        trxn, airline_booking_trxn)
-                    trxn = VCFParser.__process_airline_transaction(trxn)
+                    txn = VCFParser.__extract_airline_booking_transaction_fields(
+                        txn, airline_booking_trxn)
+                    txn = VCFParser.__process_airline_transaction(txn)
 
             for lodging_trxn in lodging_transactions:
                 if lodging_trxn[4].strip() == txn_sequence_num:
-                    trxn = VCFParser.__extract_lodging_transaction_fields(
-                        trxn, lodging_trxn)
-                    trxn = VCFParser.__process_lodging_transaction(trxn)
+                    txn = VCFParser.__extract_lodging_transaction_fields(
+                        txn, lodging_trxn)
+                    txn = VCFParser.__process_lodging_transaction(txn)
 
             for fleet_product_trxn in fleet_product_transactions:
                 if fleet_product_trxn[4].strip() == txn_sequence_num:
-                    trxn = VCFParser.__extract_fleet_product_transaction_fields(
-                        trxn, fleet_product_trxn)
+                    txn = VCFParser.__extract_fleet_product_transaction_fields(
+                        txn, fleet_product_trxn)
 
             for fleet_service_trxn in fleet_service_transactions:
                 if fleet_service_trxn[4].strip() == txn_sequence_num:
-                    trxn = VCFParser.__extract_fleet_service_transaction_fields(
-                        trxn, fleet_service_trxn)
+                    txn = VCFParser.__extract_fleet_service_transaction_fields(
+                        txn, fleet_service_trxn)
 
-            if has_null_value_for_keys(trxn, mandatory_fields):
+            if has_null_value_for_keys(txn, mandatory_fields):
                 raise ParserError(
                     'One or many mandatory fields missing.')
 
-            trxns.append(VCFTransaction(**trxn))
+            txns.append(txn)
 
-        return trxns
+        return txns
 
     @staticmethod
     def __cleanup_fields(line) -> str:
