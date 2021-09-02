@@ -2,9 +2,9 @@
 
 ## Structure
 
-All the parsers related test cases files are stored in `tests/card_data_parsers/<parser>/<p|n[0-9]>`.
+All the parsers related test cases files are stored in `tests/card_data_parsers/<parser>/<p1|n1>`.
 
-`p|n[0-9]` = Positive (p) | Negative (n) test case`
+`p1|n1` = Positive (p) | Negative (n) test case`
 
 e.g. `tests/card_data_parsers/amex/p1`
 
