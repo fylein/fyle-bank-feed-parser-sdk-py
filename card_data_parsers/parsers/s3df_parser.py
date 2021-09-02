@@ -2,18 +2,16 @@ import logging
 import xml.etree.ElementTree as ET
 from xml.etree.ElementTree import ElementTree
 from typing import List
+from ..log import getLogger
 from .parser import Parser, ParserError
 from ..models import S3DFTransaction
 from ..utils import get_currency_from_country_code, is_amount, mask_card_number, generate_external_id, get_iso_date_string, expand_with_default_values, has_null_value_for_keys
 
 
-logger = logging.getLogger('s3df')
-logger.setLevel(logging.INFO)
+logger = getLogger(__name__)
 
 
 class S3DFParser(Parser):
-    def __init__(self):
-        pass
 
     @staticmethod
     def __get_element_by_tag(root, name):
@@ -210,10 +208,10 @@ class S3DFParser(Parser):
         return trxn
 
     @staticmethod
-    def __get_transactions(root, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields):
+    def __extract_transactions(root, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields):
         trxns = []
         issuer_entity = S3DFParser.__get_element_by_tag(root, 'IssuerEntity')
-        if issuer_entity == None:
+        if issuer_entity is None:
             return None
         corporate_entity = S3DFParser.__get_element_by_tag(
             issuer_entity, 'CorporateEntity')
@@ -265,7 +263,7 @@ class S3DFParser(Parser):
         if root is None:
             return None
 
-        trxns = S3DFParser.__get_transactions(
+        trxns = S3DFParser.__extract_transactions(
             root, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields)
 
         return trxns
