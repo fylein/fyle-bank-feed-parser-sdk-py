@@ -36,44 +36,7 @@ class AmexParser(Parser):
         return transaction_type
 
     @staticmethod
-    def __process_transaction(txn, account_number_mask_begin, account_number_mask_end):
-        txn.transaction_type = AmexParser.__extract_transaction_type(
-            txn.transaction_type)
-        if txn.transaction_type is None:
-            raise ParserError(f'Transaction type is missing')
-
-        if txn.foreign_currency == txn.currency and txn.foreign_amount == txn.amount:
-            txn.foreign_amount = None
-            txn.foreign_currency = None
-        else:
-            txn.foreign_currency = AmexParser.__extract_currency(
-                txn.foreign_currency)
-            if txn.foreign_currency is None:
-                raise ParserError(f'foreign_currency is missing')
-            txn.foreign_amount = AmexParser.__extract_amount(
-                txn.foreign_amount, txn.decimal_place_indicator)
-
-        txn.amount = AmexParser.__extract_amount(
-            txn.amount, txn.decimal_place_indicator)
-        txn.currency = AmexParser.__extract_currency(txn.currency)
-        if txn.currency is None:
-            raise ParserError(f'Currency is missing')
-
-        # Masking the card number
-        txn.account_number = mask_card_number(txn.account_number, account_number_mask_begin,
-                                                 account_number_mask_end)
-
-        external_id = str(txn.external_id + txn.account_number + txn.transaction_dt + txn.description + txn.currency + txn.amount)
-        if txn.foreign_currency is not None and txn.foreign_amount is not None:
-            external_id = str(external_id + txn.foreign_currency + txn.foreign_amount)
-        txn.external_id = generate_external_id(external_id)
-
-        txn.decimal_place_indicator = None
-
-        return txn
-
-    @staticmethod
-    def __extract_transaction_fields(transaction, default_values):
+    def __extract_transaction_fields(txn_line, default_values):
         # From the AMEX specifications:
         # Billing Account Number - 208 - account number
         # Last Name - 228 - ninckname
@@ -92,28 +55,28 @@ class AmexParser(Parser):
         # Service Establishment Name 1 - 1914 - vendor
 
         txn = AmexTransaction(**default_values)
-        txn.account_number = transaction[207:227].strip()
-        txn.nickname = transaction[257:277].strip() + ' ' + transaction[277:297].strip() + ' ' + transaction[227:257].strip()
-        txn.amount = transaction[737:752].strip()
-        txn.currency = transaction[769:772].strip()
-        txn.foreign_amount = transaction[811:826].strip()
-        txn.foreign_currency = transaction[858:861].strip()
-        txn.transaction_dt = get_iso_date_string(transaction[588:598].strip(), "%Y-%m-%d")
-        txn.transaction_type = transaction[736:737].strip()
-        txn.description = transaction[946:991].strip()
-        txn.external_id = transaction[631:681].strip()
-        txn.decimal_place_indicator = transaction[768:769].strip()
-        txn.merchant_category_code = transaction[1678:1681].strip()
+        txn.account_number = txn_line[207:227].strip()
+        txn.nickname = txn_line[257:277].strip() + ' ' + txn_line[277:297].strip() + ' ' + txn_line[227:257].strip()
+        txn.amount = txn_line[737:752].strip()
+        txn.currency = txn_line[769:772].strip()
+        txn.foreign_amount = txn_line[811:826].strip()
+        txn.foreign_currency = txn_line[858:861].strip()
+        txn.transaction_dt = get_iso_date_string(txn_line[588:598].strip(), "%Y-%m-%d")
+        txn.transaction_type = txn_line[736:737].strip()
+        txn.description = txn_line[946:991].strip()
+        txn.external_id = txn_line[631:681].strip()
+        txn.decimal_place_indicator = txn_line[768:769].strip()
+        txn.merchant_category_code = txn_line[1678:1681].strip()
 
-        if transaction[1867:1897].strip() is not None and transaction[1867:1897].strip() != '':
+        if txn_line[1867:1897].strip() is not None and txn_line[1867:1897].strip() != '':
             # service_establishment_brand_name
-            txn.vendor = transaction[1867:1897].strip()
-        elif transaction[1837:1867].strip() is not None and transaction[1837:1867].strip() != '':
+            txn.vendor = txn_line[1867:1897].strip()
+        elif txn_line[1837:1867].strip() is not None and txn_line[1837:1867].strip() != '':
             # service_establishment_chain_name
-            txn.vendor = transaction[1837:1867].strip()
-        elif transaction[1913:1953].strip() is not None and transaction[1913:1953].strip() != '':
+            txn.vendor = txn_line[1837:1867].strip()
+        elif txn_line[1913:1953].strip() is not None and txn_line[1913:1953].strip() != '':
             # service_establishment_name_1
-            txn.vendor = transaction[1913:1953].strip()
+            txn.vendor = txn_line[1913:1953].strip()
         return txn
 
     @staticmethod
@@ -161,8 +124,38 @@ class AmexParser(Parser):
                 txn = AmexParser.__extract_car_rental_transaction_fields(
                     txn, txn_line)
 
-            txn = AmexParser.__process_transaction(
-                txn, account_number_mask_begin, account_number_mask_end)
+            txn.transaction_type = AmexParser.__extract_transaction_type(
+                        txn.transaction_type)
+            if txn.transaction_type is None:
+                raise ParserError(f'Transaction type is missing')
+
+            if txn.foreign_currency == txn.currency and txn.foreign_amount == txn.amount:
+                txn.foreign_amount = None
+                txn.foreign_currency = None
+            else:
+                txn.foreign_currency = AmexParser.__extract_currency(
+                    txn.foreign_currency)
+                if txn.foreign_currency is None:
+                    raise ParserError(f'foreign_currency is missing')
+                txn.foreign_amount = AmexParser.__extract_amount(
+                    txn.foreign_amount, txn.decimal_place_indicator)
+
+            txn.amount = AmexParser.__extract_amount(
+                txn.amount, txn.decimal_place_indicator)
+            txn.currency = AmexParser.__extract_currency(txn.currency)
+            if txn.currency is None:
+                raise ParserError(f'Currency is missing')
+
+            # Masking the card number
+            txn.account_number = mask_card_number(txn.account_number, account_number_mask_begin,
+                                                    account_number_mask_end)
+
+            external_id = str(txn.external_id + txn.account_number + txn.transaction_dt + txn.description + txn.currency + txn.amount)
+            if txn.foreign_currency is not None and txn.foreign_amount is not None:
+                external_id = str(external_id + txn.foreign_currency + txn.foreign_amount)
+            txn.external_id = generate_external_id(external_id)
+
+            txn.decimal_place_indicator = None
 
             if has_null_value_for_attrs(txn, mandatory_fields):
                 raise ParserError('One or many mandatory fields missing.')
