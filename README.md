@@ -1,5 +1,7 @@
 # fyle-bank-feed-parser-sdk-py
 
+[![test](https://github.com/fylein/fyle-bank-feed-parser-sdk-py/actions/workflows/test.yml/badge.svg)](https://github.com/fylein/fyle-bank-feed-parser-sdk-py/actions/workflows/test.yml) [![pythonpublish](https://github.com/fylein/fyle-bank-feed-parser-sdk-py/actions/workflows/pythonpublish.yml/badge.svg)](https://github.com/fylein/fyle-bank-feed-parser-sdk-py/actions/workflows/pythonpublish.yml)
+
 Bank feeds parsers collection.
 
 
