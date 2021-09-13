@@ -22,7 +22,7 @@ setup(
         'jsondiff >= 1.2.0',
         'dataclasses>=0.6'
     ],
-    keywords=['fyle', 'api', 'python', 'sdk', 'cards', 'parsers'],
+    keywords=['fyle', 'api', 'python', 'sdk', 'cards', 'parsers', 'amex', 'visa', 'cdf', 'vcf', 's3df', 'happay', 'mastercard', 'diners club'],
     classifiers=[
         'Intended Audience :: Developers',
         'Programming Language :: Python :: 3',
