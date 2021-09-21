@@ -21,7 +21,8 @@ class VCFParser(Parser):
         else:
             amount = amount[0:len(amount)-2]+'.'+amount[-2:]
         if not is_amount(amount):
-            raise ParserError(f'Not a valid amount {amount}')
+            logger.warn(f'Not a valid amount {amount}')
+            return None
         return amount
 
     @staticmethod
@@ -56,6 +57,8 @@ class VCFParser(Parser):
                 txn.foreign_amount)
 
         txn.amount = VCFParser.__extract_amount(txn.amount)
+        if txn.amount == None:
+            raise ParserError(f'Not a valid amount')
         txn.currency = remove_leading_zeros(txn.currency, 3)
         # currency utils to convert to currency ISO string
         txn.currency = get_currency_from_country_code(txn.currency)
