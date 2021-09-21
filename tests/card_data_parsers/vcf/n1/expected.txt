@@ -1,1 +1,1 @@
-Not a valid amount 899.8b
+Not a valid amount

@@ -36,7 +36,8 @@ class CDFParser(Parser):
         exponent = int(exponent)
         amount = amount_str[:-exponent] + '.' + amount_str[-exponent:]
         if not is_amount(amount):
-            raise ParserError(f'Not a valid amount {amount}')
+            logger.warn(f'Not a valid amount {amount}')
+            return None
         amount = amount.strip('0')
         if amount.endswith('.'):
             amount = amount[:-1]
