@@ -5,7 +5,7 @@ from typing import List
 from ..log import getLogger
 from .parser import Parser, ParserError
 from ..models import CDFTransaction
-from ..utils import get_currency_from_country_code, is_amount, mask_card_number, generate_external_id, get_iso_date_string, has_null_value_for_attrs
+from ..utils import get_currency_from_country_code, is_amount, mask_card_number, generate_external_id, get_iso_date_string, has_null_value_for_attrs, generate_starting_bill_date
 
 
 logger = getLogger(__name__)
@@ -117,6 +117,20 @@ class CDFParser(Parser):
                 ftrxn, 'MasterCardFinancialTransactionId').text
         txn.external_id = generate_external_id(external_id)
 
+        # Billing date
+        txn.ending_bill_date = CDFParser.__get_element_by_tag(
+            ftrxn, 'BillingDate').text
+        txn.ending_bill_date = get_iso_date_string(
+            txn.ending_bill_date.strip(), '%Y-%m-%d')
+        
+        txn.starting_bill_date = generate_starting_bill_date(txn.ending_bill_date)
+        
+        # Post date
+        txn.post_date = CDFParser.__get_element_by_tag(
+            ftrxn, 'PostingDate').text
+        txn.post_date = get_iso_date_string(
+            txn.post_date.strip(), '%Y-%m-%d')
+        
         return txn
 
     @staticmethod

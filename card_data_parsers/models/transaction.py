@@ -27,6 +27,13 @@ class Transaction:
     foreign_amount: Refers to amount in foreign currency
 
     foreign_currency: Refers to foreign currency
+    
+    starting_bill_date: Refers to the starting bill date in a billing period (if this is not available but ending_bill_date is 
+    available, this will get defaulted to ending_bill_date - 1 month )
+    
+    ending_bill_date: Refers to the ending bill date in a billing period
+    
+    post_date: Refers to the posting date of the bank transaction.
     '''
     account_number: str = None
     transaction_dt: str = None
@@ -39,3 +46,6 @@ class Transaction:
     description: str = None
     external_id: str = None
     bank_name: str = None
+    starting_bill_date: str = None
+    ending_bill_date: str = None
+    post_date: str = None

@@ -86,6 +86,8 @@ def get_iso_date_string(date_string, date_format):
 
     return iso_date_string
 
+def generate_starting_bill_date(date_string):
+    return (datetime.strptime(date_string, "%Y-%m-%dT%H:%M:%SZ") - relativedelta(months=1)).strftime("%Y-%m-%dT%H:%M:%SZ");
 
 def filter_none_values(d: dict) -> dict:
     return {k: v

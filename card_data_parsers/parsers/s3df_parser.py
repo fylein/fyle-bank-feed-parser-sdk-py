@@ -116,6 +116,12 @@ class S3DFParser(Parser):
             ftrxn, 'ProcessorTransactionId').text
         txn.external_id = generate_external_id(external_id)
 
+        # Post date
+        txn.post_date = S3DFParser.__get_element_by_tag(
+            ftrxn, 'PostingDate').text
+        txn.post_date = get_iso_date_string(
+            txn.post_date.strip(), '%Y-%m-%d')
+
         return txn
 
     @staticmethod

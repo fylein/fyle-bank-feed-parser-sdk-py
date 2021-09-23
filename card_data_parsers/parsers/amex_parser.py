@@ -2,8 +2,7 @@ from typing import List
 from ..log import getLogger
 from .parser import Parser, ParserError
 from ..models import AmexTransaction
-from ..utils import generate_external_id, get_currency_from_country_code, get_iso_date_string, is_amount, mask_card_number, has_null_value_for_attrs, remove_leading_zeros
-
+from ..utils import generate_external_id, get_currency_from_country_code, get_iso_date_string, mask_card_number, has_null_value_for_attrs, remove_leading_zeros, generate_starting_bill_date
 
 logger = getLogger(__name__)
 
@@ -53,6 +52,8 @@ class AmexParser(Parser):
         # Service Establishment Brand Name - 1868 - vendor
         # Service Establishment Chain Name - 1838 - vendor
         # Service Establishment Name 1 - 1914 - vendor
+        # Bill date - 617 - bill date
+        # Business process date - 574 - post_date
 
         txn = AmexTransaction(**default_values)
         txn.account_number = txn_line[207:227].strip()
@@ -67,6 +68,9 @@ class AmexParser(Parser):
         txn.external_id = txn_line[631:681].strip()
         txn.decimal_place_indicator = txn_line[768:769].strip()
         txn.merchant_category_code = txn_line[1678:1681].strip()
+        txn.ending_bill_date = get_iso_date_string(txn_line[616:626].strip(), "%Y-%m-%d")
+        txn.starting_bill_date = generate_starting_bill_date(txn.ending_bill_date);
+        txn.post_date = get_iso_date_string(txn_line[573:581].strip(), "%Y%m%d")
 
         if txn_line[1867:1897].strip() is not None and txn_line[1867:1897].strip() != '':
             # service_establishment_brand_name
@@ -159,7 +163,6 @@ class AmexParser(Parser):
 
             if has_null_value_for_attrs(txn, mandatory_fields):
                 raise ParserError('One or many mandatory fields missing.')
-
             txns.append(txn)
         return txns
 
