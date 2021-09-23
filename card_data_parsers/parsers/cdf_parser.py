@@ -118,12 +118,13 @@ class CDFParser(Parser):
         txn.external_id = generate_external_id(external_id)
 
         # Billing date
-        txn.ending_bill_date = CDFParser.__get_element_by_tag(
-            ftrxn, 'BillingDate').text
-        txn.ending_bill_date = get_iso_date_string(
-            txn.ending_bill_date.strip(), '%Y-%m-%d')
+        if CDFParser.__get_element_by_tag(ftrxn, 'BillingDate'):
+            txn.ending_bill_date = CDFParser.__get_element_by_tag(
+                ftrxn, 'BillingDate').text
+            txn.ending_bill_date = get_iso_date_string(
+                txn.ending_bill_date.strip(), '%Y-%m-%d')
         
-        txn.starting_bill_date = generate_starting_bill_date(txn.ending_bill_date)
+            txn.starting_bill_date = generate_starting_bill_date(txn.ending_bill_date)
         
         # Post date
         txn.post_date = CDFParser.__get_element_by_tag(
