@@ -68,7 +68,9 @@ class VCFParser(Parser):
         txn.transaction_dt = get_iso_date_string(
             txn.transaction_dt.strip(), '%m%d%Y')
 
-        card_num = txn.account_number
+        txn.post_date = get_iso_date_string(
+            txn.post_date.strip(), '%m%d%Y')
+
         # Masking the card number
         txn.account_number = mask_card_number(
             txn.account_number, account_number_mask_begin, account_number_mask_end)
@@ -113,7 +115,8 @@ class VCFParser(Parser):
         txn.external_id = transaction[3].strip()
         txn.merchant_category_code = transaction[16].strip()
         txn.sequence_number = transaction[4].strip()
-
+        txn.post_date = transaction[2].strip()
+        
         # other amounts to consider are
         # at positions 20, 28, 29
         # if 28 is present then do not add the other 20 , 29
@@ -159,6 +162,15 @@ class VCFParser(Parser):
         return txn
 
     @staticmethod
+    def __extract_transaction_period(txn, line_item):
+        txn.starting_bill_date = get_iso_date_string(
+            line_item[4].strip(), '%m%d%Y')
+
+        txn.ending_bill_date = get_iso_date_string(
+            line_item[5].strip(), '%m%d%Y')
+        return txn
+
+    @staticmethod
     def __extract_transactions(lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields):
         card_transactions_block_start = -1
         card_transactions_block_end = -1
@@ -177,6 +189,9 @@ class VCFParser(Parser):
 
         fleet_product_transactions_block_start = -1
         fleet_product_transactions_block_end = -1
+
+        transaction_period_block_start = -1
+        transaction_period_block_end = -1
 
         # identifying header and trailer of card transaction blocks
         for index, line in enumerate(lines):
@@ -204,6 +219,10 @@ class VCFParser(Parser):
                 fleet_product_transactions_block_start = index + 1
             if line[0].strip() == '9' and line[4].strip() == '18':
                 fleet_product_transactions_block_end = index - 1
+            if line[0].strip() == '8' and line[4].strip() == '11':
+                transaction_period_block_start = index + 1
+            if line[0].strip() == '9' and line[4].strip() == '11':
+                transaction_period_block_end = index - 1
 
         card_transactions = lines[card_transactions_block_start: card_transactions_block_end + 1]
         car_rental_transactions = lines[car_rental_transactions_block_start:
@@ -216,7 +235,8 @@ class VCFParser(Parser):
                                            fleet_service_transactions_block_end + 1]
         fleet_product_transactions = lines[fleet_product_transactions_block_start:
                                            fleet_product_transactions_block_end + 1]
-
+        transaction_period = lines[transaction_period_block_start:
+                                    transaction_period_block_end + 1]
         txns = []
         for transaction in card_transactions:
             txn = VCFParser.__extract_transaction_fields(transaction, default_values)
@@ -254,6 +274,10 @@ class VCFParser(Parser):
                 if fleet_service_trxn[4].strip() == txn_sequence_num:
                     txn = VCFParser.__extract_fleet_service_transaction_fields(
                         txn, fleet_service_trxn)
+
+            if transaction_period[0]:
+                txn = VCFParser.__extract_transaction_period(
+                    txn, transaction_period[0])
 
             if has_null_value_for_keys(txn, mandatory_fields):
                 raise ParserError(

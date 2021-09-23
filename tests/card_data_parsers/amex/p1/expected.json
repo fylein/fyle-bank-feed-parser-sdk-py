@@ -1,17 +1,20 @@
 [
-  {
-    "account_number": "0123*******0113",
-    "nickname": "I  ABCDEFG",
-    "amount": "63.81",
-    "currency": "CAD",
-    "foreign_amount": "48.33",
-    "foreign_currency": "USD",
-    "transaction_dt": "2009-03-13T10:00:00Z",
-    "transaction_type": "debit",
-    "description": "ABC-DEF  9511      HXLGGHWZOV M      ZA",
-    "external_id": "dd11f01234dde3c25b1a4d87a764201e",
-    "merchant_category_code": "10",
-    "vendor": "5",
-    "bank_name": "Test Bank"
-  }
+    {
+        "account_number": "0123*******0113",
+        "transaction_dt": "2009-03-13T10:00:00Z",
+        "currency": "CAD",
+        "amount": "63.81",
+        "foreign_amount": "48.33",
+        "foreign_currency": "USD",
+        "transaction_type": "debit",
+        "vendor": "5",
+        "description": "ABC-DEF  9511      HXLGGHWZOV M      ZA",
+        "external_id": "dd11f01234dde3c25b1a4d87a764201e",
+        "bank_name": "Test Bank",
+        "starting_bill_date": "2009-04-26T10:00:00Z",
+        "ending_bill_date": "2009-05-26T10:00:00Z",
+        "post_date": "2009-05-26T10:00:00Z",
+        "nickname": "I  ABCDEFG",
+        "merchant_category_code": "10"
+    }
 ]

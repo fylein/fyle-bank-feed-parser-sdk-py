@@ -1,38 +1,42 @@
 [
-  {
-    "account_number": "1234*********1213",
-    "transaction_dt": "2018-12-18T10:00:00Z",
-    "transaction_type": "debit",
-    "amount": "13.99",
-    "currency": "EUR",
-    "vendor": "ABCDEF",
-    "external_id": "bcc54fff373cf5b4eb1b3b8c53c111bf"
-  },
-  {
-    "account_number": "1234*********1213",
-    "transaction_dt": "2018-12-19T10:00:00Z",
-    "transaction_type": "debit",
-    "amount": "130",
-    "currency": "EUR",
-    "vendor": "ABCDEF",
-    "external_id": "c36c9ba0602a898336e1c08360495d5d"
-  },
-  {
-    "account_number": "1234*********1213",
-    "transaction_dt": "2018-12-19T10:00:00Z",
-    "transaction_type": "debit",
-    "amount": "38.63",
-    "currency": "EUR",
-    "vendor": "ABCDEF",
-    "external_id": "379e9c62e0804eeb9ff0864fb03b96f0"
-  },
-  {
-    "account_number": "1234*********1213",
-    "transaction_dt": "2018-12-19T10:00:00Z",
-    "transaction_type": "debit",
-    "amount": "129",
-    "currency": "EUR",
-    "vendor": "ABCDEF",
-    "external_id": "14a181d358d82b3dd3532e5ec47653d8"
-  }
+    {
+        "account_number": "1234*********1213",
+        "transaction_dt": "2018-12-18T10:00:00Z",
+        "currency": "EUR",
+        "amount": "13.99",
+        "transaction_type": "debit",
+        "vendor": "ABCDEF",
+        "external_id": "bcc54fff373cf5b4eb1b3b8c53c111bf",
+        "post_date": "2018-12-20T10:00:00Z"
+    },
+    {
+        "account_number": "1234*********1213",
+        "transaction_dt": "2018-12-19T10:00:00Z",
+        "currency": "EUR",
+        "amount": "130",
+        "transaction_type": "debit",
+        "vendor": "ABCDEF",
+        "external_id": "c36c9ba0602a898336e1c08360495d5d",
+        "post_date": "2018-12-20T10:00:00Z"
+    },
+    {
+        "account_number": "1234*********1213",
+        "transaction_dt": "2018-12-19T10:00:00Z",
+        "currency": "EUR",
+        "amount": "38.63",
+        "transaction_type": "debit",
+        "vendor": "ABCDEF",
+        "external_id": "379e9c62e0804eeb9ff0864fb03b96f0",
+        "post_date": "2018-12-20T10:00:00Z"
+    },
+    {
+        "account_number": "1234*********1213",
+        "transaction_dt": "2018-12-19T10:00:00Z",
+        "currency": "EUR",
+        "amount": "129",
+        "transaction_type": "debit",
+        "vendor": "ABCDEF",
+        "external_id": "14a181d358d82b3dd3532e5ec47653d8",
+        "post_date": "2018-12-20T10:00:00Z"
+    }
 ]
