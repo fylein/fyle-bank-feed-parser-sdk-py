@@ -5,8 +5,8 @@
     "amount": "89.98",
     "currency": "EUR",
     "transaction_type": "debit",
-    "transaction_dt": "2019-01-02T10:00:00Z",
-    "external_id": "521bb8c41273282f9d5e46b9de1fbc01",
+    "transaction_dt": "2019-01-02T10:00:00.000000Z",
+    "external_id": "21f3c22b19f44df7536cf16ba1040ecd",
     "merchant_category_code": "5044",
     "sequence_number": "0032044068",
     "bank_name": "Test Bank"

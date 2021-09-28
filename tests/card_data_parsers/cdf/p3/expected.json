@@ -1,7 +1,7 @@
 [
   {
     "account_number": "1234*********1213",
-    "transaction_dt": "2018-12-18T10:00:00Z",
+    "transaction_dt": "2018-12-18T10:00:00.000000Z",
     "transaction_type": "debit",
     "amount": "5",
     "currency": "EUR",
@@ -10,7 +10,7 @@
   },
   {
     "account_number": "1234*********1213",
-    "transaction_dt": "2018-12-18T10:00:00Z",
+    "transaction_dt": "2018-12-18T10:00:00.000000Z",
     "transaction_type": "debit",
     "amount": "3.89",
     "currency": "EUR",
@@ -19,7 +19,7 @@
   },
   {
     "account_number": "1234*********1213",
-    "transaction_dt": "2018-12-18T10:00:00Z",
+    "transaction_dt": "2018-12-18T10:00:00.000000Z",
     "transaction_type": "debit",
     "amount": "89",
     "currency": "EUR",

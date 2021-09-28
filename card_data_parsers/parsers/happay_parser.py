@@ -65,7 +65,7 @@ class HappayParser(Parser):
 
         # transaction date
         txn.transaction_dt = datetime.datetime.strptime(txn.transaction_dt.strip(), "%Y-%m-%d")
-        txn.transaction_dt = txn.transaction_dt.strftime("%Y-%m-%dT%H:%M:%SZ")
+        txn.transaction_dt = txn.transaction_dt.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
 
         # orig amount and orig currency
         if txn.foreign_amount and txn.foreign_currency:
