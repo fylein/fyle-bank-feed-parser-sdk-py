@@ -58,7 +58,7 @@ git push origin v0.1.0
 The parse method is supposed to return a list of transactions. This is a list of python dict objects that looks like this:
 
 ```
-[{"bank_name": "Test BANK", "vendor": "Test", "sync_type": "BANK FEED - VCF", "transaction_type": "debit", "currency": "EUR", "amount": "124.74", "transaction_date": "2018-11-30T10:00:00Z", "account_number": "4142********6333", "transaction_dt": "2018-11-30T10:00:00Z", "external_id": "b2a242d1d9814394b594044b77f36f2f"}]
+[{"bank_name": "Test BANK", "vendor": "Test", "sync_type": "BANK FEED - VCF", "transaction_type": "debit", "currency": "EUR", "amount": "124.74", "transaction_date": "2018-11-30T10:00:00.000000Z", "account_number": "4142********6333", "transaction_dt": "2018-11-30T10:00:00.000000Z", "external_id": "b2a242d1d9814394b594044b77f36f2f"}]
 ```
 
 If there is any non-backward compatible change to this structure e.g. a key is deleted, then bump up major number. Otherwise, bump up minor number.

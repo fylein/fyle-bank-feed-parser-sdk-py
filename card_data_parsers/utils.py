@@ -80,7 +80,7 @@ def get_iso_date_string(date_string, date_format):
         iso_date_string = datetime.strptime(date_string.strip(), date_format)
         # hack for timezones: set time to 10 o clock
         iso_date_string = iso_date_string.replace(hour=10)
-        iso_date_string = iso_date_string.strftime("%Y-%m-%dT%H:%M:%SZ")
+        iso_date_string = iso_date_string.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
     else:
         iso_date_string = None
 

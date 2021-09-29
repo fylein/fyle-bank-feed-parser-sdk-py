@@ -1,12 +1,12 @@
 [
   {
-    "transaction_dt": "2021-08-13T00:00:00Z",
+    "transaction_dt": "2021-08-13T00:00:00.000000Z",
     "account_number": "**0123",
     "vendor": "RandomVendor1",
     "amount": 624.0,
     "transaction_type": "debit",
     "description": "",
-    "external_id": "22ad6bf6230053b0fdd4a17717615004",
+    "external_id": "60daa9e0ec4a6020f1e0c8f6e9b7b32b",
     "nickname": "Boi1",
     "currency": "INR",
     "foreign_amount": 624.0,
@@ -14,13 +14,13 @@
     "bank_name": "Test Bank"
   },
   {
-    "transaction_dt": "2021-08-12T00:00:00Z",
+    "transaction_dt": "2021-08-12T00:00:00.000000Z",
     "account_number": "**0123",
     "vendor": "RandomVendor2",
     "amount": 1005.0,
     "transaction_type": "debit",
     "description": "",
-    "external_id": "3bb23c91900be9c326f7b80575250831",
+    "external_id": "30386309fbdaa313e31cde98fcc261c2",
     "nickname": "Boi2",
     "currency": "INR",
     "foreign_amount": 1005.0,
@@ -28,13 +28,13 @@
     "bank_name": "Test Bank"
   },
   {
-    "transaction_dt": "2021-08-12T00:00:00Z",
+    "transaction_dt": "2021-08-12T00:00:00.000000Z",
     "account_number": "**0124",
     "vendor": "RandomVendor3",
     "amount": 114431.81,
     "transaction_type": "debit",
     "description": "",
-    "external_id": "910efbef3c4ab927fd4d8a2cd87ab664",
+    "external_id": "55e4b13075a195ea9c8bdeea59025e9f",
     "nickname": "Boi3",
     "currency": "INR",
     "foreign_amount": 1516.08,
