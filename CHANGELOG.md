@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.4.0]
+
+### Changed
+
+- Updated `vcf_parser.py` to parse `000...` amounts as zero.
+
 ## [0.3.0]
 
 ### Changed
