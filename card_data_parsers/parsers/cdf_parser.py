@@ -258,6 +258,9 @@ class CDFParser(Parser):
         corporate_entities = CDFParser.__get_elements_by_tag(
             issuer_entity, 'CorporateEntity')
         for corporate_entity in corporate_entities:
+            if corporate_entity == None:
+                continue
+
             account_entities = CDFParser.__get_elements_by_tag(
                 corporate_entity, 'AccountEntity')
 
