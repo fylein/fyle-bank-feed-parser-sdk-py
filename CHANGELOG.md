@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.5.0]
+
+### Changed
+
+- Updated `cdf_parser.py` to parse all of the `CorporateEntity` entities.
+
 ## [0.4.0]
 
 ### Changed
