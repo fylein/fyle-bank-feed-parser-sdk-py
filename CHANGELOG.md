@@ -1,5 +1,12 @@
 # Change Log
 
+## [0.6.0]
+
+### Changed
+
+- Updated AMEX Parser to send actual transaction_id in external_id instead of hashing.
+- Affects external_id
+
 ## [0.5.0]
 
 ### Changed
