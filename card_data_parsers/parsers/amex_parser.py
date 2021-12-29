@@ -2,7 +2,7 @@ from typing import List
 from ..log import getLogger
 from .parser import Parser, ParserError
 from ..models import AmexTransaction
-from ..utils import get_currency_from_country_code, get_iso_date_string, mask_card_number, has_null_value_for_attrs, remove_leading_zeros
+from ..utils import generate_external_id, get_currency_from_country_code, get_iso_date_string, is_amount, mask_card_number, has_null_value_for_attrs, remove_leading_zeros
 
 
 logger = getLogger(__name__)
@@ -149,6 +149,12 @@ class AmexParser(Parser):
             # Masking the card number
             txn.account_number = mask_card_number(txn.account_number, account_number_mask_begin,
                                                     account_number_mask_end)
+
+            txn.transaction_id = txn.external_id
+            external_id = str(txn.external_id + txn.account_number + txn.transaction_dt + txn.description + txn.currency + txn.amount)
+            if txn.foreign_currency is not None and txn.foreign_amount is not None:
+                external_id = str(external_id + txn.foreign_currency + txn.foreign_amount)
+            txn.external_id = generate_external_id(external_id)
 
             txn.decimal_place_indicator = None
 
