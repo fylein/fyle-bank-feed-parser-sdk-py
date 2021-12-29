@@ -18,4 +18,3 @@ class AmexTransaction(Transaction):
     airline_travel_agency_name: str = None
     airline_ticket_number: str = None
     airline_type: str = None
-    transaction_id: str = None
