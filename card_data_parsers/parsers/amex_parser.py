@@ -53,7 +53,6 @@ class AmexParser(Parser):
         # Service Establishment Brand Name - 1868 - vendor
         # Service Establishment Chain Name - 1838 - vendor
         # Service Establishment Name 1 - 1914 - vendor
-
         txn = AmexTransaction(**default_values)
         txn.account_number = txn_line[207:227].strip()
         txn.nickname = txn_line[257:277].strip() + ' ' + txn_line[277:297].strip() + ' ' + txn_line[227:257].strip()
@@ -65,6 +64,7 @@ class AmexParser(Parser):
         txn.transaction_type = txn_line[736:737].strip()
         txn.description = txn_line[946:991].strip()
         txn.external_id = txn_line[631:681].strip()
+        txn.post_date = get_iso_date_string(txn_line[573:581].strip(), "%Y%m%d")
         txn.decimal_place_indicator = txn_line[768:769].strip()
         txn.merchant_category_code = txn_line[1678:1681].strip()
 

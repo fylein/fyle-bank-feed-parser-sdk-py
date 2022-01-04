@@ -60,6 +60,12 @@ class S3DFParser(Parser):
         txn.transaction_dt = get_iso_date_string(
             txn.transaction_dt.strip(), '%Y-%m-%d')
 
+        # Post Date
+        txn.post_date = S3DFParser.__get_element_by_tag(
+            ftrxn, 'PostingDate').text
+        txn.post_date = get_iso_date_string(
+            txn.post_date.strip(), '%Y-%m-%d')
+
         # Transaction Type
         txn.transaction_type = S3DFParser.__get_element_by_tag(
             ftrxn, 'DebitOrCreditIndicator').text
