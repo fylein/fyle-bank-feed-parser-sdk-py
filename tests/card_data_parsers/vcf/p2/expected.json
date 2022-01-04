@@ -1,0 +1,14 @@
+[
+  {
+    "account_number": "1234********1234",
+    "transaction_dt": "2021-11-12T10:00:00.000000Z",
+    "currency": "USD",
+    "amount": "0.0",
+    "transaction_type": "credit",
+    "vendor": "CHARGE OFF",
+    "external_id": "3d31ebfed8cb00c26db8403d5f744598",
+    "bank_name": "Test Bank",
+    "merchant_category_code": "",
+    "sequence_number": "0000009688"
+  }
+]

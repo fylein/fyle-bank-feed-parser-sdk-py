@@ -261,48 +261,50 @@ class CDFParser(Parser):
         issuer_entity = CDFParser.__get_element_by_tag(root, 'IssuerEntity')
         if issuer_entity is None:
             return []
-        corporate_entity = CDFParser.__get_element_by_tag(
+        corporate_entities = CDFParser.__get_elements_by_tag(
             issuer_entity, 'CorporateEntity')
-        if corporate_entity == None:
-            return []
-        account_entities = CDFParser.__get_elements_by_tag(
-            corporate_entity, 'AccountEntity')
+        for corporate_entity in corporate_entities:
+            if corporate_entity == None:
+                continue
 
-        for account in account_entities:
-            nickname = CDFParser.__extract_nickname(account)
-            account_number = account.attrib['AccountNumber']
-            account_number = mask_card_number(
-                account_number, account_number_mask_begin, account_number_mask_end)
-            financial_transaction_entities = CDFParser.__get_elements_by_tag(
-                account, 'FinancialTransactionEntity')
+            account_entities = CDFParser.__get_elements_by_tag(
+                corporate_entity, 'AccountEntity')
 
-            for transaction in financial_transaction_entities:
-                txn = CDFParser.__extract_transaction_fields(
-                    transaction, account_number, nickname, default_values)
+            for account in account_entities:
+                nickname = CDFParser.__extract_nickname(account)
+                account_number = account.attrib['AccountNumber']
+                account_number = mask_card_number(
+                    account_number, account_number_mask_begin, account_number_mask_end)
+                financial_transaction_entities = CDFParser.__get_elements_by_tag(
+                    account, 'FinancialTransactionEntity')
 
-                lodging_transaction_entities = CDFParser.__get_elements_by_tag(
-                    transaction, 'LodgingSummaryAddendumEntity')
-                airline_transaction_entities = CDFParser.__get_elements_by_tag(
-                    transaction, 'PassengerTransportDetailTripLegDataEntity')
-                general_ticket_transaction_entities = CDFParser.__get_elements_by_tag(
-                    transaction, 'PassengerTransportEntity')
-                for lodging_trxn in lodging_transaction_entities:
-                    txn = CDFParser.__extract_lodging_transaction_fields(
-                        txn, lodging_trxn)
-                for airline_trxn in airline_transaction_entities:
-                    txn = CDFParser.__extract_airline_transaction_fields(
-                        txn, airline_trxn)
-                for general_ticket_trxn in general_ticket_transaction_entities:
-                    txn = CDFParser.__extract_general_ticket_transaction_fields(
-                        txn, general_ticket_trxn)
-                if txn:
-                    if has_null_value_for_attrs(txn, mandatory_fields):
-                        raise ParserError(
-                            'One or many mandatory fields missing.')
+                for transaction in financial_transaction_entities:
+                    txn = CDFParser.__extract_transaction_fields(
+                        transaction, account_number, nickname, default_values)
 
-                    txns.append(txn)
-                else:
-                    return None
+                    lodging_transaction_entities = CDFParser.__get_elements_by_tag(
+                        transaction, 'LodgingSummaryAddendumEntity')
+                    airline_transaction_entities = CDFParser.__get_elements_by_tag(
+                        transaction, 'PassengerTransportDetailTripLegDataEntity')
+                    general_ticket_transaction_entities = CDFParser.__get_elements_by_tag(
+                        transaction, 'PassengerTransportEntity')
+                    for lodging_trxn in lodging_transaction_entities:
+                        txn = CDFParser.__extract_lodging_transaction_fields(
+                            txn, lodging_trxn)
+                    for airline_trxn in airline_transaction_entities:
+                        txn = CDFParser.__extract_airline_transaction_fields(
+                            txn, airline_trxn)
+                    for general_ticket_trxn in general_ticket_transaction_entities:
+                        txn = CDFParser.__extract_general_ticket_transaction_fields(
+                            txn, general_ticket_trxn)
+                    if txn:
+                        if has_null_value_for_attrs(txn, mandatory_fields):
+                            raise ParserError(
+                                'One or many mandatory fields missing.')
+
+                        txns.append(txn)
+                    else:
+                        return None
 
         return txns
 

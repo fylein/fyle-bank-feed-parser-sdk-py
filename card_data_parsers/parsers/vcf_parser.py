@@ -16,7 +16,10 @@ class VCFParser(Parser):
     def __extract_amount(amount):
         amount = remove_leading_zeros(amount)
         # making the string '1234' into '12.34'
-        if len(amount) <= 2:
+        # If 0000... amount, then it gets stripped, so making it 0.0
+        if amount == '':
+            amount = '0.0'
+        elif len(amount) <= 2:
             amount = '.' + amount
         else:
             amount = amount[0:len(amount)-2]+'.'+amount[-2:]
