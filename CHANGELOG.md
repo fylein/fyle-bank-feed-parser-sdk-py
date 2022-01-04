@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.5.1]
+
+### Changed
+
+- Fetching the `post_date` from amex, cdf, s3df and vcf parsers.
+
 ## [0.5.0]
 
 ### Changed

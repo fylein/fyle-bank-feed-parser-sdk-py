@@ -6,7 +6,8 @@
     "amount": "13.99",
     "currency": "EUR",
     "vendor": "ABCDEF",
-    "external_id": "bcc54fff373cf5b4eb1b3b8c53c111bf"
+    "external_id": "bcc54fff373cf5b4eb1b3b8c53c111bf",
+    "post_date": "2018-12-20T10:00:00.000000Z"
   },
   {
     "account_number": "1234*********1213",
@@ -15,7 +16,8 @@
     "amount": "130",
     "currency": "EUR",
     "vendor": "ABCDEF",
-    "external_id": "c36c9ba0602a898336e1c08360495d5d"
+    "external_id": "c36c9ba0602a898336e1c08360495d5d",
+    "post_date": "2018-12-20T10:00:00.000000Z"
   },
   {
     "account_number": "1234*********1213",
@@ -24,7 +26,8 @@
     "amount": "38.63",
     "currency": "EUR",
     "vendor": "ABCDEF",
-    "external_id": "379e9c62e0804eeb9ff0864fb03b96f0"
+    "external_id": "379e9c62e0804eeb9ff0864fb03b96f0",
+    "post_date": "2018-12-20T10:00:00.000000Z"
   },
   {
     "account_number": "1234*********1213",
@@ -33,6 +36,7 @@
     "amount": "129",
     "currency": "EUR",
     "vendor": "ABCDEF",
-    "external_id": "14a181d358d82b3dd3532e5ec47653d8"
+    "external_id": "14a181d358d82b3dd3532e5ec47653d8",
+    "post_date": "2018-12-20T10:00:00.000000Z"
   }
 ]

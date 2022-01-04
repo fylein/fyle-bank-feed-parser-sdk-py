@@ -63,7 +63,7 @@ class CDFParser(Parser):
         # Post Date
         txn.post_date = CDFParser.__get_element_by_tag(
             ftrxn, 'PostingDate').text
-        txn.transaction_dt = get_iso_date_string(
+        txn.post_date = get_iso_date_string(
             txn.post_date.strip(), '%Y-%m-%d')
 
         # Transaction Type
