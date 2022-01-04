@@ -53,6 +53,7 @@ class AmexParser(Parser):
         # Service Establishment Brand Name - 1868 - vendor
         # Service Establishment Chain Name - 1838 - vendor
         # Service Establishment Name 1 - 1914 - vendor
+
         txn = AmexTransaction(**default_values)
         txn.account_number = txn_line[207:227].strip()
         txn.nickname = txn_line[257:277].strip() + ' ' + txn_line[277:297].strip() + ' ' + txn_line[227:257].strip()
