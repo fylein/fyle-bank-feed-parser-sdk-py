@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.6.0]
+
+### Changed
+
+- Added AMEX transaction_id as `transaction_id` in AMEX Parser.
+
 ## [0.5.0]
 
 ### Changed

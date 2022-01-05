@@ -150,6 +150,9 @@ class AmexParser(Parser):
             txn.account_number = mask_card_number(txn.account_number, account_number_mask_begin,
                                                     account_number_mask_end)
 
+            # adding actual AMEX transaction_id before modifying it
+            txn.transaction_id = txn.external_id
+
             external_id = str(txn.external_id + txn.account_number + txn.transaction_dt + txn.description + txn.currency + txn.amount)
             if txn.foreign_currency is not None and txn.foreign_amount is not None:
                 external_id = str(external_id + txn.foreign_currency + txn.foreign_amount)

@@ -38,7 +38,7 @@ Check implemented parsers for examples.
 ### Run tests
 
 ```
-chmod +x text.sh
+chmod +x test.sh
 
 ./test.sh
 ```

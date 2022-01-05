@@ -7,7 +7,7 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name='card_data_parsers',
-    version='0.5.0',
+    version='0.6.0',
     author='Siva Narayanan',
     author_email='siva@fyle.in',
     url='https://www.fylehq.com',
