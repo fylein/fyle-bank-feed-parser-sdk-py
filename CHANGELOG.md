@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.7.0]
+
+### Changed
+
+- Reverted v0.5.0
+
 ## [0.6.0]
 
 ### Changed
