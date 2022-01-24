@@ -208,7 +208,7 @@ class S3DFParser(Parser):
         return txn
 
     @staticmethod
-    def __extract_transactions(root, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields):
+    def __extract_transactions(root, account_number_mask_begin=None, account_number_mask_end=None, default_values, mandatory_fields):
         txns = []
         issuer_entity = S3DFParser.__get_element_by_tag(root, 'IssuerEntity')
         if issuer_entity is None:
@@ -220,8 +220,12 @@ class S3DFParser(Parser):
         account_entities = S3DFParser.__get_elements_by_tag(
             corporate_entity, 'AccountEntity')
         for account in account_entities:
-            account_number = mask_card_number(
-                account.attrib['AccountNumber'], account_number_mask_begin, account_number_mask_end)
+            if account_number_mask_begin!=None and account_number_mask_end!=None:
+                account_number = mask_card_number(
+                    account.attrib['AccountNumber'], 
+                    account_number_mask_begin, 
+                    account_number_mask_end
+                )
             financial_transaction_entities = S3DFParser.__get_elements_by_tag(
                 account, 'FinancialTransactionEntity')
 
@@ -256,7 +260,7 @@ class S3DFParser(Parser):
         return txns
 
     @staticmethod
-    def parse(file_obj, account_number_mask_begin, account_number_mask_end, default_values={}, mandatory_fields=[]) -> List[S3DFTransaction]:
+    def parse(file_obj, account_number_mask_begin=None, account_number_mask_end=None, default_values={}, mandatory_fields=[]) -> List[S3DFTransaction]:
         root: ElementTree = ET.parse(file_obj).getroot()
         if root is None:
             return None
