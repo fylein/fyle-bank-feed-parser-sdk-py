@@ -208,7 +208,7 @@ class S3DFParser(Parser):
         return txn
 
     @staticmethod
-    def __extract_transactions(root, account_number_mask_begin=None, account_number_mask_end=None, default_values, mandatory_fields):
+    def __extract_transactions(root, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields):
         txns = []
         issuer_entity = S3DFParser.__get_element_by_tag(root, 'IssuerEntity')
         if issuer_entity is None:
