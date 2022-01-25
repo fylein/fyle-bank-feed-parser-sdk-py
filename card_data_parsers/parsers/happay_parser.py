@@ -49,7 +49,7 @@ class HappayParser(Parser):
         txn = HappayTransaction(**txn_line)
 
         # account number
-        if account_number_mask_begin!=None and account_number_mask_end!=None:
+        if account_number_mask_begin is not None and account_number_mask_end is not None:
             txn.account_number = mask_card_number(
                 txn.account_number, 
                 account_number_mask_begin,

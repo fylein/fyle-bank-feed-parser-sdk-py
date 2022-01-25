@@ -267,7 +267,7 @@ class CDFParser(Parser):
             for account in account_entities:
                 nickname = CDFParser.__extract_nickname(account)
                 account_number = account.attrib['AccountNumber']
-                if account_number_mask_begin!=None and account_number_mask_end!=None:
+                if account_number_mask_begin is not None and account_number_mask_end is not None:
                     account_number = mask_card_number(
                         account_number, 
                         account_number_mask_begin,

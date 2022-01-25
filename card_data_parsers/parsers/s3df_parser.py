@@ -78,7 +78,7 @@ class S3DFParser(Parser):
         # currency
         txn.currency = S3DFParser.__get_element_by_tag(
             ftrxn, 'PostedCurrencyCode').text
-        if txn.currency != None:
+        if txn.currency is not None:
             txn.currency = get_currency_from_country_code(txn.currency)
         else:
             return None
@@ -95,7 +95,7 @@ class S3DFParser(Parser):
         # foreign_currency
         txn.foreign_currency = S3DFParser.__get_element_by_tag(
             ftrxn, 'OriginalCurrencyCode').text
-        if txn.foreign_currency != None:
+        if txn.foreign_currency is not None:
             txn.foreign_currency = get_currency_from_country_code(
                 txn.foreign_currency)
         else:
@@ -220,7 +220,7 @@ class S3DFParser(Parser):
         account_entities = S3DFParser.__get_elements_by_tag(
             corporate_entity, 'AccountEntity')
         for account in account_entities:
-            if account_number_mask_begin!=None and account_number_mask_end!=None:
+            if account_number_mask_begin is not None and account_number_mask_end is not None:
                 account_number = mask_card_number(
                     account.attrib['AccountNumber'], 
                     account_number_mask_begin, 
