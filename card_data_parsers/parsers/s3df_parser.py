@@ -226,6 +226,8 @@ class S3DFParser(Parser):
                     account_number_mask_begin, 
                     account_number_mask_end
                 )
+            else: 
+                account_number = account.attrib['AccountNumber']
             financial_transaction_entities = S3DFParser.__get_elements_by_tag(
                 account, 'FinancialTransactionEntity')
 
