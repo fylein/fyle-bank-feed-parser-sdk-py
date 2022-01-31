@@ -49,7 +49,7 @@ chmod +x test.sh
 To release new version to Pypi:
 - Create a new release [here](https://github.com/fylein/fyle-bank-feed-parser-sdk-py/releases/new).
   <center>OR</center>
-- When a new version is ready for release, create a git tag and push that tag(after merge) with version number like: 
+- Create a git tag and push that tag(after merge) with version number like: 
   ```
   git tag v0.1.0
   git push origin v0.1.0
