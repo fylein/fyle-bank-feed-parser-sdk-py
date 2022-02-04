@@ -73,8 +73,13 @@ class VCFParser(Parser):
 
         card_num = txn.account_number
         # Masking the card number
-        txn.account_number = mask_card_number(
-            txn.account_number, account_number_mask_begin, account_number_mask_end)
+        if account_number_mask_begin is not None and account_number_mask_end is not None:
+            txn.account_number = mask_card_number(
+                txn.account_number, 
+                account_number_mask_begin, 
+                account_number_mask_end
+            )
+            
         external_id = str(txn.external_id) + txn.account_number + \
             txn.transaction_dt + txn.vendor + \
             txn.currency + txn.amount
@@ -274,7 +279,7 @@ class VCFParser(Parser):
         return line
 
     @staticmethod
-    def parse(file_obj, account_number_mask_begin, account_number_mask_end, default_values={}, mandatory_fields=[]) -> List[VCFTransaction]:
+    def parse(file_obj, account_number_mask_begin=None, account_number_mask_end=None, default_values={}, mandatory_fields=[]) -> List[VCFTransaction]:
         reader = csv.reader(file_obj, delimiter='\t', quoting=csv.QUOTE_NONE)
 
         trxn_lines = []

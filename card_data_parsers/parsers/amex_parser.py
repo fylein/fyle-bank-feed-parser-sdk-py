@@ -147,8 +147,12 @@ class AmexParser(Parser):
                 raise ParserError(f'Currency is missing')
 
             # Masking the card number
-            txn.account_number = mask_card_number(txn.account_number, account_number_mask_begin,
-                                                    account_number_mask_end)
+            if account_number_mask_begin is not None and account_number_mask_end is not None:
+                txn.account_number = mask_card_number(
+                    txn.account_number, 
+                    account_number_mask_begin,
+                    account_number_mask_end
+                )
 
             # adding actual AMEX transaction_id before modifying it
             txn.transaction_id = txn.external_id
@@ -180,7 +184,7 @@ class AmexParser(Parser):
         return is_transaction
 
     @staticmethod
-    def parse(file_obj, account_number_mask_begin, account_number_mask_end, default_values={}, mandatory_fields=[]) -> List[AmexTransaction]:
+    def parse(file_obj, account_number_mask_begin=None, account_number_mask_end=None, default_values={}, mandatory_fields=[]) -> List[AmexTransaction]:
         txn_lines = []
         file_content = file_obj.readlines()
         for line in file_content:

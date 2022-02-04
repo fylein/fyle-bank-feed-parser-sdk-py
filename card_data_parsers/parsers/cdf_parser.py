@@ -267,8 +267,13 @@ class CDFParser(Parser):
             for account in account_entities:
                 nickname = CDFParser.__extract_nickname(account)
                 account_number = account.attrib['AccountNumber']
-                account_number = mask_card_number(
-                    account_number, account_number_mask_begin, account_number_mask_end)
+                if account_number_mask_begin is not None and account_number_mask_end is not None:
+                    account_number = mask_card_number(
+                        account_number, 
+                        account_number_mask_begin,
+                        account_number_mask_end
+                    )
+                
                 financial_transaction_entities = CDFParser.__get_elements_by_tag(
                     account, 'FinancialTransactionEntity')
 
@@ -303,7 +308,7 @@ class CDFParser(Parser):
         return txns
 
     @staticmethod
-    def parse(file_obj, account_number_mask_begin, account_number_mask_end, default_values={}, mandatory_fields=[]) -> List[CDFTransaction]:
+    def parse(file_obj, account_number_mask_begin=None, account_number_mask_end=None, default_values={}, mandatory_fields=[]) -> List[CDFTransaction]:
         root: ElementTree = ET.parse(file_obj).getroot()
         if root is None:
             return None

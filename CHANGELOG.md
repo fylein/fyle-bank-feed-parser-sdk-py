@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.7.0]
+
+### Changed
+
+- Provided `None` as default value for `account_number_mask_begin` and `account_number_mask_end` arguments, to evade card masking.
+
 ## [0.6.0]
 
 ### Changed
