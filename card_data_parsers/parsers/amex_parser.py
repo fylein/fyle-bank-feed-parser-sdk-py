@@ -65,6 +65,7 @@ class AmexParser(Parser):
         txn.transaction_type = txn_line[736:737].strip()
         txn.description = txn_line[946:991].strip()
         txn.external_id = txn_line[631:681].strip()
+        txn.post_date = get_iso_date_string(txn_line[573:581].strip(), "%Y%m%d")
         txn.decimal_place_indicator = txn_line[768:769].strip()
         txn.merchant_category_code = txn_line[1678:1681].strip()
 

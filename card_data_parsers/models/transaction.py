@@ -39,3 +39,4 @@ class Transaction:
     description: str = None
     external_id: str = None
     bank_name: str = None
+    post_date: str = None

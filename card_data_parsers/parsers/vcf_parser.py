@@ -71,6 +71,9 @@ class VCFParser(Parser):
         txn.transaction_dt = get_iso_date_string(
             txn.transaction_dt.strip(), '%m%d%Y')
 
+        txn.post_date = get_iso_date_string(
+            txn.post_date.strip(), '%m%d%Y')
+        
         card_num = txn.account_number
         # Masking the card number
         if account_number_mask_begin is not None and account_number_mask_end is not None:
@@ -121,6 +124,7 @@ class VCFParser(Parser):
         txn.external_id = transaction[3].strip()
         txn.merchant_category_code = transaction[16].strip()
         txn.sequence_number = transaction[4].strip()
+        txn.post_date = transaction[2].strip()
 
         # other amounts to consider are
         # at positions 20, 28, 29
