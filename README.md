@@ -38,7 +38,7 @@ Check implemented parsers for examples.
 ### Run tests
 
 ```
-chmod +x text.sh
+chmod +x test.sh
 
 ./test.sh
 ```
@@ -46,11 +46,15 @@ chmod +x text.sh
 
 ## Releasing a new version
 
-When a new version is ready for release, create a git tag with version number like -
-```
-git tag v0.1.0
-git push origin v0.1.0
-```
+To release new version to Pypi:
+- Create a new release [here](https://github.com/fylein/fyle-bank-feed-parser-sdk-py/releases/new).
+  <center>OR</center>
+- Create a git tag and push that tag(after merge) with version number like: 
+  ```
+  git tag v0.1.0
+  git push origin v0.1.0
+  ```
+
 
 
 ## Versioning semantics

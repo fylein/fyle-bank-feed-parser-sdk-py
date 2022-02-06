@@ -49,8 +49,12 @@ class HappayParser(Parser):
         txn = HappayTransaction(**txn_line)
 
         # account number
-        txn.account_number = mask_card_number(
-            txn.account_number, account_number_mask_begin, account_number_mask_end)
+        if account_number_mask_begin is not None and account_number_mask_end is not None:
+            txn.account_number = mask_card_number(
+                txn.account_number, 
+                account_number_mask_begin,
+                account_number_mask_end
+            )
 
         # amount
         txn.amount = abs(float(txn.amount))
@@ -91,7 +95,7 @@ class HappayParser(Parser):
         return txns
 
     @staticmethod
-    def parse(file_obj, account_number_mask_begin, account_number_mask_end, default_values={}, mandatory_fields=[]) -> List[HappayTransaction]:
+    def parse(file_obj, account_number_mask_begin=None, account_number_mask_end=None, default_values={}, mandatory_fields=[]) -> List[HappayTransaction]:
         reader = csv.DictReader(file_obj, delimiter=',')
 
         # Transaction Lines

@@ -1,0 +1,6 @@
+{
+  "default_values": {
+    "bank_name": null
+  },
+  "mandatory_fields": []
+}

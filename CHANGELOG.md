@@ -1,10 +1,22 @@
 # Change Log
 
-## [0.6.0]
+## [0.8.0]
 
 ### Changed
 
 - Fetching the `post_date` from amex, cdf, s3df and vcf parsers.
+
+## [0.7.0]
+
+### Changed
+
+- Provided `None` as default value for `account_number_mask_begin` and `account_number_mask_end` arguments, to evade card masking.
+
+## [0.6.0]
+
+### Changed
+
+- Added AMEX transaction_id as `transaction_id` in AMEX Parser.
 
 ## [0.5.0]
 
