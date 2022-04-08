@@ -9,8 +9,6 @@
     "external_id": "3d97790796a6d8c0012ad6ad28d2912b",
     "nickname": "Boi1",
     "currency": "INR",
-    "foreign_amount": 624.0,
-    "foreign_currency": "INR",
     "bank_name": "Test Bank"
   },
   {
@@ -23,8 +21,6 @@
     "external_id": "b923cc3fcad3dda44f5b09143973590a",
     "nickname": "Boi2",
     "currency": "INR",
-    "foreign_amount": 1005.0,
-    "foreign_currency": "INR",
     "bank_name": "Test Bank"
   },
   {
