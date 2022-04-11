@@ -40,6 +40,7 @@ def is_amount(str):
     except ValueError:
         return False
 
+
 def are_amounts_null_or_same(a, b):
     if isinstance(a, str):
         if is_amount(a):
@@ -94,7 +95,7 @@ def remove_leading_zeros(value, min_len=None):
 
 
 def get_iso_date_string(date_string, date_format):
-    if date_string is not '':
+    if date_string != '':
         iso_date_string = datetime.strptime(date_string.strip(), date_format)
         # hack for timezones: set time to 10 o clock
         iso_date_string = iso_date_string.replace(hour=10)
