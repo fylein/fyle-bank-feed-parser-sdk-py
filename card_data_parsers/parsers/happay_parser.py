@@ -72,9 +72,13 @@ class HappayParser(Parser):
         txn.transaction_dt = txn.transaction_dt.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
 
         # orig amount and orig currency
-        if txn.foreign_amount and txn.foreign_currency and txn.foreign_currency != txn.currency:
+        if txn.foreign_amount and txn.foreign_currency:
             txn.foreign_amount = abs(float(txn.foreign_amount))
         else:
+            txn.foreign_amount = None
+            txn.foreign_currency = None
+
+        if txn.foreign_currency == txn.currency and txn.foreign_amount == txn.amount:
             txn.foreign_amount = None
             txn.foreign_currency = None
 
