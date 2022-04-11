@@ -78,7 +78,10 @@ class HappayParser(Parser):
             txn.foreign_amount = None
             txn.foreign_currency = None
 
-        if txn.foreign_currency == txn.currency and txn.foreign_amount == txn.amount:
+        if txn.foreign_currency == txn.currency \
+            and txn.foreign_amount is not None \
+            and txn.amount is not None \
+            and abs(txn.foreign_amount - txn.amount) < 0.002:
             txn.foreign_amount = None
             txn.foreign_currency = None
 
