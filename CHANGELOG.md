@@ -4,7 +4,7 @@
 
 ### Changed
 
-- Updated `HappayParser` to set `foreign_amount` and `foreign_currency` to `None`, if `foreign_currency` is same as `currency`.
+- Updated parsers to set `foreign_amount` and `foreign_currency` to `None`, if `foreign_currency` is same as `currency` and `foreign_amount` is same as `amount`.
 
 ## [0.8.0]
 

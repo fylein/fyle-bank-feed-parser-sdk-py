@@ -5,7 +5,7 @@ from typing import List
 from ..log import getLogger
 from .parser import Parser, ParserError
 from ..models import HappayTransaction
-from ..utils import get_currency_from_country_code, is_amount, mask_card_number, generate_external_id, expand_with_default_values, has_null_value_for_keys
+from ..utils import get_currency_from_country_code, is_amount, mask_card_number, generate_external_id, expand_with_default_values, has_null_value_for_keys, are_amounts_null_or_same
 
 
 logger = getLogger(__name__)
@@ -78,10 +78,7 @@ class HappayParser(Parser):
             txn.foreign_amount = None
             txn.foreign_currency = None
 
-        if txn.foreign_currency == txn.currency \
-            and txn.foreign_amount is not None \
-            and txn.amount is not None \
-            and abs(txn.foreign_amount - txn.amount) < 0.002:
+        if txn.foreign_currency == txn.currency and are_amounts_null_or_same(txn.foreign_amount, txn.amount):
             txn.foreign_amount = None
             txn.foreign_currency = None
 

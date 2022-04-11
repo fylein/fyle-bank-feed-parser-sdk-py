@@ -5,7 +5,7 @@ from typing import List
 from ..log import getLogger
 from .parser import Parser, ParserError
 from ..models import S3DFTransaction
-from ..utils import get_currency_from_country_code, is_amount, mask_card_number, generate_external_id, get_iso_date_string, has_null_value_for_attrs
+from ..utils import get_currency_from_country_code, is_amount, mask_card_number, generate_external_id, get_iso_date_string, has_null_value_for_attrs, are_amounts_null_or_same
 
 
 logger = getLogger(__name__)
@@ -107,7 +107,7 @@ class S3DFParser(Parser):
         else:
             return None
 
-        if txn.foreign_currency == txn.currency:
+        if txn.foreign_currency == txn.currency and are_amounts_null_or_same(txn.foreign_amount, txn.amount):
             txn.foreign_currency = None
             txn.foreign_amount = None
 

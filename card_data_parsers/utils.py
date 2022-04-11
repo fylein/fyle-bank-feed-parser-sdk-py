@@ -2,6 +2,7 @@ from typing import List
 from datetime import datetime
 import hashlib
 import pycountry
+import numbers
 
 
 country_code_to_currency_dict = {
@@ -38,6 +39,23 @@ def is_amount(str):
         return True
     except ValueError:
         return False
+
+def are_amounts_null_or_same(a, b):
+    if isinstance(a, str):
+        if is_amount(a):
+            a = float(a)
+        elif a == '':
+            a = None
+    if isinstance(b, str):
+        if is_amount(b):
+            b = float(b)
+        elif b == '':
+            b = None
+    if a is None and b is None:
+        return True
+    if isinstance(a, numbers.Real) and isinstance(b, numbers.Real):
+        return abs(a - b) < 0.002
+    return False
 
 
 def mask_card_number(card_number, unmask_begin, unmask_end):

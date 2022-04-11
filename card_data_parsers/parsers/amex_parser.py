@@ -2,7 +2,7 @@ from typing import List
 from ..log import getLogger
 from .parser import Parser, ParserError
 from ..models import AmexTransaction
-from ..utils import generate_external_id, get_currency_from_country_code, get_iso_date_string, is_amount, mask_card_number, has_null_value_for_attrs, remove_leading_zeros
+from ..utils import generate_external_id, get_currency_from_country_code, get_iso_date_string, is_amount, mask_card_number, has_null_value_for_attrs, remove_leading_zeros, are_amounts_null_or_same
 
 
 logger = getLogger(__name__)
@@ -130,7 +130,7 @@ class AmexParser(Parser):
             if txn.transaction_type is None:
                 raise ParserError(f'Transaction type is missing')
 
-            if txn.foreign_currency == txn.currency and txn.foreign_amount == txn.amount:
+            if txn.foreign_currency == txn.currency and are_amounts_null_or_same(txn.foreign_amount, txn.amount):
                 txn.foreign_amount = None
                 txn.foreign_currency = None
             else:
