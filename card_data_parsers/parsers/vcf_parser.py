@@ -171,7 +171,8 @@ class VCFParser(Parser):
         return txn
 
     @staticmethod
-    def __extract_transactions(lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields):
+    def __extract_transactions_block_start(start_index, lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields):
+        end_index = -1
         card_transactions_block_start = -1
         card_transactions_block_end = -1
 
@@ -192,30 +193,38 @@ class VCFParser(Parser):
 
         # identifying header and trailer of card transaction blocks
         for index, line in enumerate(lines):
-            if line[0].strip() == '8' and (line[4].strip() == '05' or line[4].strip() == '5'):
+            if index < start_index:
+                continue
+            if line[0].strip() == '8' and (line[4].strip() == '05' or line[4].strip() == '5') and card_transactions_block_start == -1:
                 card_transactions_block_start = index + 1
-            if line[0].strip() == '9' and (line[4].strip() == '05' or line[4].strip() == '5'):
+            if line[0].strip() == '9' and (line[4].strip() == '05' or line[4].strip() == '5') and card_transactions_block_end == -1:
                 card_transactions_block_end = index - 1
-            if line[0].strip() == '8' and (line[4].strip() == '02' or line[4].strip() == '2'):
+                end_index = max(index, end_index)
+            if line[0].strip() == '8' and (line[4].strip() == '02' or line[4].strip() == '2') and car_rental_transactions_block_start == -1:
                 car_rental_transactions_block_start = index + 1
-            if line[0].strip() == '9' and (line[4].strip() == '02' or line[4].strip() == '2'):
+            if line[0].strip() == '9' and (line[4].strip() == '02' or line[4].strip() == '2') and car_rental_transactions_block_end == -1:
                 car_rental_transactions_block_end = index - 1
-            if line[0].strip() == '8' and (line[4].strip() == '09' or line[4].strip() == '9'):
+                end_index = max(index, end_index)
+            if line[0].strip() == '8' and (line[4].strip() == '09' or line[4].strip() == '9') and lodging_transactions_block_start == -1:
                 lodging_transactions_block_start = index + 1
-            if line[0].strip() == '9' and (line[4].strip() == '09' or line[4].strip() == '9'):
+            if line[0].strip() == '9' and (line[4].strip() == '09' or line[4].strip() == '9') and lodging_transactions_block_end == -1:
                 lodging_transactions_block_end = index - 1
-            if line[0].strip() == '8' and line[4].strip() == '14':
+                end_index = max(index, end_index)
+            if line[0].strip() == '8' and line[4].strip() == '14' and airline_booking_transactions_block_start == -1:
                 airline_booking_transactions_block_start = index + 1
-            if line[0].strip() == '9' and line[4].strip() == '14':
+            if line[0].strip() == '9' and line[4].strip() == '14' and airline_booking_transactions_block_end == -1:
                 airline_booking_transactions_block_end = index - 1
-            if line[0].strip() == '8' and line[4].strip() == '17':
+                end_index = max(index, end_index)
+            if line[0].strip() == '8' and line[4].strip() == '17' and fleet_service_transactions_block_start == -1:
                 fleet_service_transactions_block_start = index + 1
-            if line[0].strip() == '9' and line[4].strip() == '17':
+            if line[0].strip() == '9' and line[4].strip() == '17' and fleet_service_transactions_block_end == -1:
                 fleet_service_transactions_block_end = index - 1
-            if line[0].strip() == '8' and line[4].strip() == '18':
+                end_index = max(index, end_index)
+            if line[0].strip() == '8' and line[4].strip() == '18' and fleet_product_transactions_block_start == -1:
                 fleet_product_transactions_block_start = index + 1
-            if line[0].strip() == '9' and line[4].strip() == '18':
+            if line[0].strip() == '9' and line[4].strip() == '18' and fleet_product_transactions_block_end == -1:
                 fleet_product_transactions_block_end = index - 1
+                end_index = max(index, end_index)
 
         card_transactions = lines[card_transactions_block_start: card_transactions_block_end + 1]
         car_rental_transactions = lines[car_rental_transactions_block_start:
@@ -272,6 +281,22 @@ class VCFParser(Parser):
                     'One or many mandatory fields missing.')
 
             txns.append(txn)
+
+        return txns, end_index
+
+    @staticmethod
+    def __extract_transactions(lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields):
+        txns = []
+
+        start_index = 0
+        total_lines = len(lines)
+        while start_index < total_lines:
+            block_txns, end_index = VCFParser.__extract_transactions_block_start(
+                start_index, lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields)
+            txns.extend(block_txns)
+            if end_index == -1:
+                break
+            start_index = end_index + 1
 
         return txns
 
