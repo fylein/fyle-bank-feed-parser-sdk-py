@@ -46,7 +46,7 @@ class VCFParser(Parser):
         if txn.transaction_type == None:
             raise ParserError('Transaction type missing.')
 
-        if txn.foreign_currency is None or (txn.foreign_currency == txn.currency and are_amounts_null_or_same(txn.foreign_amount, txn.amount)):
+        if txn.foreign_currency is None or txn.foreign_amount is None or (txn.foreign_currency == txn.currency and are_amounts_null_or_same(txn.foreign_amount, txn.amount)):
             txn.foreign_currency = None
             txn.foreign_amount = None
         else:

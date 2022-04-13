@@ -45,12 +45,12 @@ def are_amounts_null_or_same(a, b):
     if isinstance(a, str):
         if is_amount(a):
             a = float(a)
-        elif a == '':
+        else:
             a = None
     if isinstance(b, str):
         if is_amount(b):
             b = float(b)
-        elif b == '':
+        else:
             b = None
     if a is None and b is None:
         return True
