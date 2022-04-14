@@ -171,7 +171,7 @@ class VCFParser(Parser):
         return txn
 
     @staticmethod
-    def __extract_transactions_block_start(start_index, lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields):
+    def __extract_transactions_from_first_block_detected(start_index, lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields):
         end_index = -1
         card_transactions_block_start = -1
         card_transactions_block_end = -1
@@ -289,7 +289,7 @@ class VCFParser(Parser):
         start_index = 0
         total_lines = len(lines)
         while start_index < total_lines:
-            block_txns, end_index = VCFParser.__extract_transactions_block_start(
+            block_txns, end_index = VCFParser.__extract_transactions_from_first_block_detected(
                 start_index, lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields)
             txns.extend(block_txns)
             if end_index == -1:
