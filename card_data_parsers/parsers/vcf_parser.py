@@ -192,9 +192,7 @@ class VCFParser(Parser):
         fleet_product_transactions_block_end = -1
 
         # identifying header and trailer of card transaction blocks
-        for index, line in enumerate(lines):
-            if index < start_index:
-                continue
+        for index, line in enumerate(lines[start_index:], start=start_index):
             if line[0].strip() == '8' and (line[4].strip() == '05' or line[4].strip() == '5') and card_transactions_block_start == -1:
                 card_transactions_block_start = index + 1
             if line[0].strip() == '9' and (line[4].strip() == '05' or line[4].strip() == '5') and card_transactions_block_end == -1:
