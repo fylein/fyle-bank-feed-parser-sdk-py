@@ -41,7 +41,7 @@ def is_amount(str):
         return False
 
 
-def are_amounts_null_or_same(a, b):
+def are_amounts_empty_or_same(a, b):
     if isinstance(a, str):
         if is_amount(a):
             a = float(a)

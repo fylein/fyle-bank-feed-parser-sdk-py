@@ -36,5 +36,55 @@
     "foreign_amount": 1516.08,
     "foreign_currency": "USD",
     "bank_name": "Test Bank"
+  },
+  {
+    "transaction_dt": "2022-01-01T00:00:00.000000Z",
+    "account_number": "000124",
+    "vendor": "RandomVendor3",
+    "amount": 1000.0,
+    "transaction_type": "debit",
+    "description": "",
+    "external_id": "17d67ea722b91a4303c1f22337aa2998",
+    "nickname": "Boi3",
+    "currency": "INR",
+    "bank_name": "Test Bank"
+  },
+  {
+    "transaction_dt": "2022-01-01T00:00:00.000000Z",
+    "account_number": "000124",
+    "vendor": "RandomVendor3",
+    "amount": 1000.0,
+    "transaction_type": "debit",
+    "description": "",
+    "external_id": "17d67ea722b91a4303c1f22337aa2998",
+    "nickname": "Boi3",
+    "currency": "INR",
+    "bank_name": "Test Bank"
+  },
+  {
+    "transaction_dt": "2022-01-01T00:00:00.000000Z",
+    "account_number": "000124",
+    "vendor": "RandomVendor3",
+    "amount": 1000.0,
+    "transaction_type": "debit",
+    "description": "",
+    "external_id": "17d67ea722b91a4303c1f22337aa2998",
+    "nickname": "Boi3",
+    "currency": "INR",
+    "bank_name": "Test Bank"
+  },
+  {
+    "transaction_dt": "2022-01-01T00:00:00.000000Z",
+    "account_number": "000124",
+    "vendor": "RandomVendor3",
+    "amount": 1000.0,
+    "transaction_type": "debit",
+    "description": "",
+    "external_id": "17d67ea722b91a4303c1f22337aa2998",
+    "nickname": "Boi3",
+    "currency": "INR",
+    "bank_name": "Test Bank",
+    "foreign_amount": 1000.003,
+    "foreign_currency": "INR"
   }
 ]
