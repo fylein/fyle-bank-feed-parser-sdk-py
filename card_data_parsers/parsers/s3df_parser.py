@@ -107,7 +107,7 @@ class S3DFParser(Parser):
         else:
             return None
 
-        if txn.foreign_currency == txn.currency:
+        if txn.foreign_currency is None or txn.foreign_amount is None or (txn.foreign_currency == txn.currency):
             txn.foreign_currency = None
             txn.foreign_amount = None
 

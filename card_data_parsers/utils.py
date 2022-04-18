@@ -2,6 +2,7 @@ from typing import List
 from datetime import datetime
 import hashlib
 import pycountry
+import numbers
 
 
 country_code_to_currency_dict = {
@@ -76,7 +77,7 @@ def remove_leading_zeros(value, min_len=None):
 
 
 def get_iso_date_string(date_string, date_format):
-    if date_string is not '':
+    if date_string != '':
         iso_date_string = datetime.strptime(date_string.strip(), date_format)
         # hack for timezones: set time to 10 o clock
         iso_date_string = iso_date_string.replace(hour=10)

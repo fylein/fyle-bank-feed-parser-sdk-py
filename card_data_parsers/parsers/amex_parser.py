@@ -130,7 +130,7 @@ class AmexParser(Parser):
             if txn.transaction_type is None:
                 raise ParserError(f'Transaction type is missing')
 
-            if txn.foreign_currency == txn.currency and txn.foreign_amount == txn.amount:
+            if txn.foreign_currency is None or txn.foreign_amount is None or (txn.foreign_currency == txn.currency):
                 txn.foreign_amount = None
                 txn.foreign_currency = None
             else:
