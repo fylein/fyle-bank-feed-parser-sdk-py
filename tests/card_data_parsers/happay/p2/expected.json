@@ -84,7 +84,7 @@
     "nickname": "Boi3",
     "currency": "INR",
     "bank_name": "Test Bank",
-    "foreign_amount": 1000.003,
-    "foreign_currency": "INR"
+    "foreign_amount": 1000.0,
+    "foreign_currency": "USD"
   }
 ]

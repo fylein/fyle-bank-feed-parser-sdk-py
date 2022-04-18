@@ -41,24 +41,6 @@ def is_amount(str):
         return False
 
 
-def are_amounts_empty_or_same(a, b):
-    if isinstance(a, str):
-        if is_amount(a):
-            a = float(a)
-        else:
-            a = None
-    if isinstance(b, str):
-        if is_amount(b):
-            b = float(b)
-        else:
-            b = None
-    if a is None and b is None:
-        return True
-    if isinstance(a, numbers.Real) and isinstance(b, numbers.Real):
-        return abs(a - b) < 0.002
-    return False
-
-
 def mask_card_number(card_number, unmask_begin, unmask_end):
     # UnMask in the begining and the end of the account number
     try:
