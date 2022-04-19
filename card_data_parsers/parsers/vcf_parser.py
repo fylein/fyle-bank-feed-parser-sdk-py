@@ -181,7 +181,7 @@ class VCFParser(Parser):
 
                 Returns:
                         txns (list): List of transactions parsed
-                        end_index (int): Ending index from `lines`, of block if found any, otherwise -1
+                        end_index (int): Ending index from `lines`, of block, if found any, otherwise -1
         '''
         end_index = -1
         card_transactions_block_start = -1
@@ -202,7 +202,8 @@ class VCFParser(Parser):
         fleet_product_transactions_block_start = -1
         fleet_product_transactions_block_end = -1
 
-        # identifying header and trailer of card transaction blocks
+        # Identifying header and trailer of first valid card transaction block
+        # We'll ignore further blocks by checking if start/end values are -1 or not
         for index, line in enumerate(lines[start_index:], start=start_index):
             if line[0].strip() == '8' and (line[4].strip() == '05' or line[4].strip() == '5') and card_transactions_block_start == -1:
                 card_transactions_block_start = index + 1
