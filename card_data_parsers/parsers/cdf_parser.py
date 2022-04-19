@@ -102,7 +102,7 @@ class CDFParser(Parser):
         txn.foreign_currency = get_currency_from_country_code(
             txn.foreign_currency)
 
-        if txn.foreign_currency is not None and txn.foreign_currency == txn.currency:
+        if txn.foreign_currency is None or txn.foreign_amount is None or (txn.foreign_currency == txn.currency):
             txn.foreign_currency = None
             txn.foreign_amount = None
 

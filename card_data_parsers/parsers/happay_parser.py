@@ -78,6 +78,10 @@ class HappayParser(Parser):
             txn.foreign_amount = None
             txn.foreign_currency = None
 
+        if txn.foreign_currency is None or txn.foreign_amount is None or (txn.foreign_currency == txn.currency):
+            txn.foreign_amount = None
+            txn.foreign_currency = None
+
         # external id
         unique_for_transaction = str(txn.account_number) + str(txn.transaction_dt) + str(
             txn.amount) + str(txn.external_id) + str(txn.vendor) + txn.bank_name

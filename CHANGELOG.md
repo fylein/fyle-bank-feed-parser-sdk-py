@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.9.0]
+
+### Changed
+
+- Updated parsers to set `foreign_amount` and `foreign_currency` to `None`, if `foreign_currency` is same as `currency` or if `foreign_currency` or `foreign_amount` is `None`.
+
 ## [0.8.0]
 
 ### Changed
