@@ -181,7 +181,7 @@ class VCFParser(Parser):
 
                 Returns:
                         txns (list): List of transactions parsed
-                        end_index (int): Ending index from `lines`, of block, if found any, otherwise -1
+                        end_index (int): Ending index of first found block after start index from `lines`, of block, if found any, otherwise -1
         '''
         end_index = -1
         card_transactions_block_start = -1
