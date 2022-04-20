@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.10.0]
+
+### Changed
+
+- Updated `VCFParser` to parse all transaction blocks present in a VCF feed data.
+
 ## [0.9.0]
 
 ### Changed
