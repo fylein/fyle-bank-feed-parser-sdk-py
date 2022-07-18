@@ -67,7 +67,7 @@ class AmexParser(Parser):
         txn.external_id = txn_line[631:681].strip()
         txn.post_date = get_iso_date_string(txn_line[573:581].strip(), "%Y%m%d")
         txn.decimal_place_indicator = txn_line[768:769].strip()
-        txn.merchant_category_code = txn_line[1678:1681].strip()
+        txn.merchant_category_code = txn_line[1677:1681].strip()
 
         if txn_line[1867:1897].strip() is not None and txn_line[1867:1897].strip() != '':
             # service_establishment_brand_name
