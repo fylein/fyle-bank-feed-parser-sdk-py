@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.11.0]
+
+### Changed
+
+- Bug fixed in `AmexParser` for correctly parsing Merchant Category Codes (MCC).
+
 ## [0.10.0]
 
 ### Changed
