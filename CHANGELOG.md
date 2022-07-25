@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.12.0]
+
+### Changed
+
+- Updated `CDFParser` to parse merchant category codes in a CDF feed data.
+
 ## [0.11.0]
 
 ### Changed
