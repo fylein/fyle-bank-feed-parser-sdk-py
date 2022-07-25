@@ -110,6 +110,7 @@ class CDFParser(Parser):
         txn.vendor = CDFParser.__get_element_by_tag(
             card_acceptor, 'CardAcceptorName').text
 
+        # MCC
         txn.merchant_category_code = CDFParser.__get_element_by_tag(
             card_acceptor, 'CardAcceptorBusinessCode').text
 
