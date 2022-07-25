@@ -4,7 +4,7 @@
 
 ### Changed
 
-- Updated `CDFParser` and `S3DFParser` to parse merchant category codes in a CDF feed data.
+- Updated `CDFParser` and `S3DFParser` to parse merchant category codes from the feed data.
 
 ## [0.11.0]
 
