@@ -6,6 +6,7 @@ from .transaction import Transaction
 class CDFTransaction(Transaction):
     nickname: str = None
 
+    merchant_category_code: str = None
     lodging_nights: int = None
     lodging_check_in_date: str = None
     lodging_checkout_date: str = None
