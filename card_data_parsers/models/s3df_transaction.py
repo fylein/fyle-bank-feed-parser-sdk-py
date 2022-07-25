@@ -4,6 +4,7 @@ from .transaction import Transaction
 
 @dataclass
 class S3DFTransaction(Transaction):
+    merchant_category_code: str = None
     general_issuing_carrier: str = None
     general_travel_agency_name: str = None
     general_travel_agency_code: str = None
