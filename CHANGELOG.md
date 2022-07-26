@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.12.0]
+
+### Changed
+
+- Updated `CDFParser` and `S3DFParser` to parse merchant category codes from the feed data.
+
 ## [0.11.0]
 
 ### Changed

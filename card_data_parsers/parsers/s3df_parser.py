@@ -117,6 +117,10 @@ class S3DFParser(Parser):
         txn.vendor = str(txn.vendor) + ', ' + S3DFParser.__get_element_by_tag(
             card_acceptor, 'CardAcceptorStateProvince').text
 
+        # MCC
+        txn.merchant_category_code = S3DFParser.__get_element_by_tag(
+            card_acceptor, 'CardAcceptorBusinessCode').text
+
         # external Id
         external_id = S3DFParser.__get_element_by_tag(
             ftrxn, 'ProcessorTransactionId').text
