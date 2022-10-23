@@ -5,3 +5,4 @@ from .happay_transaction import *
 from .s3df_transaction import *
 from .vcf_transaction import *
 from .vcf_company import *
+from .vcf_card_account import *
