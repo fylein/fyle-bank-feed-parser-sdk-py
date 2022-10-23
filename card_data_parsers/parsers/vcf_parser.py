@@ -3,7 +3,7 @@ import csv
 from typing import List
 from ..log import getLogger
 from .parser import Parser, ParserError
-from ..models import VCFTransaction
+from ..models import VCFCompany, VCFTransaction
 from ..utils import get_currency_from_country_code, is_amount, mask_card_number, generate_external_id, get_iso_date_string, has_null_value_for_keys, remove_leading_zeros
 
 
@@ -93,6 +93,11 @@ class VCFParser(Parser):
         return txn
 
     @staticmethod
+    def __process_company(company, account_number_mask_begin, account_number_mask_end):
+        # TODO: should we do something here?
+        return company
+
+    @staticmethod
     def __process_airline_transaction(airline_trxn):
         airline_trxn.airline_travel_date = get_iso_date_string(
             airline_trxn.airline_travel_date.strip(), '%m%d%Y')
@@ -109,6 +114,20 @@ class VCFParser(Parser):
             lodging_trxn.lodging_check_in_date.strip(), '%m%d%Y')
 
         return lodging_trxn
+
+    @staticmethod
+    def __extract_company_fields(company_record, default_values):
+        company = VCFCompany(**default_values)
+        company.company_id = company_record[1].strip()
+        company.company_name = company_record[2].strip()
+        company.address_line_1 = company_record[3].strip()
+        company.address_line_2 = company_record[4].strip()
+        company.city = company_record[5].strip()
+        company.state = company_record[6].strip()
+        company.iso_country_code = company_record[7].strip()
+        company.postal_code = company_record[8].strip()
+
+        return company
 
     @staticmethod
     def __extract_transaction_fields(transaction, default_values):
@@ -295,6 +314,51 @@ class VCFParser(Parser):
         return txns, end_index
 
     @staticmethod
+    def __extract_companies_from_block_after_index(start_index, lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields):
+        '''
+        Returns the companies present in a single block, from the given `start_index`.
+        This function only parses the 1st block of companies that is detected from given `start_index`.
+
+                Parameters:
+                        start_index (int): Starting index of `lines` to search block from
+
+                Returns:
+                        companies (list): List of companies parsed
+                        end_index (int): Ending index of first found block after start index from `lines`, of block, if found any, otherwise -1
+        '''
+        end_index = -1
+        company_block_start = -1
+        company_block_end = -1
+
+        # Identifying header and trailer of first valid company block
+        # We'll ignore further blocks by checking if start/end values are -1 or not
+        for index, line in enumerate(lines[start_index:], start=start_index):
+            if line[0].strip() == '8' and (line[4].strip() == '06' or line[4].strip() == '6') and company_block_start == -1:
+                company_block_start = index + 1
+            if line[0].strip() == '9' and (line[4].strip() == '06' or line[4].strip() == '6') and company_block_end == -1:
+                company_block_end = index - 1
+                end_index = index
+
+        company_data = lines[company_block_start: company_block_end + 1]
+
+        companies = []
+        for company_record in company_data:
+            company = VCFParser.__extract_company_fields(company_record, default_values)
+
+            company = VCFParser.__process_company(
+                company, account_number_mask_begin, account_number_mask_end)
+            if company is None:
+                raise ParserError(f'unable to parse company.')
+
+            if has_null_value_for_keys(company, mandatory_fields):
+                raise ParserError(
+                    'One or many mandatory fields missing.')
+
+            companies.append(company)
+
+        return companies, end_index
+
+    @staticmethod
     def __extract_transactions(lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields):
         txns = []
 
@@ -312,6 +376,25 @@ class VCFParser(Parser):
         return txns
 
     @staticmethod
+    def __extract_companies(lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields):
+        companies = []
+
+        # Parsing all vcf companies blocks present in given lines
+        start_index = 0
+        total_lines = len(lines)
+        while start_index < total_lines:
+            print("Start index: " + str(start_index))
+            block_txns, end_index = VCFParser.__extract_companies_from_block_after_index(
+                start_index, lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields)
+            companies.extend(block_txns)
+            print("End index: " + str(end_index))
+            if end_index == -1:
+                break
+            start_index = end_index + 1
+
+        return companies
+
+    @staticmethod
     def __cleanup_fields(line) -> str:
         for index, field in enumerate(line):
             if all(str(value) == '0' for value in field):
@@ -319,7 +402,7 @@ class VCFParser(Parser):
         return line
 
     @staticmethod
-    def parse(file_obj, account_number_mask_begin=None, account_number_mask_end=None, default_values={}, mandatory_fields=[]) -> List[VCFTransaction]:
+    def parse(file_obj, account_number_mask_begin=None, account_number_mask_end=None, default_values={}, mandatory_fields=[], company_mandatory_fields=[]) -> dict:
         reader = csv.reader(file_obj, delimiter='\t', quoting=csv.QUOTE_NONE)
 
         trxn_lines = []
@@ -328,5 +411,13 @@ class VCFParser(Parser):
             cleaned_line = VCFParser.__cleanup_fields(line)
             trxn_lines.append(cleaned_line)
 
-        return VCFParser.__extract_transactions(
+        companies = VCFParser.__extract_companies(
+            trxn_lines, account_number_mask_begin, account_number_mask_end, default_values, company_mandatory_fields)
+
+        transactions =  VCFParser.__extract_transactions(
             trxn_lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields)
+
+        results = dict();
+        results['companies'] = companies
+        results['transactions'] = transactions
+        return results
