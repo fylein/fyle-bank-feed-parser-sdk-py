@@ -3,7 +3,7 @@ import csv
 from typing import List
 from ..log import getLogger
 from .parser import Parser, ParserError
-from ..models import VCFCompany, VCFTransaction, VCFCardAccount
+from ..models import VCFCompany, VCFTransaction, VCFCardAccount, VCFCardHolder
 from ..utils import get_currency_from_country_code, is_amount, mask_card_number, generate_external_id, get_iso_date_string, has_null_value_for_keys, remove_leading_zeros
 
 
@@ -103,6 +103,11 @@ class VCFParser(Parser):
         return card_account
 
     @staticmethod
+    def __process_card_holder(card_holder, account_number_mask_begin, account_number_mask_end):
+        # TODO: should we do something here?
+        return card_holder
+
+    @staticmethod
     def __process_airline_transaction(airline_trxn):
         airline_trxn.airline_travel_date = get_iso_date_string(
             airline_trxn.airline_travel_date.strip(), '%m%d%Y')
@@ -143,6 +148,25 @@ class VCFParser(Parser):
         card_account.card_type = record[8].strip()
         card_account.status_code = record[20].strip()
         return card_account
+
+    @staticmethod
+    def __extract_card_holders_fields(record, default_values):
+        card_holder = VCFCardHolder(**default_values)
+        card_holder.company_id = record[1].strip()
+        card_holder.cardholder_id = record[2].strip()
+        card_holder.hierarchy_node = record[3].strip()
+        card_holder.first_name = record[4].strip()
+        card_holder.last_name = record[5].strip()
+        card_holder.address_line_1 = record[6].strip()
+        card_holder.address_line_2 = record[7].strip()
+        card_holder.city = record[8].strip()
+        card_holder.state = record[9].strip()
+        card_holder.iso_country_code = record[10].strip()
+        card_holder.postal_code = record[11].strip()
+        card_holder.phone_no = record[14].strip()
+        card_holder.email_address = record[18].strip()
+
+        return card_holder
 
     @staticmethod
     def __extract_transaction_fields(transaction, default_values):
@@ -408,6 +432,40 @@ class VCFParser(Parser):
         return card_accounts, end_index
 
     @staticmethod
+    def __extract_card_holders_from_block_after_index(start_index, lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields):
+        end_index = -1
+        block_start = -1
+        block_end = -1
+
+        # Identifying header and trailer of first valid card accounts block
+        # We'll ignore further blocks by checking if start/end values are -1 or not
+        for index, line in enumerate(lines[start_index:], start=start_index):
+            if line[0].strip() == '8' and (line[4].strip() == '04' or line[4].strip() == '4') and block_start == -1:
+                block_start = index + 1
+            if line[0].strip() == '9' and (line[4].strip() == '04' or line[4].strip() == '4') and block_end == -1:
+                block_end = index - 1
+                end_index = index
+
+        data = lines[block_start: block_end + 1]
+
+        parsed_objects = []
+        for record in data:
+            parsed_object = VCFParser.__extract_card_holders_fields(record, default_values)
+
+            parsed_object = VCFParser.__process_card_holder(
+                parsed_object, account_number_mask_begin, account_number_mask_end)
+            if parsed_object is None:
+                raise ParserError(f'unable to parse card holder.')
+
+            if has_null_value_for_keys(parsed_object, mandatory_fields):
+                raise ParserError(
+                    'One or many mandatory fields missing.')
+
+            parsed_objects.append(parsed_object)
+
+        return parsed_objects, end_index
+
+    @staticmethod
     def __extract_transactions(lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields):
         txns = []
 
@@ -463,6 +521,25 @@ class VCFParser(Parser):
         return card_accounts
 
     @staticmethod
+    def __extract_card_holders(lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields):
+        card_holders = []
+
+        # Parsing all vcf card accounts blocks present in given lines
+        start_index = 0
+        total_lines = len(lines)
+        while start_index < total_lines:
+            print("Start index: " + str(start_index))
+            block_card_holders, end_index = VCFParser.__extract_card_holders_from_block_after_index(
+                start_index, lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields)
+            card_holders.extend(block_card_holders)
+            print("End index: " + str(end_index))
+            if end_index == -1:
+                break
+            start_index = end_index + 1
+
+        return card_holders
+
+    @staticmethod
     def __cleanup_fields(line) -> str:
         for index, field in enumerate(line):
             if all(str(value) == '0' for value in field):
@@ -471,7 +548,8 @@ class VCFParser(Parser):
 
     @staticmethod
     def parse(file_obj, account_number_mask_begin=None, account_number_mask_end=None, default_values={},
-              mandatory_fields=[], company_mandatory_fields=[], card_accounts_mandatory_fields=[]) -> dict:
+              mandatory_fields=[], company_mandatory_fields=[], card_account_mandatory_fields=[],
+              card_holder_mandatory_fields=[]) -> dict:
         reader = csv.reader(file_obj, delimiter='\t', quoting=csv.QUOTE_NONE)
 
         lines = []
@@ -487,10 +565,14 @@ class VCFParser(Parser):
             lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields)
 
         card_accounts = VCFParser.__extract_card_accounts(
-            lines, account_number_mask_begin, account_number_mask_end, default_values, card_accounts_mandatory_fields)
+            lines, account_number_mask_begin, account_number_mask_end, default_values, card_account_mandatory_fields)
+
+        card_holders = VCFParser.__extract_card_holders(
+            lines, account_number_mask_begin, account_number_mask_end, default_values, card_holder_mandatory_fields)
 
         results = dict()
         results['companies'] = companies
         results['transactions'] = transactions
         results['card_accounts'] = card_accounts
+        results['card_holders'] = card_holders
         return results
