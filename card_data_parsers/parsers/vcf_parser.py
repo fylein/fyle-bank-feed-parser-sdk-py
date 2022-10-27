@@ -5,6 +5,8 @@ from ..log import getLogger
 from .parser import Parser, ParserError
 from ..models import VCFCompany, VCFTransaction, VCFCardAccount, VCFCardHolder
 from ..utils import get_currency_from_country_code, is_amount, mask_card_number, generate_external_id, get_iso_date_string, has_null_value_for_keys, remove_leading_zeros
+import json
+from dataclasses import asdict
 
 
 logger = getLogger(__name__)
@@ -348,7 +350,7 @@ class VCFParser(Parser):
                 raise ParserError(
                     'One or many mandatory fields missing.')
 
-            txns.append(txn.to_json())
+            txns.append(asdict(txn))
 
         return txns, end_index
 
@@ -393,7 +395,7 @@ class VCFParser(Parser):
                 raise ParserError(
                     'One or many mandatory fields missing.')
 
-            companies.append(company.to_json())
+            companies.append(asdict(company))
 
         return companies, end_index
 
@@ -427,7 +429,7 @@ class VCFParser(Parser):
                 raise ParserError(
                     'One or many mandatory fields missing.')
 
-            card_accounts.append(card_account.to_json())
+            card_accounts.append(asdict(card_account))
 
         return card_accounts, end_index
 
@@ -461,7 +463,7 @@ class VCFParser(Parser):
                 raise ParserError(
                     'One or many mandatory fields missing.')
 
-            parsed_objects.append(parsed_object.to_json())
+            parsed_objects.append(asdict(parsed_object))
 
         return parsed_objects, end_index
 
@@ -565,8 +567,8 @@ class VCFParser(Parser):
             lines, account_number_mask_begin, account_number_mask_end, default_values, card_holder_mandatory_fields)
 
         results = dict()
-        results['companies'] = companies
-        results['transactions'] = transactions
-        results['card_accounts'] = card_accounts
-        results['card_holders'] = card_holders
+        results["companies"] = companies
+        results["transactions"] = transactions
+        results["card_accounts"] = card_accounts
+        results["card_holders"] = card_holders
         return results

@@ -1,9 +1,6 @@
 from dataclasses import dataclass
 from .transaction import Transaction
-from dataclasses_json import dataclass_json
 
-
-@dataclass_json
 @dataclass
 class AmexTransaction(Transaction):
     nickname: str = None
