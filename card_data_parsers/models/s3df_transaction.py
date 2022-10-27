@@ -1,7 +1,6 @@
 from dataclasses import dataclass, asdict
 from .transaction import Transaction
 
-
 @dataclass
 class S3DFTransaction(Transaction):
     merchant_category_code: str = None

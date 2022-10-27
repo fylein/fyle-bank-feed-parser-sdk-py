@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 from .transaction import Transaction
 
-
 @dataclass
 class AmexTransaction(Transaction):
     nickname: str = None
