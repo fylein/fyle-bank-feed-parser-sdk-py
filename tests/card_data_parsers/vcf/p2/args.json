@@ -1,8 +1,0 @@
-{
-  "default_values": {
-    "bank_name": "Test Bank"
-  },
-  "mandatory_fields": [],
-  "account_number_mask_begin": 4,
-  "account_number_mask_end": 4
-}

@@ -1,9 +1,6 @@
 from typing import List
 from datetime import datetime
 import hashlib
-import pycountry
-import numbers
-
 
 country_code_to_currency_dict = {
     "040": "EUR",  # Austria
@@ -24,10 +21,8 @@ country_code_to_currency_dict = {
 
 
 def get_currency_from_country_code(country_code):
-    try:
-        currency = pycountry.currencies.get(numeric=country_code).alpha_3
-    except KeyError:
-        currency = country_code_to_currency_dict[country_code] if country_code in country_code_to_currency_dict else None
+    # TODO: pycountry removed, so we need to enhance the country_code_to_currency_dict, if needed.
+    currency = country_code_to_currency_dict[country_code] if country_code in country_code_to_currency_dict else None
     return currency
 
 
