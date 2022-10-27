@@ -1,5 +1,8 @@
 from dataclasses import dataclass, asdict
+from dataclasses_json import dataclass_json
 
+
+@dataclass_json
 @dataclass
 class CardHolder:
     company_id: str = None

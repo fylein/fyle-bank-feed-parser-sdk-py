@@ -348,7 +348,7 @@ class VCFParser(Parser):
                 raise ParserError(
                     'One or many mandatory fields missing.')
 
-            txns.append(txn)
+            txns.append(txn.to_json())
 
         return txns, end_index
 
@@ -393,7 +393,7 @@ class VCFParser(Parser):
                 raise ParserError(
                     'One or many mandatory fields missing.')
 
-            companies.append(company)
+            companies.append(company.to_json())
 
         return companies, end_index
 
@@ -427,7 +427,7 @@ class VCFParser(Parser):
                 raise ParserError(
                     'One or many mandatory fields missing.')
 
-            card_accounts.append(card_account)
+            card_accounts.append(card_account.to_json())
 
         return card_accounts, end_index
 
@@ -461,7 +461,7 @@ class VCFParser(Parser):
                 raise ParserError(
                     'One or many mandatory fields missing.')
 
-            parsed_objects.append(parsed_object)
+            parsed_objects.append(parsed_object.to_json())
 
         return parsed_objects, end_index
 
@@ -490,11 +490,9 @@ class VCFParser(Parser):
         start_index = 0
         total_lines = len(lines)
         while start_index < total_lines:
-            print("Start index: " + str(start_index))
             block_companies, end_index = VCFParser.__extract_companies_from_block_after_index(
                 start_index, lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields)
             companies.extend(block_companies)
-            print("End index: " + str(end_index))
             if end_index == -1:
                 break
             start_index = end_index + 1
@@ -509,11 +507,9 @@ class VCFParser(Parser):
         start_index = 0
         total_lines = len(lines)
         while start_index < total_lines:
-            print("Start index: " + str(start_index))
             block_card_accounts, end_index = VCFParser.__extract_card_accounts_from_block_after_index(
                 start_index, lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields)
             card_accounts.extend(block_card_accounts)
-            print("End index: " + str(end_index))
             if end_index == -1:
                 break
             start_index = end_index + 1
@@ -528,11 +524,9 @@ class VCFParser(Parser):
         start_index = 0
         total_lines = len(lines)
         while start_index < total_lines:
-            print("Start index: " + str(start_index))
             block_card_holders, end_index = VCFParser.__extract_card_holders_from_block_after_index(
                 start_index, lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields)
             card_holders.extend(block_card_holders)
-            print("End index: " + str(end_index))
             if end_index == -1:
                 break
             start_index = end_index + 1

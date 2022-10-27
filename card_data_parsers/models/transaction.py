@@ -1,6 +1,8 @@
 from dataclasses import dataclass, asdict
+from dataclasses_json import dataclass_json
 
 
+@dataclass_json
 @dataclass
 class Transaction:
     '''
