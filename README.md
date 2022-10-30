@@ -4,6 +4,8 @@ Solid lambda function for processing credit card feeds (VCF)
 
 ## Environment
 
+- SOLID_SLACK_CHANNEL - name of the Slack channel to send audit message to.
+- SOLID_SLACK_TOKEN - token for slack authentication.
 - S3 bucket for feed files (SOLID_SFTP_BUCKET)
   - The bucket should be accessible via SFTP using "AWS transfer family".
 - S3 bucket for processed files (SOLID_PARSED_BUCKET)

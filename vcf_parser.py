@@ -2,8 +2,7 @@ from card_data_parsers import VCFParser, ParserError
 import boto3
 import json
 import os
-
-print('Loading function')
+from simple_slack import SimpleSlack
 
 solid_parsed_bucket = os.environ['SOLID_PARSED_BUCKET']
 solid_sqs_queue = os.environ['SOLID_SQS_QUEUE']
@@ -15,6 +14,7 @@ def handler(event, context):
 
         bucket = record['s3']['bucket']['name']
         input_file = record['s3']['object']['key']
+        SimpleSlack.post_message_to_slack(f"Processing file {input_file}")
 
         if input_file.endswith('.vcf'):
             try:
@@ -29,14 +29,13 @@ def handler(event, context):
                 )
                 body = json.dumps(result).encode('utf-8')
                 s3_put = s3_client.put_object(Body=body, Bucket=solid_parsed_bucket, Key=output_file)
-                queue = sqs.get_queue_by_name(QueueName=solid_sqs_queue)
+                SimpleSlack.post_message_to_slack(f"Output file {output_file} in bucket {solid_parsed_bucket}")
+
+           #     queue = sqs.get_queue_by_name(QueueName=solid_sqs_queue)
 
                 # Create a new message
                 response = queue.send_message(MessageBody=json.dumps(s3_put))
 
-                # The response is NOT a resource, but gives you a message ID and MD5
-                print(response.get('MessageId'))
-                print(response.get('MD5OfMessageBody'))
             except ParserError as e:
                 print(f'Omg! error {e}')
         else:

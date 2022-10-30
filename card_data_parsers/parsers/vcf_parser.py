@@ -1,16 +1,12 @@
-import logging
 import csv
-from typing import List
 from ..log import getLogger
 from .parser import Parser, ParserError
 from ..models import VCFCompany, VCFTransaction, VCFCardAccount, VCFCardHolder
 from ..utils import get_currency_from_country_code, is_amount, mask_card_number, generate_external_id, get_iso_date_string, has_null_value_for_keys, remove_leading_zeros
-import json
+from simple_slack import SimpleSlack
 from dataclasses import asdict
 
-
 logger = getLogger(__name__)
-
 
 class VCFParser(Parser):
 
@@ -548,6 +544,8 @@ class VCFParser(Parser):
               card_holder_mandatory_fields=[]) -> dict:
         reader = csv.reader(file_obj, delimiter='\t', quoting=csv.QUOTE_NONE)
 
+        SimpleSlack.post_message_to_slack(f"New VCF file")
+
         lines = []
 
         for line in reader:
@@ -556,6 +554,8 @@ class VCFParser(Parser):
 
         companies = VCFParser.__extract_companies(
             lines, account_number_mask_begin, account_number_mask_end, default_values, company_mandatory_fields)
+
+        SimpleSlack.post_message_to_slack(f"Number of companies {len(companies)}")
 
         transactions = VCFParser.__extract_transactions(
             lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields)
