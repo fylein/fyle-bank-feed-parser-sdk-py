@@ -1,10 +1,8 @@
-import json
-
 from card_data_parsers import VCFParser, ParserError
 from simple_slack import SimpleSlack
 
 try:
-    file = '/Users/iinbar@tripactions.com/Downloads/input.vcf'
+    file = "/Users/iinbar@tripactions.com/Downloads/input.vcf"
     with open(file) as input_file:
         SimpleSlack.post_message_to_slack(f"Processing local file {file}")
         result = VCFParser.parse(

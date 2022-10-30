@@ -24,13 +24,14 @@ class SimpleSlack:
             if SimpleSlack.execution_slack_thread is not None:
                 params["thread_ts"] = SimpleSlack.execution_slack_thread
 
-       #     data = parse.urlencode(params).encode()
-       #     req = request.Request('https://slack.com/api/chat.postMessage', data=data)
-       #     response = request.urlopen(req)
+            data = parse.urlencode(params).encode()
+            req = request.Request('https://slack.com/api/chat.postMessage', data=data)
+            response = request.urlopen(req).json()
 
-            #response = urllib.request.urlopen('https://slack.com/api/chat.postMessage', params).json()
             if SimpleSlack.execution_slack_thread is None and response["ok"] is True and response["ts"] is not None:
-                SimpleSlack.execution_slack_thread = response['ts']
+                SimpleSlack.execution_slack_thread = response["ts"]
+            #print(response)
+            
             return response
         except Exception as e:
             return slack_failure

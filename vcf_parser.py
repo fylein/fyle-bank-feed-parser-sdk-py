@@ -31,7 +31,7 @@ def handler(event, context):
                 s3_put = s3_client.put_object(Body=body, Bucket=solid_parsed_bucket, Key=output_file)
                 SimpleSlack.post_message_to_slack(f"Output file {output_file} in bucket {solid_parsed_bucket}")
 
-           #     queue = sqs.get_queue_by_name(QueueName=solid_sqs_queue)
+                queue = sqs.get_queue_by_name(QueueName=solid_sqs_queue)
 
                 # Create a new message
                 response = queue.send_message(MessageBody=json.dumps(s3_put))
