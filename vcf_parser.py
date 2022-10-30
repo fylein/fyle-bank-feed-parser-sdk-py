@@ -14,7 +14,7 @@ def handler(event, context):
 
         bucket = record['s3']['bucket']['name']
         input_file = record['s3']['object']['key']
-        SimpleSlack.post_message_to_slack(f"Processing file {input_file}")
+        SimpleSlack.add_message_to_slack(f"Processing file {input_file}")
 
         if input_file.endswith('.vcf'):
             try:
@@ -29,7 +29,7 @@ def handler(event, context):
                 )
                 body = json.dumps(result).encode('utf-8')
                 s3_put = s3_client.put_object(Body=body, Bucket=solid_parsed_bucket, Key=output_file)
-                SimpleSlack.post_message_to_slack(f"Output file {output_file} in bucket {solid_parsed_bucket}")
+                SimpleSlack.add_message_to_slack(f"Output file {output_file} in bucket {solid_parsed_bucket}")
 
                 queue = sqs.get_queue_by_name(QueueName=solid_sqs_queue)
 
@@ -40,3 +40,5 @@ def handler(event, context):
                 print(f'Omg! error {e}')
         else:
             print(f'File {input_file} is not a VCF file')
+
+        SimpleSlack.send_messages_to_slack()

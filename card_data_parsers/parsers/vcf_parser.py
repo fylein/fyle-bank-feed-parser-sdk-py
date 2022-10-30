@@ -544,7 +544,7 @@ class VCFParser(Parser):
               card_holder_mandatory_fields=[]) -> dict:
         reader = csv.reader(file_obj, delimiter='\t', quoting=csv.QUOTE_NONE)
 
-        SimpleSlack.post_message_to_slack(f"New VCF file")
+        SimpleSlack.add_message_to_slack(f"New VCF file")
 
         lines = []
 
@@ -555,7 +555,7 @@ class VCFParser(Parser):
         companies = VCFParser.__extract_companies(
             lines, account_number_mask_begin, account_number_mask_end, default_values, company_mandatory_fields)
 
-        SimpleSlack.post_message_to_slack(f"Number of companies {len(companies)}")
+        SimpleSlack.add_message_to_slack(f"Number of companies {len(companies)}")
 
         transactions = VCFParser.__extract_transactions(
             lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields)

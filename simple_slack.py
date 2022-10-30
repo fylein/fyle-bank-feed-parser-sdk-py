@@ -11,6 +11,7 @@ slack_failure = {
 
 class SimpleSlack:
     execution_slack_thread = None
+    messages = []
 
     @staticmethod
     def post_message_to_slack(text: str):
@@ -40,3 +41,13 @@ class SimpleSlack:
             return response
         except Exception as e:
             return slack_failure
+
+    @staticmethod
+    def add_message_to_slack(text: str):
+        SimpleSlack.messages.append(text)
+
+    @staticmethod
+    def send_messages_to_slack():
+        for message in SimpleSlack.messages:
+            SimpleSlack.post_message_to_slack(message)
+
