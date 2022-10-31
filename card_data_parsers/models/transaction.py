@@ -27,6 +27,7 @@ class Transaction:
 
     foreign_currency: Refers to foreign currency
     '''
+    load_transaction_code: int = 1
     account_number: str = None
     transaction_dt: str = None
     currency: str = None

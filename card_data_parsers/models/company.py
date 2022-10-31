@@ -9,6 +9,7 @@ class Company:
     ----------
     TODO: add the rest
     '''
+    load_transaction_code: int = 1
     company_id: str = None
     company_name: str = None
     address_line_1: str = None

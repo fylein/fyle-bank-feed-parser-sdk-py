@@ -4,8 +4,9 @@ import json
 import os
 from simple_slack import SimpleSlack
 
-solid_parsed_bucket = os.environ['SOLID_PARSED_BUCKET']
-solid_sqs_queue = os.environ['SOLID_SQS_QUEUE']
+# TODO: fail properly in case env vars are not set.
+solid_parsed_bucket = os.environ.get('SOLID_PARSED_BUCKET')
+solid_sqs_queue = os.environ.get('SOLID_SQS_QUEUE')
 s3_client = boto3.client('s3')
 sqs = boto3.resource('sqs')
 

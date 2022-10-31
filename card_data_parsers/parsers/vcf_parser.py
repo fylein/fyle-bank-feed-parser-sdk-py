@@ -124,22 +124,24 @@ class VCFParser(Parser):
         return lodging_trxn
 
     @staticmethod
-    def __extract_company_fields(company_record, default_values):
+    def __extract_company_fields(record, default_values):
         company = VCFCompany(**default_values)
-        company.company_id = company_record[1].strip()
-        company.company_name = company_record[2].strip()
-        company.address_line_1 = company_record[3].strip()
-        company.address_line_2 = company_record[4].strip()
-        company.city = company_record[5].strip()
-        company.state = company_record[6].strip()
-        company.iso_country_code = company_record[7].strip()
-        company.postal_code = company_record[8].strip()
+        company.load_transaction_code = record[0].strip()
+        company.company_id = record[1].strip()
+        company.company_name = record[2].strip()
+        company.address_line_1 = record[3].strip()
+        company.address_line_2 = record[4].strip()
+        company.city = record[5].strip()
+        company.state = record[6].strip()
+        company.iso_country_code = record[7].strip()
+        company.postal_code = record[8].strip()
 
         return company
 
     @staticmethod
     def __extract_card_accounts_fields(record, default_values):
         card_account = VCFCardAccount(**default_values)
+        card_account.load_transaction_code = record[0].strip()
         card_account.cardholder_id = record[1].strip()
         card_account.account_number = record[2].strip()
         card_account.hierarchy_node = record[3].strip()
@@ -150,6 +152,7 @@ class VCFParser(Parser):
     @staticmethod
     def __extract_card_holders_fields(record, default_values):
         card_holder = VCFCardHolder(**default_values)
+        card_holder.load_transaction_code = record[0].strip()
         card_holder.company_id = record[1].strip()
         card_holder.cardholder_id = record[2].strip()
         card_holder.hierarchy_node = record[3].strip()
@@ -167,20 +170,21 @@ class VCFParser(Parser):
         return card_holder
 
     @staticmethod
-    def __extract_transaction_fields(transaction, default_values):
+    def __extract_transaction_fields(record, default_values):
         txn = VCFTransaction(**default_values)
-        txn.account_number = transaction[1].strip()
-        txn.vendor = transaction[8].strip()
-        txn.amount = transaction[14].strip()
-        txn.currency = transaction[19].strip()
-        txn.foreign_amount = transaction[13].strip()
-        txn.foreign_currency = transaction[15].strip()
-        txn.transaction_type = transaction[17].strip()
-        txn.transaction_dt = transaction[18].strip()
-        txn.external_id = transaction[3].strip()
-        txn.merchant_category_code = transaction[16].strip()
-        txn.sequence_number = transaction[4].strip()
-        txn.post_date = transaction[2].strip()
+        txn.load_transaction_code = record[0].strip()
+        txn.account_number = record[1].strip()
+        txn.vendor = record[8].strip()
+        txn.amount = record[14].strip()
+        txn.currency = record[19].strip()
+        txn.foreign_amount = record[13].strip()
+        txn.foreign_currency = record[15].strip()
+        txn.transaction_type = record[17].strip()
+        txn.transaction_dt = record[18].strip()
+        txn.external_id = record[3].strip()
+        txn.merchant_category_code = record[16].strip()
+        txn.sequence_number = record[4].strip()
+        txn.post_date = record[2].strip()
 
         # other amounts to consider are
         # at positions 20, 28, 29

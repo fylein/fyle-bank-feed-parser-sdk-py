@@ -2,8 +2,8 @@ from urllib import request, parse
 import os
 import json
 
-SOLID_SLACK_CHANNEL = os.environ['SOLID_SLACK_CHANNEL'] if os.environ['SOLID_SLACK_CHANNEL'] else None
-SOLID_SLACK_TOKEN = os.environ['SOLID_SLACK_TOKEN'] if os.environ['SOLID_SLACK_TOKEN'] else None
+SOLID_SLACK_CHANNEL = os.environ.get('SOLID_SLACK_CHANNEL')
+SOLID_SLACK_TOKEN = os.environ.get('SOLID_SLACK_TOKEN')
 
 slack_failure = {
     "ok": False
@@ -50,4 +50,6 @@ class SimpleSlack:
     def send_messages_to_slack():
         for message in SimpleSlack.messages:
             SimpleSlack.post_message_to_slack(message)
+        # Clean messages queue
+        SimpleSlack.messages = []
 

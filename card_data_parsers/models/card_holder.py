@@ -2,6 +2,7 @@ from dataclasses import dataclass, asdict
 
 @dataclass
 class CardHolder:
+    load_transaction_code: int = 1
     company_id: str = None
     cardholder_id: str = None
     hierarchy_node: str = None
