@@ -9,6 +9,11 @@ from dataclasses import asdict
 logger = getLogger(__name__)
 
 class VCFParser(Parser):
+    record_types_and_codes = {
+        'company': ['6', '06'],
+        'card_holder': ['4', '04'],
+        'card_account': ['3', '03']
+    }
 
     @staticmethod
     def __extract_amount(amount):
@@ -357,109 +362,46 @@ class VCFParser(Parser):
         return txns, end_index
 
     @staticmethod
-    def __extract_companies_from_block_after_index(start_index, lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields):
-        '''
-        Returns the companies present in a single block, from the given `start_index`.
-        This function only parses the 1st block of companies that is detected from given `start_index`.
+    def __extract_from_block_after_index(record_type, start_index, lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields):
+        record_type_codes = VCFParser.record_types_and_codes.get(record_type)
+        if record_type_codes is None:
+            raise ParserError(f'{record_type} is not supported')
 
-                Parameters:
-                        start_index (int): Starting index of `lines` to search block from
-
-                Returns:
-                        companies (list): List of companies parsed
-                        end_index (int): Ending index of first found block after start index from `lines`, of block, if found any, otherwise -1
-        '''
-        end_index = -1
-        company_block_start = -1
-        company_block_end = -1
-
-        # Identifying header and trailer of first valid company block
-        # We'll ignore further blocks by checking if start/end values are -1 or not
-        for index, line in enumerate(lines[start_index:], start=start_index):
-            if line[0].strip() == '8' and (line[4].strip() == '06' or line[4].strip() == '6') and company_block_start == -1:
-                company_block_start = index + 1
-            if line[0].strip() == '9' and (line[4].strip() == '06' or line[4].strip() == '6') and company_block_end == -1:
-                company_block_end = index - 1
-                end_index = index
-
-        company_data = lines[company_block_start: company_block_end + 1]
-
-        companies = []
-        for company_record in company_data:
-            company = VCFParser.__extract_company_fields(company_record, default_values)
-
-            company = VCFParser.__process_company(
-                company, account_number_mask_begin, account_number_mask_end)
-            if company is None:
-                raise ParserError(f'unable to parse company.')
-
-            if has_null_value_for_keys(company, mandatory_fields):
-                raise ParserError(
-                    'One or many mandatory fields missing.')
-
-            companies.append(asdict(company))
-
-        return companies, end_index
-
-    @staticmethod
-    def __extract_card_accounts_from_block_after_index(start_index, lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields):
-        end_index = -1
-        card_accounts_block_start = -1
-        card_accounts_block_end = -1
-
-        # Identifying header and trailer of first valid card accounts block
-        # We'll ignore further blocks by checking if start/end values are -1 or not
-        for index, line in enumerate(lines[start_index:], start=start_index):
-            if line[0].strip() == '8' and (line[4].strip() == '03' or line[4].strip() == '3') and card_accounts_block_start == -1:
-                card_accounts_block_start = index + 1
-            if line[0].strip() == '9' and (line[4].strip() == '03' or line[4].strip() == '3') and card_accounts_block_end == -1:
-                card_accounts_block_end = index - 1
-                end_index = index
-
-        card_accounts_data = lines[card_accounts_block_start: card_accounts_block_end + 1]
-
-        card_accounts = []
-        for card_accounts_record in card_accounts_data:
-            card_account = VCFParser.__extract_card_accounts_fields(card_accounts_record, default_values)
-
-            card_account = VCFParser.__process_card_account(
-                card_account, account_number_mask_begin, account_number_mask_end)
-            if card_account is None:
-                raise ParserError(f'unable to parse card account.')
-
-            if has_null_value_for_keys(card_account, mandatory_fields):
-                raise ParserError(
-                    'One or many mandatory fields missing.')
-
-            card_accounts.append(asdict(card_account))
-
-        return card_accounts, end_index
-
-    @staticmethod
-    def __extract_card_holders_from_block_after_index(start_index, lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields):
         end_index = -1
         block_start = -1
         block_end = -1
 
-        # Identifying header and trailer of first valid card accounts block
-        # We'll ignore further blocks by checking if start/end values are -1 or not
         for index, line in enumerate(lines[start_index:], start=start_index):
-            if line[0].strip() == '8' and (line[4].strip() == '04' or line[4].strip() == '4') and block_start == -1:
+            if line[0].strip() == '8' and line[4].strip() in record_type_codes and block_start == -1:
                 block_start = index + 1
-            if line[0].strip() == '9' and (line[4].strip() == '04' or line[4].strip() == '4') and block_end == -1:
+            if line[0].strip() == '9' and line[4].strip() in record_type_codes and block_end == -1:
                 block_end = index - 1
                 end_index = index
 
-        data = lines[block_start: block_end + 1]
+        block_records = lines[block_start: block_end + 1]
 
         parsed_objects = []
-        for record in data:
-            parsed_object = VCFParser.__extract_card_holders_fields(record, default_values)
+        for block_record in block_records:
+            if record_type == 'company':
+                parsed_object = VCFParser.__extract_company_fields(block_record, default_values)
 
-            parsed_object = VCFParser.__process_card_holder(
-                parsed_object, account_number_mask_begin, account_number_mask_end)
+                parsed_object = VCFParser.__process_company(
+                    parsed_object, account_number_mask_begin, account_number_mask_end)
+            elif record_type == 'card_account':
+                parsed_object = VCFParser.__extract_card_accounts_fields(block_record, default_values)
+
+                parsed_object = VCFParser.__process_card_account(
+                    parsed_object, account_number_mask_begin, account_number_mask_end)
+            elif record_type == 'card_holder':
+                parsed_object = VCFParser.__extract_card_holders_fields(block_record, default_values)
+
+                parsed_object = VCFParser.__process_card_holder(
+                    parsed_object, account_number_mask_begin, account_number_mask_end)
+            else:
+                raise ParserError(f'{record_type} is not supported')
+
             if parsed_object is None:
-                raise ParserError(f'unable to parse card holder.')
+                raise ParserError(f'unable to parse {record_type}.')
 
             if has_null_value_for_keys(parsed_object, mandatory_fields):
                 raise ParserError(
@@ -470,72 +412,26 @@ class VCFParser(Parser):
         return parsed_objects, end_index
 
     @staticmethod
-    def __extract_transactions(lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields):
-        txns = []
-
-        # Parsing all vcf txn blocks present in given lines
-        start_index = 0
-        total_lines = len(lines)
-        while start_index < total_lines:
-            block_txns, end_index = VCFParser.__extract_transactions_from_block_after_index(
-                start_index, lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields)
-            txns.extend(block_txns)
-            if end_index == -1:
-                break
-            start_index = end_index + 1
-
-        return txns
-
-    @staticmethod
-    def __extract_companies(lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields):
-        companies = []
+    def __extract_objects(record_type, lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields):
+        objects = []
 
         # Parsing all vcf companies blocks present in given lines
         start_index = 0
         total_lines = len(lines)
         while start_index < total_lines:
-            block_companies, end_index = VCFParser.__extract_companies_from_block_after_index(
-                start_index, lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields)
-            companies.extend(block_companies)
+            if record_type == 'transaction':
+                block_objects, end_index = VCFParser.__extract_transactions_from_block_after_index(
+                    start_index, lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields)
+            else:
+                block_objects, end_index = VCFParser.__extract_from_block_after_index(record_type,
+                    start_index, lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields)
+
+            objects.extend(block_objects)
             if end_index == -1:
                 break
             start_index = end_index + 1
 
-        return companies
-
-    @staticmethod
-    def __extract_card_accounts(lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields):
-        card_accounts = []
-
-        # Parsing all vcf card accounts blocks present in given lines
-        start_index = 0
-        total_lines = len(lines)
-        while start_index < total_lines:
-            block_card_accounts, end_index = VCFParser.__extract_card_accounts_from_block_after_index(
-                start_index, lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields)
-            card_accounts.extend(block_card_accounts)
-            if end_index == -1:
-                break
-            start_index = end_index + 1
-
-        return card_accounts
-
-    @staticmethod
-    def __extract_card_holders(lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields):
-        card_holders = []
-
-        # Parsing all vcf card accounts blocks present in given lines
-        start_index = 0
-        total_lines = len(lines)
-        while start_index < total_lines:
-            block_card_holders, end_index = VCFParser.__extract_card_holders_from_block_after_index(
-                start_index, lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields)
-            card_holders.extend(block_card_holders)
-            if end_index == -1:
-                break
-            start_index = end_index + 1
-
-        return card_holders
+        return objects
 
     @staticmethod
     def __cleanup_fields(line) -> str:
@@ -554,27 +450,16 @@ class VCFParser(Parser):
 
         lines = []
 
+        results = dict()
         for line in reader:
             cleaned_line = VCFParser.__cleanup_fields(line)
             lines.append(cleaned_line)
 
-        companies = VCFParser.__extract_companies(
-            lines, account_number_mask_begin, account_number_mask_end, default_values, company_mandatory_fields)
+            for record_type in ['company', 'transaction', 'card_account', 'card_holder']:
+                objects = VCFParser.__extract_objects(record_type, lines, account_number_mask_begin,
+                                                      account_number_mask_end, default_values, company_mandatory_fields)
 
-        SimpleSlack.add_message_to_slack(f"Number of companies {len(companies)}")
+                SimpleSlack.add_message_to_slack(f"Number of {record_type} objects {len(objects)}")
+                results[record_type] = objects
 
-        transactions = VCFParser.__extract_transactions(
-            lines, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields)
-
-        card_accounts = VCFParser.__extract_card_accounts(
-            lines, account_number_mask_begin, account_number_mask_end, default_values, card_account_mandatory_fields)
-
-        card_holders = VCFParser.__extract_card_holders(
-            lines, account_number_mask_begin, account_number_mask_end, default_values, card_holder_mandatory_fields)
-
-        results = dict()
-        results["companies"] = companies
-        results["transactions"] = transactions
-        results["card_accounts"] = card_accounts
-        results["card_holders"] = card_holders
         return results
