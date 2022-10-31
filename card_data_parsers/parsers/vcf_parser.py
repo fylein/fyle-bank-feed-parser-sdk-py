@@ -135,6 +135,8 @@ class VCFParser(Parser):
         company.state = record[6].strip()
         company.iso_country_code = record[7].strip()
         company.postal_code = record[8].strip()
+        company.card_type = record[11].strip()
+        company.issuer_name = record[12].strip()
 
         return company
 
