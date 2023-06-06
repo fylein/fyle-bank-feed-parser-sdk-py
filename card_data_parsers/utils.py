@@ -19,7 +19,21 @@ country_code_to_currency_dict = {
     "792": "TRY",  # Turkey
     "804": "UAH",  # Ukraine
     "862": "VEF",  # Venezuela
-    "704": "VNM"   # Vietnam
+    "704": "VNM",  # Vietnam
+    "947": "CHE",  # Switzerland
+    "948": "CHW",  # Switzerland
+    "990": "CLF",  # Chile
+    "970": "COU",  # Colombia
+    "348": "HUF",  # Hungary
+    "929": "MRU",  # Mauritania   
+    "979": "MXV",  # Mexico
+    "925": "SLE",  # Sierra Leone
+    "930": "STN",  # Sao Tome and Principe
+    "997": "USN",  # United States
+    "940": "UYI",  # Uruguay
+    "927": "UYW",  # Uruguay
+    "926": "VED",  # Venezuela
+    "928": "VES"   # Venezuela
 }
 
 
