@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.13.0]
+
+### Changed
+
+- Added support for latest ISO_4217 currencies.
+
 ## [0.12.0]
 
 ### Changed
