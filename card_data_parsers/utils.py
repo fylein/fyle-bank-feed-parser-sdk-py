@@ -38,12 +38,12 @@ country_code_to_currency_dict = {
 
 
 def get_currency_from_country_code(country_code):
-    try:
-        currency = pycountry.currencies.get(numeric=country_code).alpha_3
-    except KeyError:
+    currency_obj = pycountry.currencies.get(numeric=country_code)
+    if currency_obj is None:
         currency = country_code_to_currency_dict[country_code] if country_code in country_code_to_currency_dict else None
+    else:
+        currency = currency_obj.alpha_3
     return currency
-
 
 def is_amount(str):
     if str == None or len(str) == 0:
