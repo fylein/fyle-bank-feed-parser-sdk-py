@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.14.0]
+
+### Changed
+
+- Fixed issue regarding fetching currency other than ISO_4217.
+
 ## [0.13.0]
 
 ### Changed
