@@ -214,27 +214,22 @@ class VCFParser(Parser):
                 car_rental_transactions_block_start = index + 1
             if line[0].strip() == '9' and (line[4].strip() == '02' or line[4].strip() == '2') and car_rental_transactions_block_end == -1:
                 car_rental_transactions_block_end = index - 1
-                end_index = index
             if line[0].strip() == '8' and (line[4].strip() == '09' or line[4].strip() == '9') and lodging_transactions_block_start == -1:
                 lodging_transactions_block_start = index + 1
             if line[0].strip() == '9' and (line[4].strip() == '09' or line[4].strip() == '9') and lodging_transactions_block_end == -1:
                 lodging_transactions_block_end = index - 1
-                end_index = index
             if line[0].strip() == '8' and line[4].strip() == '14' and airline_booking_transactions_block_start == -1:
                 airline_booking_transactions_block_start = index + 1
             if line[0].strip() == '9' and line[4].strip() == '14' and airline_booking_transactions_block_end == -1:
                 airline_booking_transactions_block_end = index - 1
-                end_index = index
             if line[0].strip() == '8' and line[4].strip() == '17' and fleet_service_transactions_block_start == -1:
                 fleet_service_transactions_block_start = index + 1
             if line[0].strip() == '9' and line[4].strip() == '17' and fleet_service_transactions_block_end == -1:
                 fleet_service_transactions_block_end = index - 1
-                end_index = index
             if line[0].strip() == '8' and line[4].strip() == '18' and fleet_product_transactions_block_start == -1:
                 fleet_product_transactions_block_start = index + 1
             if line[0].strip() == '9' and line[4].strip() == '18' and fleet_product_transactions_block_end == -1:
                 fleet_product_transactions_block_end = index - 1
-                end_index = index
 
         card_transactions = lines[card_transactions_block_start: card_transactions_block_end + 1]
         car_rental_transactions = lines[car_rental_transactions_block_start:
