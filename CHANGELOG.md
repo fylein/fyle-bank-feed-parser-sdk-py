@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.16.0]
+
+### Changed
+
+- Updated python2 version incompatibility in `setup.py`.
+
 ## [0.15.0]
 
 ### Changed
