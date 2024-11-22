@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.17.0]
+
+### Changed
+
+- Updated CDF parser to use employee id when masking account number
+
 ## [0.16.0]
 
 ### Changed

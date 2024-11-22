@@ -44,7 +44,7 @@ class CDFParser(Parser):
         return amount
 
     @staticmethod
-    def __extract_transaction_fields(root: ElementTree, account_number, nickname, default_values):
+    def __extract_transaction_fields(root: ElementTree, account_number, nickname, default_values, use_employee_id_mask_for_account_number):
         txn = CDFTransaction(**default_values)
 
         txn.account_number = account_number
@@ -127,6 +127,10 @@ class CDFParser(Parser):
                 ftrxn, 'MasterCardFinancialTransactionId').text
         txn.external_id = generate_external_id(external_id)
 
+        if use_employee_id_mask_for_account_number:
+            employee_id = CDFParser.__get_element_by_tag(
+                ftrxn, 'EmployeeId').text
+            txn.account_number = str(employee_id) + str(txn.account_number)
         return txn
 
     @staticmethod
@@ -260,7 +264,7 @@ class CDFParser(Parser):
         return nickname
 
     @staticmethod
-    def __extract_transactions(root, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields):
+    def __extract_transactions(root, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields, use_employee_id_mask_for_account_number):
         txns = []
         issuer_entity = CDFParser.__get_element_by_tag(root, 'IssuerEntity')
         if issuer_entity is None:
@@ -289,7 +293,7 @@ class CDFParser(Parser):
 
                 for transaction in financial_transaction_entities:
                     txn = CDFParser.__extract_transaction_fields(
-                        transaction, account_number, nickname, default_values)
+                        transaction, account_number, nickname, default_values, use_employee_id_mask_for_account_number)
 
                     lodging_transaction_entities = CDFParser.__get_elements_by_tag(
                         transaction, 'LodgingSummaryAddendumEntity')
@@ -318,7 +322,7 @@ class CDFParser(Parser):
         return txns
 
     @staticmethod
-    def parse(file_obj, account_number_mask_begin=None, account_number_mask_end=None, default_values={}, mandatory_fields=[]) -> List[CDFTransaction]:
+    def parse(file_obj, account_number_mask_begin=None, account_number_mask_end=None, default_values={}, mandatory_fields=[], use_employee_id_mask_for_account_number=False) -> List[CDFTransaction]:
         root: ElementTree = ET.parse(file_obj).getroot()
         if root is None:
             return None
@@ -327,4 +331,4 @@ class CDFParser(Parser):
             return None
 
         return CDFParser.__extract_transactions(
-            root, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields)
+            root, account_number_mask_begin, account_number_mask_end, default_values, mandatory_fields, use_employee_id_mask_for_account_number)
